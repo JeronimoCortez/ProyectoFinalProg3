@@ -1,4 +1,4 @@
-import { EditButton } from "./Components/buttons/EditButton/EditButton";
+import { EditButton } from "./Components/ui/EditButton/EditButton";
 import { AppRoutes } from "./routes/AppRoutes";
 
 function App() {

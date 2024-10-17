@@ -1,4 +1,6 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
+import { EditButton } from "../EditButton/EditButton";
+import styles from "../EditButton/EditButton.module.css";
 
 const bull = (
   <Box
@@ -17,6 +19,7 @@ export const CardCompany = () => {
         <Typography gutterBottom sx={{ color: "text.secondary", fontSize: 14 }}>
           Nombre de la Empresa
         </Typography>
+        <EditButton typeEdit="Company" className={styles.company} />
       </CardContent>
     </Card>
   </>;
