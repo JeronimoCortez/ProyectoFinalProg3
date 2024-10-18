@@ -1,3 +1,5 @@
+import { ICompany } from "./ICompnay";
+
 export interface IBranches {
   name: string;
   company: ICompany;
