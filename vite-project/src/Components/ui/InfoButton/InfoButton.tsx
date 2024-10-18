@@ -4,9 +4,10 @@ import styles from "./InfoButton.module.css";
 
 interface IInfoButtonProps {
   typeEdit: string;
+  isCompany: boolean;
 }
 
-export const InfoButton: FC<IInfoButtonProps> = ({ typeEdit }) => {
+export const InfoButton: FC<IInfoButtonProps> = ({ typeEdit, isCompany }) => {
   const handleInfo = () => {
     switch (typeEdit) {
       case "Companies":
@@ -28,7 +29,10 @@ export const InfoButton: FC<IInfoButtonProps> = ({ typeEdit }) => {
   };
   return (
     <>
-      <div className={styles.containerInfoIcon}>
+      <div
+        className={`${styles.containerInfoIcon} 
+        ${isCompany ? styles.company : ""}`}
+      >
         <InfoIcon className={styles.infoIcon} onClick={handleInfo} />
       </div>
     </>
