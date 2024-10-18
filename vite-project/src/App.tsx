@@ -1,11 +1,11 @@
-import { CardCompany } from "./Components/ui/CardCompany/CardCompany";
+import { EditButton } from "./Components/ui/EditButton/EditButton";
 import { AppRoutes } from "./routes/AppRoutes";
 
 function App() {
   return (
     <>
       <AppRoutes />
-      <CardCompany />
+      <EditButton typeEdit="Empresas" />
     </>
   );
 }

@@ -1,0 +1,14 @@
+.containerBranchDataIcon {
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  background-color: #eef4ed;
+}
+
+.branchDataIcon {
+  font-size: 18px;
+  color: #f4d35e;
+}
