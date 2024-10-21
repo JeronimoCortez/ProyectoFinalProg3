@@ -1,11 +1,9 @@
-import { CardBranch } from "./Components/ui/CardBranch/CardBranch";
-import { CardCompany } from "./Components/ui/CardCompany/CardCompany";
+import { Home } from "./Components/screens/Home/Home";
 
 function App() {
   return (
     <>
-      <CardCompany />
-      <CardBranch />
+      <Home />
     </>
   );
 }
