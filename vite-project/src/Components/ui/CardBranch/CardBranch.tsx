@@ -1,18 +1,9 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import { EditButton } from "../EditButton/EditButton";
 import { BranchDataButton } from "../BranchDataButton/BranchDataButton";
 import WatchIcon from "@mui/icons-material/WatchLaterRounded";
 import { InfoButton } from "../InfoButton/InfoButton";
 import styles from "./CardBranch.module.css";
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
 
 export const CardBranch = () => {
   return (
@@ -25,6 +16,7 @@ export const CardBranch = () => {
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: "#134074",
+          margin: "1rem",
         }}
       >
         <CardContent
@@ -49,8 +41,8 @@ export const CardBranch = () => {
           </div>
           <div className={styles.containerIcons}>
             <BranchDataButton typeEdit="Companies" />
-            <EditButton typeEdit="Company" />
-            <InfoButton typeEdit="Companies" />
+            <EditButton typeEdit="Company" isCompany={false} />
+            <InfoButton typeEdit="Companies" isCompany={false} />
           </div>
         </CardContent>
       </Card>

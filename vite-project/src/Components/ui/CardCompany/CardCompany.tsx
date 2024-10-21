@@ -1,15 +1,6 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import { EditButton } from "../EditButton/EditButton";
 import { InfoButton } from "../InfoButton/InfoButton";
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
 
 export const CardCompany = () => {
   return (
