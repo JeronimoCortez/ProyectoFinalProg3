@@ -7,7 +7,7 @@ export const CardCompany = () => {
     <>
       <Card
         sx={{
-          width: 250,
+          minWidth: 250,
           height: 150,
           display: "flex",
           justifyContent: "center",

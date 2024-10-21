@@ -1,12 +1,13 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { FC } from "react";
-import styles from "./PlusButton.module.css";
+import styles from "./AddButton.module.css";
 
 interface AddCircleIconProps {
   typeAdd: String;
+  isCompany: boolean;
 }
 
-export const PlusButton: FC<AddCircleIconProps> = ({ typeAdd }) => {
+export const AddButton: FC<AddCircleIconProps> = ({ typeAdd, isCompany }) => {
   const handleEdit = () => {
     switch (typeAdd) {
       case "Company":
@@ -25,8 +26,15 @@ export const PlusButton: FC<AddCircleIconProps> = ({ typeAdd }) => {
   };
   return (
     <>
-      <div className={styles.containerPlusIcon}>
-        <AddCircleIcon className={styles.plusIcon} onClick={handleEdit} />
+      <div
+        className={`${styles.containerAddIcon} ${
+          isCompany ? styles.company : ""
+        }`}
+      >
+        <AddCircleIcon
+          className={`${styles.addIcon} ${isCompany ? styles.company : ""}`}
+          onClick={handleEdit}
+        />
       </div>
     </>
   );
