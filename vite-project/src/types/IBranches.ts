@@ -1,6 +1,7 @@
-import { ICompany } from "./ICompany";
+import  ICompany  from "./ICompany";
 
-export interface IBranches {
+export default interface IBranches {
+  id: string;
   name: string;
   company: ICompany;
   residence: string;
