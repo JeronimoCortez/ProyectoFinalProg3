@@ -25,7 +25,7 @@ export const CardCompany = () => {
               textAlign: "center",
             }}
           >
-            Nombre de la Empresa
+            NOMBRE DE LA EMPRESA
           </Typography>
           <div
             style={{ display: "flex", justifyContent: "center", gap: "1.4rem" }}
