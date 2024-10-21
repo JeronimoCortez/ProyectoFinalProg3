@@ -14,6 +14,7 @@ export const Home = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          minHeight: "20vh",
         }}
       >
         <Box
@@ -36,7 +37,10 @@ export const Home = () => {
         </Box>
         <AddButton typeAdd="Company" isCompany={true} />
       </Box>
-      <Box className="branchInfoContainer" sx={{ backgroundColor: "#0B2545" }}>
+      <Box
+        className="branchInfoContainer"
+        sx={{ backgroundColor: "#0B2545", minHeight: "80vh" }}
+      >
         <Box
           sx={{
             color: "#FFFDFD",
