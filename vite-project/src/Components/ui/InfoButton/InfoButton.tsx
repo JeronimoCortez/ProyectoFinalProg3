@@ -36,7 +36,6 @@ export const InfoButton: FC<IInfoButtonProps> = ({ typeEdit, isCompany }) => {
         <InfoIcon
           className={`${styles.containerInfoIcon} 
         ${isCompany ? styles.company : ""}`}
-          onClick={handleInfo}
         />
       </div>
     </>

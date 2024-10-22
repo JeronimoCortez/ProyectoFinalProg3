@@ -3,9 +3,54 @@ import { CardBranch } from "../../ui/CardBranch/CardBranch";
 import { CardCompany } from "../../ui/CardCompany/CardCompany";
 import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
+import { CardInfoModel } from "../../ui/CardInfoModel/CardInfoModel";
 export const Home = () => {
   return (
     <>
+      <CardInfoModel
+        type={{
+          id: 1,
+          nombre: "sucursal",
+          empresa: {
+            id: 12,
+            nombre: "Nombre empresa",
+            razonSocial: "Razón Social de la Empresa", // Asegúrate de proporcionar un valor
+            cuit: 2222222,
+            logo: "../public/assets/BranchImg.png",
+            pais: { nombre: "Argentina", id: 12 },
+            sucursales: [],
+          },
+          domicilio: {
+            id: 12,
+            calle: "calle",
+            numero: 123,
+            cp: 5500,
+            piso: 12,
+            nroDpto: 12,
+            localidad: {
+              id: 12,
+              nombre: "mendoza",
+              provincia: {
+                nombre: "Mendoza",
+                pais: {
+                  nombre: "Argentina",
+                  id: 12,
+                },
+                id: 12,
+              },
+            },
+          },
+          calle: "Calle",
+          latitud: 123,
+          longitud: 123,
+          categorias: [],
+          esCasaMatriz: true,
+          horarioApertura: "1212",
+          eliminado: false,
+          horarioCierre: "123",
+          logo: "../public/assets/BranchImg.png",
+        }}
+      />
       <Box
         component="section"
         sx={{
@@ -15,6 +60,7 @@ export const Home = () => {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "20vh",
+          position: "relative",
         }}
       >
         <Box

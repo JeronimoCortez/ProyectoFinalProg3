@@ -4,6 +4,12 @@ import { BranchDataButton } from "../BranchDataButton/BranchDataButton";
 import WatchIcon from "@mui/icons-material/WatchLaterRounded";
 import { InfoButton } from "../InfoButton/InfoButton";
 import styles from "./CardBranch.module.css";
+import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
+import { FC, useState } from "react";
+
+interface ICardBranch {
+  Branch: ISucursal;
+}
 
 export const CardBranch = () => {
   return (
