@@ -1,29 +1,32 @@
 import { FC } from "react";
-import ICompany from "../../../types/ICompany";
-import IBranches from "../../../types/IBranches";
+import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
+import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 
 interface IInfoProps {
-  type: ICompany | IBranches;
+  type: IEmpresa | ISucursal;
 }
 
-const isCompany = (type: ICompany | IBranches): type is ICompany => {
-  return (type as ICompany).companyName !== undefined;
+const isCompany = (type: IEmpresa | ISucursal): type is IEmpresa => {
+  return (type as IEmpresa).razonSocial !== undefined;
 };
 
 export const CardInfoModel: FC<IInfoProps> = ({ type }) => {
   return (
+    /* MODIFICAR ESTILOS Y ETIQUETAS CON MATERIAL UI */
     <>
       {isCompany(type) ? (
         <div key={type.id}>
-          <p>Nombre: {type.name}</p>
-          <p>Razon Social: {type.companyName}</p>
+          <p>Nombre: {type.nombre}</p>
+          <p>Razon Social: {type.razonSocial}</p>
           <p>CUIT: {type.cuit}</p>
           <div>
             <p>Logo: </p>
-            <img src={type.img} alt="" />
+            <img src={`type.logo`} alt="" />
           </div>
+           {/* AGREGAR CAMPO PARA PAIS */}
         </div>
       ) : (
+        {/* MODIFICAR NOMBRES ATRIBUTOS */}
         <div key={type.id}>
           <p>Nombre: {type.name}</p>
           <p>Empresa: {type.company.companyName}</p>
