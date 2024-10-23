@@ -7,11 +7,13 @@ function App() {
       <Home />
       <CardInfoModel
         type={{
-          id: "12",
-          name: "Nombre empresa",
-          companyName: "Razón Social de la Empresa", // Asegúrate de proporcionar un valor
+          id: 12,
+          nombre: "Nombre empresa",
+          razonSocial: "Razón Social de la Empresa", // Asegúrate de proporcionar un valor
           cuit: 2222222,
-          img: "url_de_la_imagen.jpg", // Asegúrate de usar una URL válida
+          logo: "url_de_la_imagen.jpg",
+          pais: { nombre: "Argentina", id: 12 },
+          sucursales: [],
         }}
       />
     </>

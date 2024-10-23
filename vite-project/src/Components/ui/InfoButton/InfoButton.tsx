@@ -1,6 +1,7 @@
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 import { FC } from "react";
 import styles from "./InfoButton.module.css";
+import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
 
 interface IInfoButtonProps {
   typeEdit: string;
@@ -9,23 +10,23 @@ interface IInfoButtonProps {
 
 export const InfoButton: FC<IInfoButtonProps> = ({ typeEdit, isCompany }) => {
   const handleInfo = () => {
-    switch (typeEdit) {
-      case "Companies":
-        console.log("Info Empresas...");
-        break;
-      case "Brunch":
-        console.log("Info Empresas...");
-        break;
-      case "Allergens":
-        console.log("Info Empresas...");
-        break;
-      case "Categories":
-        console.log("Info Empresas...");
-        break;
-      case "Products":
-        console.log("Info Empresas...");
-        break;
-    }
+    // switch (typeEdit) {
+    //   case "Companies":
+    //     console.log("Info Empresas...");
+    //     break;
+    //   case "Brunch":
+    //     console.log("Info Empresas...");
+    //     break;
+    //   case "Allergens":
+    //     console.log("Info Empresas...");
+    //     break;
+    //   case "Categories":
+    //     console.log("Info Empresas...");
+    //     break;
+    //   case "Products":
+    //     console.log("Info Empresas...");
+    //     break;
+    // }
   };
   return (
     <>
