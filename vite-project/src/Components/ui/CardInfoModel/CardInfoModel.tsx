@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 import { Box, Typography } from "@mui/material";
@@ -6,28 +6,15 @@ import { CancelButton } from "../CancelButton/CancelButton";
 
 interface IInfoProps {
   type: IEmpresa | ISucursal;
+  onClose: () => void;
 }
 
-export const CardInfoModel: FC<IInfoProps> = ({ type }) => {
-  const [actionModal, setActionModal] = useState(true);
-
+export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
   const stylesTypographyBranch = {
     color: "#FFFFFF",
     fontFamily: "Prompt, sans-serif",
     fontWeight: "bold",
     margin: ".5rem 0",
-  };
-
-  const openInfoModal = () => {
-    if (!actionModal) {
-      setActionModal(true);
-    }
-  };
-
-  const closeInfoModal = () => {
-    if (actionModal) {
-      setActionModal(false);
-    }
   };
 
   const isCompany = (type: IEmpresa | ISucursal): type is IEmpresa => {
@@ -56,10 +43,12 @@ export const CardInfoModel: FC<IInfoProps> = ({ type }) => {
             height: "100vh",
             background: "rgba(64,79,96, 0.62)",
             zIndex: 9999,
-            display: actionModal ? "flex" : "none",
+            display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            top: 0,
+            left: 0,
           }}
         >
           <Box
@@ -71,8 +60,6 @@ export const CardInfoModel: FC<IInfoProps> = ({ type }) => {
               display: "flex",
               flexDirection: "column",
               padding: "1rem",
-              top: 0,
-              left: 0,
             }}
             key={type.id}
           >
@@ -82,7 +69,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type }) => {
                 justifyContent: "flex-end",
               }}
             >
-              <CancelButton onClick={closeInfoModal} />
+              <CancelButton onClick={onClose} />
             </Box>
             <Typography
               sx={{
