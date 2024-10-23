@@ -38,7 +38,7 @@ export const CardBranch = () => {
             gutterBottom
             sx={{ color: "#FFFFFF", fontSize: 24, textAlign: "center" }}
           >
-            Nombre de la Sucursal
+            NOMBRE DE LA SUCURSAL - EMPRESA
           </Typography>
           <img src="../../public/assets/BranchImg.png" alt="" />
           <div className={styles.containerTime}>
