@@ -21,8 +21,9 @@ export const CancelButton: FC<ICancelButonProps> = ({ onClick }) => {
         cursor: "pointer",
         background: "rgba(217,217,217, 0.31)",
       }}
+      onClick={onClick}
     >
-      <CancelIcon onClick={onClick} />
+      <CancelIcon />
     </Box>
   );
 };

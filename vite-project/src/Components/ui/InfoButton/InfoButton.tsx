@@ -21,7 +21,7 @@ export const InfoButton: FC<IInfoButtonProps> = ({
         onClick={onInfoClick}
       >
         <InfoIcon
-          className={`${styles.containerInfoIcon} 
+          className={`${styles.infoIcon} 
         ${isCompany ? styles.company : ""}`}
         />
       </div>
