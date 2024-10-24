@@ -22,7 +22,6 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
   };
 
   return (
-    /* MODIFICAR ESTILOS Y ETIQUETAS CON MATERIAL UI */
     <>
       {isCompany(type) ? (
         <Box
@@ -130,11 +129,15 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
                 <Typography sx={{ marginRight: "8px", fontSize: "20px" }}>
                   <strong>Logo:</strong>
                 </Typography>
-                <img
-                  src={"type.logo"}
-                  alt="logo"
-                  style={{ maxWidth: "100px", height: "auto" }}
-                />
+                {type.logo ? (
+                  <img
+                    src={type.logo}
+                    alt="logo"
+                    style={{ maxWidth: "100px", height: "auto" }}
+                  />
+                ) : (
+                  <p>No tiene</p>
+                )}
               </Box>
             </Box>
 

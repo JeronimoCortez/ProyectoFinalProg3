@@ -5,23 +5,16 @@ import WatchIcon from "@mui/icons-material/WatchLaterRounded";
 import { InfoButton } from "../InfoButton/InfoButton";
 import styles from "./CardBranch.module.css";
 import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
+import useModal from "../../../hooks/openModal";
 
 interface ICardBranch {
   branch: ISucursal;
 }
 
 export const CardBranch: FC<ICardBranch> = ({ branch }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleInfoClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
     <>
@@ -64,15 +57,13 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
             <InfoButton
               typeEdit="Brunch"
               isCompany={false}
-              onInfoClick={handleInfoClick}
+              onInfoClick={openModal}
             />
           </div>
         </CardContent>
       </Card>
 
-      {isModalOpen && (
-        <CardInfoModel type={branch} onClose={handleCloseModal} />
-      )}
+      {isModalOpen && <CardInfoModel type={branch} onClose={closeModal} />}
     </>
   );
 };
