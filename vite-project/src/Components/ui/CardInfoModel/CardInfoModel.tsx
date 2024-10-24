@@ -32,10 +32,12 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
             height: "100vh",
             background: "rgba(64,79,96, 0.62)",
             zIndex: 9999,
-            display: actionModal ? "flex" : "none",
+            display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            top: 0,
+            left: 0,
           }}
         >
           <Box
@@ -63,7 +65,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
                 justifyContent: "flex-end",
               }}
             >
-              <CancelButton onClick={closeInfoModal} />
+              <CancelButton onClick={onClose} />
             </Box>
             <Typography
               variant="h5"
@@ -75,7 +77,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
                 fontWeight: "bold",
               }}
             >
-              Nombre de la Empresa
+              {type.nombre}
             </Typography>
             <Box
               sx={{
@@ -207,7 +209,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
               variant="body1"
               component="p"
             >
-              Casa matriz: {type.esCasaMatriz}
+              Casa matriz: {type.esCasaMatriz ? "true" : "false"}
             </Typography>
             <Typography
               sx={stylesTypographyBranch}
