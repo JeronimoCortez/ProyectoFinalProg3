@@ -13,7 +13,7 @@ import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { FC, useState } from "react";
 
 interface IHomeProps {
-  companies: IEmpresa[];
+  companies?: IEmpresa[];
 }
 
 const theme = createTheme({
@@ -21,6 +21,7 @@ const theme = createTheme({
     fontFamily: "Prompt, sans-serif",
   },
 });
+
 export const Home: FC<IHomeProps> = ({ companies }) => {
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
 
