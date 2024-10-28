@@ -1,9 +1,10 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { EditButton } from "../EditButton/EditButton";
 import { InfoButton } from "../InfoButton/InfoButton";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
+import useModal from "../../../hooks/useModal";
 
 interface IPropsCardCompany {
   company: IEmpresa;
@@ -11,15 +12,7 @@ interface IPropsCardCompany {
 }
 
 export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleInfoClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   return (
     <>
@@ -54,25 +47,14 @@ export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
             <InfoButton
               typeEdit="Company"
               isCompany={true}
-              onInfoClick={handleInfoClick}
+              onInfoClick={() => openModal("info")}
             />
           </div>
         </CardContent>
       </Card>
 
-      {isModalOpen && (
-        <CardInfoModel
-          type={{
-            id: 12,
-            nombre: "Nombre empresa",
-            razonSocial: "Razón Social de la Empresa", // Asegúrate de proporcionar un valor
-            cuit: 2222222,
-            logo: "url_de_la_imagen.jpg",
-            pais: { nombre: "Argentina", id: 12 },
-            sucursales: [],
-          }}
-          onClose={handleCloseModal}
-        />
+      {isModalOpen && activeModal === "info" && (
+        <CardInfoModel type={company} onClose={closeModal} />
       )}
     </>
   );

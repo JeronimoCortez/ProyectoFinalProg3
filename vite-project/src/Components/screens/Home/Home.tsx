@@ -4,7 +4,6 @@ import {
   createTheme,
   CssBaseline,
   ThemeProvider,
-  Typography,
 } from "@mui/material";
 import { CardBranch } from "../../ui/CardBranch/CardBranch";
 import { CardCompany } from "../../ui/CardCompany/CardCompany";
@@ -12,10 +11,9 @@ import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { FC, useState } from "react";
-import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 
 interface IHomeProps {
-  companies: IEmpresa[];
+  companies?: IEmpresa[];
 }
 
 const theme = createTheme({
@@ -23,19 +21,22 @@ const theme = createTheme({
     fontFamily: "Prompt, sans-serif",
   },
 });
+
 export const Home: FC<IHomeProps> = ({ companies }) => {
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
 
   const activateCompany = (company: IEmpresa) => {
     setCompanyActive(company);
   };
+
+  /* Creamos una lista de objetos empresa, renderizado momentaneo hasta que conectemos con la api */
   const comp: IEmpresa[] = [
     {
       id: 12,
       nombre: "Nombre empresa",
-      razonSocial: "Razón Social de la Empresa", // Asegúrate de proporcionar un valor
+      razonSocial: "Razón Social de la Empresa",
       cuit: 2222222,
-      logo: "url_de_la_imagen.jpg",
+      logo: "../../../public/assets/BranchImg.png",
       pais: { nombre: "Argentina", id: 12 },
       sucursales: [
         {
@@ -44,9 +45,9 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
           empresa: {
             id: 12,
             nombre: "Nombre empresa",
-            razonSocial: "Razón Social de la Empresa", // Asegúrate de proporcionar un valor
+            razonSocial: "Razón Social de la Empresa",
             cuit: 2222222,
-            logo: "../public/assets/BranchImg.png",
+            logo: "../../../public/assets/BranchImg.png",
             pais: { nombre: "Argentina", id: 12 },
             sucursales: [],
           },
@@ -85,9 +86,9 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
     {
       id: 12,
       nombre: "Nombre empresa",
-      razonSocial: "Razón Social de la Empresa", // Asegúrate de proporcionar un valor
+      razonSocial: "Razón Social de la Empresa",
       cuit: 2222222,
-      logo: "url_de_la_imagen.jpg",
+      logo: "",
       pais: { nombre: "Argentina", id: 12 },
       sucursales: [],
     },
@@ -98,6 +99,8 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+
+        {/* Seccion empresas */}
         <Box
           component="section"
           sx={{
@@ -128,6 +131,8 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
           </Box>
           <AddButton typeAdd="Company" isCompany={true} />
         </Box>
+
+        {/* Seccion sucursales */}
         <Box
           className="branchInfoContainer"
           sx={{ backgroundColor: "#0B2545", minHeight: "80vh" }}
