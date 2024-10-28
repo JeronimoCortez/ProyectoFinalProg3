@@ -28,86 +28,98 @@ const FieldContainer = styled(Box)(({ theme }) => ({
 
 export const CardCreateCompany = () => {
   return (
-    <FormContainer sx={{ color: "#134074" }}>
-      <Box sx={{ mb: 2 }}>
-        <h3>Crear una empresa</h3>
-      </Box>
-      <Stack spacing={2}>
-        <FieldContainer>
-          <TextField
-            fullWidth
-            label="Ingrese un nombre"
-            variant="outlined"
-            size="small"
-            inputProps={{ style: { border: "none" } }}
-            InputLabelProps={{
-              style: { color: "#FFFFFF", fontSize: "16px" },
+    <Box
+      sx={{
+        position: "fixed",
+        width: "100vw",
+        height: "100vh",
+        background: "rgba(64,79,96, 0.62)",
+        zIndex: 9999,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        top: 0,
+        left: 0,
+      }}
+    >
+      <FormContainer sx={{ color: "#134074" }}>
+        <Box sx={{ mb: 2 }}>
+          <h3>Crear una empresa</h3>
+        </Box>
+        <Stack spacing={2}>
+          <FieldContainer>
+            <TextField
+              fullWidth
+              label="Ingrese un nombre"
+              variant="outlined"
+              size="small"
+              inputProps={{ style: { border: "none" } }}
+              InputLabelProps={{
+                style: { color: "#FFFFFF", fontSize: "16px" },
+              }}
+              sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+            />
+          </FieldContainer>
+          <FieldContainer>
+            <TextField
+              fullWidth
+              label="Ingrese una razón social"
+              variant="outlined"
+              size="small"
+              inputProps={{ style: { border: "none" } }}
+              InputLabelProps={{
+                style: { color: "#FFFFFF", fontSize: "16px" },
+              }}
+              sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+            />
+          </FieldContainer>
+          <FieldContainer>
+            <TextField
+              fullWidth
+              label="Ingrese su CUIT"
+              variant="outlined"
+              size="small"
+              inputProps={{ style: { border: "none" } }}
+              InputLabelProps={{
+                style: { color: "#FFFFFF", fontSize: "16px" },
+              }}
+              sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+            />
+          </FieldContainer>
+          <FieldContainer
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-            sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-          />
-        </FieldContainer>
-        <FieldContainer>
-          <TextField
-            fullWidth
-            label="Ingrese una razón social"
-            variant="outlined"
-            size="small"
-            inputProps={{ style: { border: "none" } }}
-            InputLabelProps={{
-              style: { color: "#FFFFFF", fontSize: "16px" },
-            }}
-            sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-          />
-        </FieldContainer>
-        <FieldContainer>
-          <TextField
-            fullWidth
-            label="Ingrese su CUIT"
-            variant="outlined"
-            size="small"
-            inputProps={{ style: { border: "none" } }}
-            InputLabelProps={{
-              style: { color: "#FFFFFF", fontSize: "16px" },
-            }}
-            sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-          />
-        </FieldContainer>
-        <FieldContainer
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <TextField
-            fullWidth
-            label="Imagen"
-            variant="outlined"
-            size="small"
-            inputProps={{ style: { border: "none" } }}
-            InputLabelProps={{
-              style: { color: "#FFFFFF", fontSize: "16px" },
-            }}
-            sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-          />
-          <img
-            src="../../public/assets/BranchImg.png"
-            alt=""
-            width="60px"
-            height="46px"
-          />
-        </FieldContainer>
-      </Stack>
+          >
+            <TextField
+              fullWidth
+              label="Imagen"
+              variant="outlined"
+              size="small"
+              inputProps={{ style: { border: "none" } }}
+              InputLabelProps={{
+                style: { color: "#FFFFFF", fontSize: "16px" },
+              }}
+              sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+            />
+            <img
+              src="../../public/assets/BranchImg.png"
+              alt=""
+              width="60px"
+              height="46px"
+            />
+          </FieldContainer>
+        </Stack>
 
-      {/* Botones de Aceptar y Cancelar */}
-      <Box mt={3} display="flex" justifyContent="space-between">
-        <StyledButton>
+        {/* Botones de Aceptar y Cancelar */}
+        <Box mt={3} display="flex" justifyContent="space-between">
           <CheckButton typeCheck="Company" isCompany={true} />
-        </StyledButton>
-        <StyledButton>
           <CloseButton typeClose="Company" isCompany={true} />
-        </StyledButton>
-      </Box>
-    </FormContainer>
+        </Box>
+      </FormContainer>
+    </Box>
   );
 };
