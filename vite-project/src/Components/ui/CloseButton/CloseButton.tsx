@@ -3,7 +3,7 @@ import { FC } from "react";
 import styles from "./CloseButton.module.css";
 
 interface ICloseButtonProps {
-  typeClose: boolean;
+  typeClose: String;
   isCompany: boolean;
 }
 
@@ -12,10 +12,19 @@ export const CloseButton: FC<ICloseButtonProps> = ({
   isCompany,
 }) => {
   const handleEdit = () => {
-    if (typeClose === false) {
-      console.log("Abierto...");
-    } else {
-      console.log("Close");
+    switch (typeClose) {
+      case "Company":
+        console.log("Empresa");
+        break;
+      case "Allergens":
+        console.log("Alergenos");
+        break;
+      case "Categories":
+        console.log("Categoria");
+        break;
+      case "Product":
+        console.log("Producto");
+        break;
     }
   };
   return (

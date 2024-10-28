@@ -3,7 +3,7 @@ import { FC } from "react";
 import styles from "./CheckButton.module.css";
 
 interface ICheckButtonProps {
-  typeCheck: boolean;
+  typeCheck: string;
   isCompany: boolean;
 }
 
@@ -12,10 +12,19 @@ export const CheckButton: FC<ICheckButtonProps> = ({
   isCompany,
 }) => {
   const handleEdit = () => {
-    if (typeCheck === false) {
-      console.log("Sin Check...");
-    } else {
-      console.log("Check");
+    switch (typeCheck) {
+      case "Company":
+        console.log("Empresa");
+        break;
+      case "Allergens":
+        console.log("Alergenos");
+        break;
+      case "Categories":
+        console.log("Categoria");
+        break;
+      case "Product":
+        console.log("Producto");
+        break;
     }
   };
   return (
