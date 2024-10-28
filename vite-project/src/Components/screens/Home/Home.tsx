@@ -11,6 +11,7 @@ import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { FC, useState } from "react";
+import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
 
 interface IHomeProps {
   companies?: IEmpresa[];
@@ -99,7 +100,7 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-
+        <CreateBranch />
         {/* Seccion empresas */}
         <Box
           component="section"
