@@ -100,7 +100,6 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <CreateBranch />
         {/* Seccion empresas */}
         <Box
           component="section"

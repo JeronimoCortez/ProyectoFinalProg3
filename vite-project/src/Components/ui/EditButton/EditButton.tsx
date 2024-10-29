@@ -5,9 +5,14 @@ import styles from "./EditButton.module.css";
 interface IEditButtonProps {
   typeEdit: string;
   isCompany: boolean;
+  onEditClick: () => void;
 }
 
-export const EditButton: FC<IEditButtonProps> = ({ typeEdit, isCompany }) => {
+export const EditButton: FC<IEditButtonProps> = ({
+  typeEdit,
+  isCompany,
+  onEditClick,
+}) => {
   const handleEdit = () => {
     switch (typeEdit) {
       case "Company":
@@ -33,7 +38,7 @@ export const EditButton: FC<IEditButtonProps> = ({ typeEdit, isCompany }) => {
         className={`${styles.containerEditIcon} 
         ${isCompany ? styles.company : ""}`}
       >
-        <EditIcon className={styles.editIcon} onClick={handleEdit} />
+        <EditIcon className={styles.editIcon} onClick={onEditClick} />
       </div>
     </>
   );
