@@ -1,0 +1,20 @@
+.containerCloseIcon {
+  background-color: rgba(217, 217, 217, 0.31);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #f95738;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.company {
+  background-color: #ee964b;
+}
+
+.closeIcon {
+  font-size: 17px;
+  color: #f95738;
+}

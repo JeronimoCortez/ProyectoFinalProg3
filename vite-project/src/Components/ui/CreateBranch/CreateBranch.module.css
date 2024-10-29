@@ -1,0 +1,13 @@
+.buttonsBox {
+  position: relative;
+  height: auto;
+}
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  /* padding: 16px; */
+  bottom: -10px;
+  left: 50px;
+  right: 50px;
+}
