@@ -11,7 +11,8 @@ import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { FC, useState } from "react";
-import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
+import useModal from "../../../hooks/useModal";
+import { CardCreateCompany } from "../../ui/CardCreateCompany/CardCreateCompany";
 
 interface IHomeProps {
   companies?: IEmpresa[];
@@ -25,6 +26,7 @@ const theme = createTheme({
 
 export const Home: FC<IHomeProps> = ({ companies }) => {
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   const activateCompany = (company: IEmpresa) => {
     setCompanyActive(company);
@@ -129,7 +131,11 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
               <CardCompany company={e} onOpen={activateCompany} />
             ))}
           </Box>
-          <AddButton typeAdd="Company" isCompany={true} />
+          <AddButton
+            typeAdd="Company"
+            isCompany={true}
+            onAddClick={() => openModal("add")}
+          />
         </Box>
 
         {/* Seccion sucursales */}
@@ -193,6 +199,10 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
             </Box>
           )}
         </Box>
+
+        {isModalOpen && activeModal === "add" && (
+          <CardCreateCompany onClose={closeModal} />
+        )}
       </ThemeProvider>
     </>
   );

@@ -45,7 +45,6 @@ export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
             style={{ display: "flex", justifyContent: "center", gap: "1.4rem" }}
           >
             <EditButton
-              typeEdit="Company"
               isCompany={true}
               onEditClick={() => openModal("edit")}
             />

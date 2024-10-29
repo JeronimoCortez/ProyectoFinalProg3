@@ -1,4 +1,4 @@
-import { Box, TextField, IconButton, Stack } from "@mui/material";
+import { Box, TextField, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
