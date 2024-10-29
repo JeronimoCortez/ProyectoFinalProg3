@@ -27,14 +27,14 @@ export const CheckButton: FC<ICheckButtonProps> = ({
         break;
     }
   };
+
   return (
-    <>
-      <div
-        className={`${styles.containerCheckIcon} 
-        ${isCompany ? styles.company : ""}`}
-      >
-        <CheckIcon className={styles.checkIcon} onClick={handleEdit} />
-      </div>
-    </>
+    <div
+      className={`${styles.containerCheckIcon} 
+        ${isCompany ? styles.company : ""}
+        ${typeCheck === "Allergens" ? styles.allergens : ""}`}
+    >
+      <CheckIcon className={styles.checkIcon} onClick={handleEdit} />
+    </div>
   );
 };

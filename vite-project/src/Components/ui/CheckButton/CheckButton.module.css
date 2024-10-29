@@ -10,6 +10,10 @@
   cursor: pointer;
 }
 
+.allergens {
+  background-color: rgba(217, 217, 217, 0.12);
+}
+
 .company {
   background-color: #ee964b;
 }

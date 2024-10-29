@@ -1,10 +1,13 @@
-import { AppRouter } from "./routes/AppRouter";
-import { Home } from "./Components/screens/Home/Home";
+// import { AppRouter } from "./routes/AppRouter";
+import { CardCreateAllergens } from "./Components/ui/CardCreateAllergens/CardCreateAllergens";
+import { Header } from "./Components/ui/Header/Header";
 
 function App() {
   return (
     <>
-      <AppRouter />
+      <Header />
+      <CardCreateAllergens />
+      {/* <AppRouter /> */}
     </>
   );
 }

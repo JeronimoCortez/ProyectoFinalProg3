@@ -31,7 +31,8 @@ export const CloseButton: FC<ICloseButtonProps> = ({
     <>
       <div
         className={`${styles.containerCloseIcon} 
-        ${isCompany ? styles.company : ""}`}
+        ${isCompany ? styles.company : ""}
+        ${typeClose === "Allergens" ? styles.allergens : ""}`}
       >
         <CloseIcon className={styles.closeIcon} onClick={handleEdit} />
       </div>

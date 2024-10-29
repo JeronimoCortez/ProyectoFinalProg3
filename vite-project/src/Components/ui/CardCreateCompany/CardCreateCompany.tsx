@@ -1,4 +1,4 @@
-import { Box, TextField, IconButton, Stack } from "@mui/material";
+import { Box, TextField, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
@@ -12,12 +12,6 @@ const FormContainer = styled(Box)(({ theme }) => ({
   borderRadius: "0.4 rem",
   textAlign: "center",
   alignItems: "center",
-}));
-
-const StyledButton = styled(IconButton)(({ theme }) => ({
-  width: "33px",
-  height: "33px",
-  marginBottom: theme.spacing(2),
 }));
 
 const FieldContainer = styled(Box)(({ theme }) => ({
@@ -41,7 +35,7 @@ export const CardCreateCompany = () => {
             size="small"
             inputProps={{ style: { border: "none" } }}
             InputLabelProps={{
-              style: { color: "#FFFFFF", fontSize: "16px" },
+              style: { color: "#FFFFFF", fontSize: "18px" },
             }}
             sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
           />
@@ -54,7 +48,7 @@ export const CardCreateCompany = () => {
             size="small"
             inputProps={{ style: { border: "none" } }}
             InputLabelProps={{
-              style: { color: "#FFFFFF", fontSize: "16px" },
+              style: { color: "#FFFFFF", fontSize: "18px" },
             }}
             sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
           />
@@ -67,7 +61,7 @@ export const CardCreateCompany = () => {
             size="small"
             inputProps={{ style: { border: "none" } }}
             InputLabelProps={{
-              style: { color: "#FFFFFF", fontSize: "16px" },
+              style: { color: "#FFFFFF", fontSize: "18px" },
             }}
             sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
           />
@@ -86,7 +80,7 @@ export const CardCreateCompany = () => {
             size="small"
             inputProps={{ style: { border: "none" } }}
             InputLabelProps={{
-              style: { color: "#FFFFFF", fontSize: "16px" },
+              style: { color: "#FFFFFF", fontSize: "18px" },
             }}
             sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
           />
@@ -101,12 +95,8 @@ export const CardCreateCompany = () => {
 
       {/* Botones de Aceptar y Cancelar */}
       <Box mt={3} display="flex" justifyContent="space-between">
-        <StyledButton>
-          <CheckButton typeCheck="Company" isCompany={true} />
-        </StyledButton>
-        <StyledButton>
-          <CloseButton typeClose="Company" isCompany={true} />
-        </StyledButton>
+        <CheckButton typeCheck="Company" isCompany={true} />
+        <CloseButton typeClose="Company" isCompany={true} />
       </Box>
     </FormContainer>
   );
