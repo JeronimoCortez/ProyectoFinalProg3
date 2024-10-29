@@ -7,14 +7,14 @@ import styles from "./CardBranch.module.css";
 import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 import { FC } from "react";
 import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
-import useModal from "../../../hooks/openModal";
+import useModal from "../../../hooks/useModal";
 
 interface ICardBranch {
   branch: ISucursal;
 }
 
 export const CardBranch: FC<ICardBranch> = ({ branch }) => {
-  const { isModalOpen, openModal, closeModal } = useModal();
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   return (
     <>
@@ -57,13 +57,15 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
             <InfoButton
               typeEdit="Brunch"
               isCompany={false}
-              onInfoClick={openModal}
+              onInfoClick={() => openModal("info")}
             />
           </div>
         </CardContent>
       </Card>
 
-      {isModalOpen && <CardInfoModel type={branch} onClose={closeModal} />}
+      {isModalOpen && activeModal === "info" && (
+        <CardInfoModel type={branch} onClose={closeModal} />
+      )}
     </>
   );
 };

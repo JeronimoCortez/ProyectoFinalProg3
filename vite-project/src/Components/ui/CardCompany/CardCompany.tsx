@@ -4,7 +4,7 @@ import { InfoButton } from "../InfoButton/InfoButton";
 import { FC } from "react";
 import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
-import useModal from "../../../hooks/openModal";
+import useModal from "../../../hooks/useModal";
 
 interface IPropsCardCompany {
   company: IEmpresa;
@@ -12,7 +12,7 @@ interface IPropsCardCompany {
 }
 
 export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
-  const { isModalOpen, openModal, closeModal } = useModal();
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   return (
     <>
@@ -47,13 +47,15 @@ export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
             <InfoButton
               typeEdit="Company"
               isCompany={true}
-              onInfoClick={openModal}
+              onInfoClick={() => openModal("info")}
             />
           </div>
         </CardContent>
       </Card>
 
-      {isModalOpen && <CardInfoModel type={company} onClose={closeModal} />}
+      {isModalOpen && activeModal === "info" && (
+        <CardInfoModel type={company} onClose={closeModal} />
+      )}
     </>
   );
 };
