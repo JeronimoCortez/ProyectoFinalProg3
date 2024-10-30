@@ -10,96 +10,50 @@ import { CardCompany } from "../../ui/CardCompany/CardCompany";
 import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
-import { FC, useState } from "react";
+import { useEffect, useState } from "react";
+import { EmpresaService } from "../../../services/EmpresaService";
+import { useAppDispatch } from "../../../hooks/redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store/store";
+import { setCompanies } from "../../../redux/slices/companySlice";
 
-interface IHomeProps {
-  companies?: IEmpresa[];
-}
-
+// const API_URL = import.meta.env.BASE_URL;
+const API_URL = "http://190.221.207.224:8090/empresas";
 const theme = createTheme({
   typography: {
     fontFamily: "Prompt, sans-serif",
   },
 });
 
-export const Home: FC<IHomeProps> = ({ companies }) => {
+export const Home = () => {
+  const companies = useSelector((state: RootState) => state.company.companies);
+
+  //Instanciamos servicio empresa
+  const serviceCompany = new EmpresaService(API_URL);
+  const dispatch = useAppDispatch();
+
+  // Estado para renderizar las sucursales de la empresa seleccionada
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
 
   const activateCompany = (company: IEmpresa) => {
     setCompanyActive(company);
   };
 
-  /* Creamos una lista de objetos empresa, renderizado momentaneo hasta que conectemos con la api */
-  const comp: IEmpresa[] = [
-    {
-      id: 12,
-      nombre: "Nombre empresa",
-      razonSocial: "Razón Social de la Empresa",
-      cuit: 2222222,
-      logo: "../../../public/assets/BranchImg.png",
-      pais: { nombre: "Argentina", id: 12 },
-      sucursales: [
-        {
-          id: 1,
-          nombre: "sucursal",
-          empresa: {
-            id: 12,
-            nombre: "Nombre empresa",
-            razonSocial: "Razón Social de la Empresa",
-            cuit: 2222222,
-            logo: "../../../public/assets/BranchImg.png",
-            pais: { nombre: "Argentina", id: 12 },
-            sucursales: [],
-          },
-          domicilio: {
-            id: 12,
-            calle: "calle",
-            numero: 123,
-            cp: 5500,
-            piso: 12,
-            nroDpto: 12,
-            localidad: {
-              id: 12,
-              nombre: "mendoza",
-              provincia: {
-                nombre: "Mendoza",
-                pais: {
-                  nombre: "Argentina",
-                  id: 12,
-                },
-                id: 12,
-              },
-            },
-          },
-          calle: "Calle",
-          latitud: 123,
-          longitud: 123,
-          categorias: [],
-          esCasaMatriz: true,
-          horarioApertura: "1212",
-          eliminado: false,
-          horarioCierre: "123",
-          logo: "../public/assets/BranchImg.png",
-        },
-      ],
-    },
-    {
-      id: 12,
-      nombre: "Nombre empresa",
-      razonSocial: "Razón Social de la Empresa",
-      cuit: 2222222,
-      logo: "",
-      pais: { nombre: "Argentina", id: 12 },
-      sucursales: [],
-    },
-  ];
+  const getEmpresas = async () => {
+    await serviceCompany.getAll().then((companyData) => {
+      dispatch(setCompanies(companyData));
+    });
+  };
 
-  companies = comp;
+  useEffect(() => {
+    console.log(API_URL);
+    getEmpresas();
+  }, []);
+
   return (
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-
         {/* Seccion empresas */}
         <Box
           component="section"
@@ -125,7 +79,7 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
               scrollBehavior: "smooth",
             }}
           >
-            {companies.map((e) => (
+            {companies?.map((e) => (
               <CardCompany company={e} onOpen={activateCompany} />
             ))}
           </Box>
