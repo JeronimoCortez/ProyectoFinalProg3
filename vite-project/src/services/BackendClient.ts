@@ -6,7 +6,9 @@ export abstract class BackendClient<T> extends AbstractBackendClient<T> {
   }
 
   async getAll(): Promise<T[]> {
+
     const response = await fetch(`${this.baseUrl}`);
+
     const data = await response.json();
     return data as T[];
   }

@@ -16,6 +16,12 @@ import { useAppDispatch } from "../../../hooks/redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { setCompanies } from "../../../redux/slices/companySlice";
+import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
+import { CardCreateCompany } from "../../ui/CardCreateCompany/CardCreateCompany";
+
+interface IHomeProps {
+  companies?: IEmpresa[];
+}
 
 // const API_URL = import.meta.env.BASE_URL;
 const API_URL = "http://190.221.207.224:8090/empresas";
