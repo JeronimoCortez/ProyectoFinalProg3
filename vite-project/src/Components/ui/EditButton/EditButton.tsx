@@ -16,8 +16,9 @@ export const EditButton: FC<IEditButtonProps> = ({
       <div
         className={`${styles.containerEditIcon} 
         ${isCompany ? styles.company : ""}`}
+        onClick={onEditClick}
       >
-        <EditIcon className={styles.editIcon} onClick={onEditClick} />
+        <EditIcon className={styles.editIcon} />
       </div>
     </>
   );

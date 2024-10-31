@@ -44,7 +44,13 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
           >
             {branch.nombre}
           </Typography>
-          <img src="../../public/assets/BranchImg.png" alt="" />
+          <img
+            src={
+              branch.logo ? branch.logo : "../../public/assets/BranchImg.png"
+            }
+            alt=""
+            height={"120px"}
+          />
           <div className={styles.containerTime}>
             <WatchIcon style={{ color: "#d9d9d9" }} />
             <p className={styles.time}>

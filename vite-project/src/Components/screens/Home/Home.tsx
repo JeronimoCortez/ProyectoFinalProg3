@@ -13,13 +13,13 @@ import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { useEffect, useState } from "react";
 import { EmpresaService } from "../../../services/EmpresaService";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { setCompanies } from "../../../redux/slices/companySlice";
 import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
 import useModal from "../../../hooks/useModal";
 import { CardCreateCompany } from "../../ui/CardCreateCompany/CardCreateCompany";
 import { SucursalService } from "../../../services/SucursalService";
+import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 const theme = createTheme({
@@ -29,8 +29,6 @@ const theme = createTheme({
 });
 
 export const Home = () => {
-  console.log(API_URL);
-
   const companies = useAppSelector(
     (state: RootState) => state.company.companies
   );
@@ -42,10 +40,12 @@ export const Home = () => {
 
   // Estado para renderizar las sucursales de la empresa seleccionada
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
+  const [branches, setBranches] = useState<ISucursal[]>([]);
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   const activateCompany = (company: IEmpresa) => {
     setCompanyActive(company);
+    getSucursalesPorEmpresa(company.id);
   };
 
   const getEmpresas = async () => {
@@ -54,8 +54,13 @@ export const Home = () => {
     });
   };
 
+  const getSucursalesPorEmpresa = async (idEmpresa: number) => {
+    await serviceBranch.getSucursalByEmpresaId(idEmpresa).then((sucursales) => {
+      setBranches(sucursales);
+    });
+  };
+
   useEffect(() => {
-    console.log(API_URL);
     getEmpresas();
   }, []);
 
@@ -89,7 +94,11 @@ export const Home = () => {
             }}
           >
             {companies?.map((e) => (
-              <CardCompany company={e} onOpen={activateCompany} />
+              <CardCompany
+                key={e.id}
+                company={e}
+                onOpen={() => activateCompany(e)}
+              />
             ))}
           </Box>
           <AddButton
@@ -152,18 +161,17 @@ export const Home = () => {
                   margin: "0 auto",
                 }}
               >
-                {companyActive &&
-                  companyActive.sucursales?.map((e) => (
-                    <CardBranch branch={e} />
-                  ))}
+                {branches.map((e) => (
+                  <CardBranch branch={e} />
+                ))}
               </Box>
             </Box>
           )}
         </Box>
 
-        {/* {isModalOpen && activeModal === "add" && (
+        {isModalOpen && activeModal === "add" && (
           <CardCreateCompany onClose={closeModal} />
-        )} */}
+        )}
       </ThemeProvider>
     </>
   );

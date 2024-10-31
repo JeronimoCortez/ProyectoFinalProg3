@@ -130,11 +130,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
                   <strong>Logo:</strong>
                 </Typography>
                 {type.logo ? (
-                  <img
-                    src={type.logo}
-                    alt="logo"
-                    style={{ maxWidth: "100px", height: "auto" }}
-                  />
+                  <img src={type.logo} alt="logo" height={"100px"} />
                 ) : (
                   <p>No tiene</p>
                 )}
@@ -241,7 +237,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
               >
                 Logo:
               </Typography>
-              <img src={type.logo} alt="" />
+              <img src={type.logo} alt="" height={"120px"} />
             </Box>
           </Box>
         </Box>

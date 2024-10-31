@@ -62,7 +62,7 @@ export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
       )}
 
       {isModalOpen && activeModal === "edit" && (
-        <CardCreateCompany onClose={closeModal} />
+        <CardCreateCompany onClose={closeModal} company={company} />
       )}
     </>
   );
