@@ -237,7 +237,15 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
               >
                 Logo:
               </Typography>
-              <img src={type.logo} alt="" height={"120px"} />
+              {type.logo ? (
+                <img src={type.logo} alt="logo" height={"120px"} />
+              ) : (
+                <img
+                  src="https://i.postimg.cc/FRKsWfmM/Branch-Img.png"
+                  alt="logo"
+                  height={"120px"}
+                />
+              )}
             </Box>
           </Box>
         </Box>

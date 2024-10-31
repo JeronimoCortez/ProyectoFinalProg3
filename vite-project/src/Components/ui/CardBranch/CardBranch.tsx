@@ -46,7 +46,9 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
           </Typography>
           <img
             src={
-              branch.logo ? branch.logo : "../../public/assets/BranchImg.png"
+              branch.logo
+                ? branch.logo
+                : "https://i.postimg.cc/FRKsWfmM/Branch-Img.png"
             }
             alt=""
             height={"120px"}
