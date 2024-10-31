@@ -12,19 +12,16 @@ import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { useEffect, useState } from "react";
 import { EmpresaService } from "../../../services/EmpresaService";
-import { useAppDispatch } from "../../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { setCompanies } from "../../../redux/slices/companySlice";
 import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
+import useModal from "../../../hooks/useModal";
 import { CardCreateCompany } from "../../ui/CardCreateCompany/CardCreateCompany";
+import { SucursalService } from "../../../services/SucursalService";
 
-interface IHomeProps {
-  companies?: IEmpresa[];
-}
-
-// const API_URL = import.meta.env.BASE_URL;
-const API_URL = "http://190.221.207.224:8090/empresas";
+const API_URL = import.meta.env.VITE_BASE_URL;
 const theme = createTheme({
   typography: {
     fontFamily: "Prompt, sans-serif",
@@ -32,14 +29,20 @@ const theme = createTheme({
 });
 
 export const Home = () => {
-  const companies = useSelector((state: RootState) => state.company.companies);
+  console.log(API_URL);
 
-  //Instanciamos servicio empresa
-  const serviceCompany = new EmpresaService(API_URL);
+  const companies = useAppSelector(
+    (state: RootState) => state.company.companies
+  );
+
+  //Instanciamos servicios
+  const serviceCompany = new EmpresaService(API_URL + "/empresas");
+  const serviceBranch = new SucursalService(API_URL + "/sucursales");
   const dispatch = useAppDispatch();
 
   // Estado para renderizar las sucursales de la empresa seleccionada
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   const activateCompany = (company: IEmpresa) => {
     setCompanyActive(company);
@@ -89,7 +92,11 @@ export const Home = () => {
               <CardCompany company={e} onOpen={activateCompany} />
             ))}
           </Box>
-          <AddButton typeAdd="Company" isCompany={true} />
+          <AddButton
+            typeAdd="Company"
+            isCompany={true}
+            onAddClick={() => openModal("add")}
+          />
         </Box>
 
         {/* Seccion sucursales */}
@@ -153,6 +160,10 @@ export const Home = () => {
             </Box>
           )}
         </Box>
+
+        {/* {isModalOpen && activeModal === "add" && (
+          <CardCreateCompany onClose={closeModal} />
+        )} */}
       </ThemeProvider>
     </>
   );

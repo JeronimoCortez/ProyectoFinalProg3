@@ -5,6 +5,7 @@ import { FC } from "react";
 import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import useModal from "../../../hooks/useModal";
+import { CardCreateCompany } from "../CardCreateCompany/CardCreateCompany";
 
 interface IPropsCardCompany {
   company: IEmpresa;
@@ -43,7 +44,10 @@ export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
           <div
             style={{ display: "flex", justifyContent: "center", gap: "1.4rem" }}
           >
-            <EditButton typeEdit="Company" isCompany={true} />
+            <EditButton
+              isCompany={true}
+              onEditClick={() => openModal("edit")}
+            />
             <InfoButton
               typeEdit="Company"
               isCompany={true}
@@ -55,6 +59,10 @@ export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
 
       {isModalOpen && activeModal === "info" && (
         <CardInfoModel type={company} onClose={closeModal} />
+      )}
+
+      {isModalOpen && activeModal === "edit" && (
+        <CardCreateCompany onClose={closeModal} />
       )}
     </>
   );

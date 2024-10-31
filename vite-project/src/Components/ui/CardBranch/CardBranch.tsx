@@ -53,7 +53,10 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
           </div>
           <div className={styles.containerIcons}>
             <BranchDataButton typeEdit="Companies" />
-            <EditButton typeEdit="Company" isCompany={false} />
+            <EditButton
+              isCompany={false}
+              onEditClick={() => openModal("edit")}
+            />
             <InfoButton
               typeEdit="Brunch"
               isCompany={false}
