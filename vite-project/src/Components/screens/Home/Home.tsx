@@ -11,6 +11,8 @@ import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { FC, useState } from "react";
+import useModal from "../../../hooks/useModal";
+import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
 
 interface IHomeProps {
   companies?: IEmpresa[];
@@ -23,6 +25,7 @@ const theme = createTheme({
 });
 
 export const Home: FC<IHomeProps> = ({ companies }) => {
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
 
   const activateCompany = (company: IEmpresa) => {
@@ -171,6 +174,7 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
                     fontSize: "1.2rem",
                     fontFamily: "Prompt, sans-serif",
                   }}
+                  onClick={() => openModal("add")}
                 >
                   Agregar
                 </Button>
@@ -193,6 +197,9 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
             </Box>
           )}
         </Box>
+        {isModalOpen && activeModal === "add" && (
+          <CreateBranch onClose={closeModal} />
+        )}
       </ThemeProvider>
     </>
   );

@@ -473,6 +473,9 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({ onClose }) => {
             <ImageIcon></ImageIcon>
           </Box>
         </Box>
+
+        {/* Botones Check y Close */}
+
         <Box className={styles.buttonsBox}>
           <Box className={styles.buttonsContainer}>
             <CheckButton typeCheck="branch" isCompany={false}></CheckButton>
