@@ -4,14 +4,10 @@ import styles from "./CheckButton.module.css";
 import { Button } from "@mui/material";
 
 interface ICheckButtonProps {
-  typeCheck: string;
   isCompany: boolean;
 }
 
-export const CheckButton: FC<ICheckButtonProps> = ({
-  typeCheck,
-  isCompany,
-}) => {
+export const CheckButton: FC<ICheckButtonProps> = ({ isCompany }) => {
   return (
     <>
       <button

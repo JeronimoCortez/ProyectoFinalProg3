@@ -1,619 +1,241 @@
 import {
   Box,
   Checkbox,
-  FormControl,
   FormControlLabel,
   InputAdornment,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { FC, useState } from "react";
 import WatchIcon from "@mui/icons-material/WatchLater";
-import ImageIcon from "@mui/icons-material/Image";
+import { CheckButton } from "../CheckButton/CheckButton";
+import { CloseButton } from "../CloseButton/CloseButton";
+import { InputTextField } from "../InputTextField/InputTextField";
+import InputSelect from "../InputSelect/InputSelect";
+import { IPais } from "../../../types/IPais";
+import { IProvincia } from "../../../types/IProvincia";
+import { ILocalidad } from "../../../types/ILocalidad";
+import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 
-export const CreateBranch = () => {
+interface IPropsCreateBranch {
+  onClose: () => void;
+  branch: ISucursal;
+  idCompany: number;
+}
+
+export const CreateBranch: FC<IPropsCreateBranch> = ({ onClose }) => {
   const [checked, setChecked] = useState(false);
 
   // Manejador del evento cuando el usuario marca/desmarca el checkbox
   const handleChange = (event: any) => {
     setChecked(event.target.checked);
   };
-  const [selectedCountry, setSelectedCountry] = useState("");
 
-  const countries = ["Argentina", "México", "España", "Colombia", "Chile"];
-
-  const handleCountryChange = (event: any) => {
-    setSelectedCountry(event.target.value);
-  };
-
-  const [selectedProvince, setSelectedProvince] = useState("");
-
-  const provinces = [
-    "Río Negro",
-    "Mendoza",
-    "Buenos Aires",
-    "Córdoba",
-    "Misiones",
+  const countries: IPais[] = [
+    { id: 0, nombre: "Argentina" },
+    { id: 1, nombre: "Brasil" },
   ];
 
-  const handleProvinceChange = (event: any) => {
-    setSelectedProvince(event.target.value);
+  const provinces: IProvincia[] = [
+    { id: 0, nombre: "Mendoza", pais: { id: 0, nombre: "Argentina" } },
+    { id: 1, nombre: "Rio negro", pais: { id: 0, nombre: "Argentina" } },
+  ];
+
+  const localidades: ILocalidad[] = [
+    { id: 0, nombre: "Mendoza", provincia: provinces[0] },
+    { id: 1, nombre: "Guaymallen", provincia: provinces[0] },
+  ];
+
+  const commonStyles = {
+    sx: {
+      "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+          borderColor: "rgba(217, 217, 217, 0.35)",
+        },
+        "&:hover fieldset": {
+          borderColor: "#FFFFFF",
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: "#FFFFFF",
+        },
+      },
+    },
   };
 
   return (
-    <Box
-      sx={{
-        position: "fixed",
-        width: "100vw",
-        height: "100vh",
-        background: "rgba(64,79,96, 0.62)",
-        zIndex: 9999,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        top: 0,
-        left: 0,
-      }}
-    >
+    <>
       <Box
         sx={{
-          width: "800px",
-          height: "500px",
-          backgroundColor: "#2E64A1",
-          fontFamily: "Prompt, sans-serif",
+          position: "fixed",
+          width: "100vw",
+          height: "100vh",
+          background: "rgba(64,79,96, 0.62)",
+          zIndex: 9999,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          top: 0,
+          left: 0,
         }}
       >
-        <Typography
-          sx={{ color: "#FFFFFF", textAlign: "center", paddingTop: "2vh" }}
-          variant="h5"
-        >
-          Crear una Sucursal
-        </Typography>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)", // Tres columnas
-            gap: "1rem", // Espaciado entre columnas
-            padding: "1.6rem",
-          }}
-        >
-          {/* Columna 1 */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <TextField
-              placeholder="Ingrese un nombre"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            />
-            <TextField
-              placeholder="Horario apertura"
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" sx={{ color: "#FFFFFF" }}>
-                    <WatchIcon />
-                  </InputAdornment>
-                ),
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-            />
-            <TextField
-              placeholder="Horario cierre"
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" sx={{ color: "#FFFFFF" }}>
-                    <WatchIcon />
-                  </InputAdornment>
-                ),
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-            />
-            <FormControlLabel
-              sx={{
-                color: "#FFFFFF",
-              }}
-              control={
-                <Checkbox
-                  sx={{
-                    color: "#FFFFFF",
-                    "&.Mui-checked": {
-                      color: "#4CE415",
-                    },
-                  }}
-                  checked={checked}
-                  onChange={handleChange}
-                />
-              }
-              label="Habilitado"
-            />
-          </Box>
-
-          {/* Columna 2 */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-              <Select
-                value={selectedCountry}
-                onChange={handleCountryChange}
-                displayEmpty
-                sx={{
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  height: "50px",
-                  color: "#FFFFFF",
-                  fontSize: "15px",
-                  borderRadius: "4px",
-                  "& .MuiSelect-icon": {
-                    color: "#FFFFFF", // Cambia el color del ícono (triángulo)
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(255, 255, 255, 0.5)", // Cambia el color del borde
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFFFFF",
-                  },
-                }}
-                IconComponent={(props) => (
-                  <span
-                    {...props}
-                    style={{
-                      color: "#FFFFFF",
-                      fontSize: ".8rem",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      transform: "translateY(-5px)",
-                      marginRight: "10px",
-                    }}
-                  >
-                    ▼
-                  </span>
-                )}
-              >
-                <MenuItem value="" disabled>
-                  <Typography
-                    color="rgba(217, 217, 217, 0.35)"
-                    fontSize={"14px"}
-                  >
-                    Seleccione un país
-                  </Typography>
-                </MenuItem>
-                {countries.map((country) => (
-                  <MenuItem key={country} value={country}>
-                    {country}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            {/* Seleccione una Provincia */}
-
-            <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-              <Select
-                value={selectedProvince}
-                onChange={handleProvinceChange}
-                displayEmpty
-                sx={{
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  height: "50px",
-                  color: "#FFFFFF",
-                  borderRadius: "4px",
-                  "& .MuiSelect-icon": {
-                    color: "#FFFFFF", // Cambia el color del ícono (triángulo)
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(255, 255, 255, 0.5)", // Cambia el color del borde
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFFFFF",
-                  },
-                }}
-                IconComponent={(props) => (
-                  <span
-                    {...props}
-                    style={{
-                      color: "#FFFFFF",
-                      fontSize: ".8rem",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      transform: "translateY(-5px)",
-                      marginRight: "10px",
-                    }}
-                  >
-                    ▼
-                  </span>
-                )}
-              >
-                <MenuItem value="" disabled>
-                  <Typography
-                    color="rgba(217, 217, 217, 0.35)"
-                    fontSize={"14px"}
-                  >
-                    Seleccione una provincia
-                  </Typography>
-                </MenuItem>
-                {provinces.map((province) => (
-                  <MenuItem key={province} value={province}>
-                    {province}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-              <Select
-                value={selectedProvince}
-                onChange={handleProvinceChange}
-                displayEmpty
-                sx={{
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  height: "50px",
-                  color: "#FFFFFF",
-                  borderRadius: "4px",
-                  "& .MuiSelect-icon": {
-                    color: "rgba(217, 217, 217, 0.35)", // Cambia el color del ícono (triángulo)
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(255, 255, 255, 0.5)", // Cambia el color del borde
-                  },
-
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                }}
-                IconComponent={(props) => (
-                  <span
-                    {...props}
-                    style={{
-                      color: "#FFFFFF",
-                      fontSize: ".8rem",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      transform: "translateY(-5px)",
-                      marginRight: "10px",
-                    }}
-                  >
-                    ▼
-                  </span>
-                )}
-              >
-                <MenuItem value="" disabled>
-                  <Typography
-                    color="rgba(217, 217, 217, 0.35)"
-                    fontSize={"14px"}
-                  >
-                    Seleccione una localidad
-                  </Typography>
-                </MenuItem>
-                {provinces.map((province) => (
-                  <MenuItem key={province} value={province}>
-                    {province}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            {/* Longitud */}
-
-            <TextField
-              placeholder="Longitud"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
-
-            {/* Latitud */}
-
-            <TextField
-              placeholder="Latitud"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
-          </Box>
-
-          {/* Columna 3 */}
-
-          {/* Nombre de la calle */}
-
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <TextField
-              placeholder="Nombre de la calle"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
-
-            {/* Número de la calle */}
-
-            <TextField
-              placeholder="Número de la calle"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
-
-            {/* Código postal */}
-
-            <TextField
-              placeholder="Código postal"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
-
-            {/* Número de piso */}
-
-            <TextField
-              placeholder="Número de piso"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
-
-            {/* Número de departamento */}
-
-            <TextField
-              placeholder="Número de departamento"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "rgba(217, 217, 217, 0.35)",
-                  },
-                  "&:hover fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                  "&.Mui-focused fieldset": {
-                    color: "#FFFFFF",
-                    borderColor: "#FFFFFF",
-                  },
-                },
-              }}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
-          </Box>
-        </Box>
         <Box
           sx={{
             display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            maxWidth: "800px",
+            minHeight: "500px",
             alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-            gap: "16vh",
-            width: "400px",
-            height: "55px",
-            backgroundColor: "rgba(217, 217, 217, 0.35)",
-            borderRadius: "4px",
-            border: "2px solid transparent", // Borde inicial transparente
-            "&:hover": {
-              border: "2px solid white", // Borde blanco al hacer hover
-            },
-            cursor: "pointer",
-            marginLeft: "32vh",
+            backgroundColor: "#2E64A1",
+            borderRadius: ".4rem",
           }}
         >
           <Typography
-            variant="subtitle1"
+            variant="h2"
+            component="h6"
             sx={{
-              color: "rgba(217, 217, 217, 0.35)",
-              fontSize: "18px",
+              fontFamily: "Prompt, sans-serif",
+              fontSize: "32px",
+              color: "#FFF",
             }}
           >
-            Elige una imagen
+            Crear sucursal
           </Typography>
           <Box
             sx={{
-              color: "#FFFFFF",
-              display: "flex",
-              scale: "1.5",
-              justifyContent: "center",
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "1rem",
               alignItems: "center",
+              margin: "5px",
             }}
           >
-            <ImageIcon></ImageIcon>
+            {/* Columna 1 */}
+            <Box
+              sx={{
+                width: "100%",
+              }}
+            >
+              <InputTextField placeholder="Ingrese su nombre" name="nombre" />
+              <TextField
+                placeholder="Horario apertura"
+                variant="outlined"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ color: "#FFFFFF" }}>
+                      <WatchIcon />
+                    </InputAdornment>
+                  ),
+                  style: {
+                    backgroundColor: "rgba(217, 217, 217, 0.35)",
+                    color: "#FFFFFF",
+                    height: "50px",
+                    fontSize: "14px",
+                    margin: "4px 0",
+                  },
+                }}
+                {...commonStyles}
+              />
+              <TextField
+                placeholder="Horario cierre"
+                variant="outlined"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ color: "#FFFFFF" }}>
+                      <WatchIcon />
+                    </InputAdornment>
+                  ),
+                  style: {
+                    backgroundColor: "rgba(217, 217, 217, 0.35)",
+                    color: "#FFFFFF",
+                    height: "50px",
+                    fontSize: "14px",
+
+                    margin: "4px 0",
+                  },
+                }}
+                {...commonStyles}
+              />
+              <FormControlLabel
+                sx={{
+                  color: "#FFFFFF",
+                  margin: "0 auto",
+                }}
+                control={
+                  <Checkbox
+                    sx={{
+                      color: "#FFFFFF",
+                      "&.Mui-checked": {
+                        color: "#4CE415",
+                      },
+                    }}
+                    checked={checked}
+                    onChange={handleChange}
+                  />
+                }
+                label="Habilitado"
+              />
+            </Box>
+
+            {/* Columna 2 */}
+            <Box>
+              <InputSelect
+                options={countries}
+                placeholder="Seleccione un pais"
+                name="pais"
+              />
+              <InputSelect
+                options={provinces}
+                placeholder="Seleccione una provincia"
+                name="provincia"
+              />
+
+              <InputSelect
+                options={localidades}
+                placeholder="Seleccione una localidad"
+                name="localidad"
+              />
+
+              <InputTextField placeholder="Longitud" name="Longitud" />
+              <InputTextField placeholder="Latitud" name="Latitud" />
+            </Box>
+            {/* Columna 3 */}
+            <Box>
+              <InputTextField
+                placeholder="Nombre de calle"
+                name="domicilio.calle"
+              />
+              <InputTextField
+                placeholder="Numero de calle"
+                name="domicilio.numero"
+              />
+              <InputTextField placeholder="Codigo postal" name="domicilio.cp" />
+              <InputTextField
+                placeholder="Numero de piso"
+                name="domicilio.piso"
+              />
+              <InputTextField
+                placeholder="Numero de departamento"
+                name="domicilio.nroDpto"
+              />
+            </Box>
+          </Box>
+          <Box>
+            <InputTextField placeholder="Ingrese una imagen" name="logo" />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              width: "100%",
+            }}
+          >
+            <CheckButton isCompany={false} />
+            <CloseButton isCompany={false} onclick={onClose} />
           </Box>
         </Box>
       </Box>
-    </Box>
+    </>
   );
 };

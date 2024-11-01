@@ -3,32 +3,11 @@ import { FC } from "react";
 import styles from "./CloseButton.module.css";
 
 interface ICloseButtonProps {
-  typeClose: String;
   isCompany: boolean;
   onclick: () => void;
 }
 
-export const CloseButton: FC<ICloseButtonProps> = ({
-  typeClose,
-  isCompany,
-  onclick,
-}) => {
-  const handleEdit = () => {
-    switch (typeClose) {
-      case "Company":
-        console.log("Empresa");
-        break;
-      case "Allergens":
-        console.log("Alergenos");
-        break;
-      case "Categories":
-        console.log("Categoria");
-        break;
-      case "Product":
-        console.log("Producto");
-        break;
-    }
-  };
+export const CloseButton: FC<ICloseButtonProps> = ({ isCompany, onclick }) => {
   return (
     <>
       <div
