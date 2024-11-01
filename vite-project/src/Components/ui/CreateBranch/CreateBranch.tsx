@@ -10,11 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import { FC, useState } from "react";
-import WatchIcon from "@mui/icons-material/WatchLater";
 import ImageIcon from "@mui/icons-material/Image";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
 import styles from "./CreateBranch.module.css";
+import { InputTextField } from "../InputTextField/InputTextField";
+import { InputTime } from "../InputTime/InputTime";
 
 interface IPropsCreateBranch {
   onClose: () => void;
@@ -47,22 +48,6 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({ onClose }) => {
 
   const handleProvinceChange = (event: any) => {
     setSelectedProvince(event.target.value);
-  };
-
-  const commonStyles = {
-    sx: {
-      "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-          borderColor: "rgba(217, 217, 217, 0.35)",
-        },
-        "&:hover fieldset": {
-          borderColor: "#FFFFFF",
-        },
-        "&.Mui-focused fieldset": {
-          borderColor: "#FFFFFF",
-        },
-      },
-    },
   };
 
   const commonStyles_2 = {
@@ -124,55 +109,10 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({ onClose }) => {
         >
           {/* Columna 1 */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <TextField
-              placeholder="Ingrese un nombre"
-              variant="outlined"
-              {...commonStyles}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            />
-            <TextField
-              placeholder="Horario apertura"
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" sx={{ color: "#FFFFFF" }}>
-                    <WatchIcon />
-                  </InputAdornment>
-                ),
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-              {...commonStyles}
-            />
-            <TextField
-              placeholder="Horario cierre"
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" sx={{ color: "#FFFFFF" }}>
-                    <WatchIcon />
-                  </InputAdornment>
-                ),
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-              {...commonStyles}
-            />
+            <InputTextField placeholder="Ingrese un nombre" name="nombre" />
+            <InputTime placeholder="Horario apertura" name="horarioApertura" />
+
+            <InputTime placeholder="Horario cierre" name="horarioCierre" />
             <FormControlLabel
               sx={{
                 color: "#FFFFFF",
@@ -274,6 +214,9 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({ onClose }) => {
                 ))}
               </Select>
             </FormControl>
+
+            {/* Seleccione una Localidad */}
+
             <FormControl variant="outlined" sx={{ minWidth: 200 }}>
               <Select
                 value={selectedProvince}
@@ -314,36 +257,10 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({ onClose }) => {
             </FormControl>
 
             {/* Longitud */}
-
-            <TextField
-              placeholder="Longitud"
-              variant="outlined"
-              {...commonStyles}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
+            <InputTextField placeholder="Longitud" name="longitud" />
 
             {/* Latitud */}
-
-            <TextField
-              placeholder="Latitud"
-              variant="outlined"
-              {...commonStyles}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
+            <InputTextField placeholder="Latitud" name="latitud" />
           </Box>
 
           {/* Columna 3 */}
@@ -351,83 +268,32 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({ onClose }) => {
           {/* Nombre de la calle */}
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <TextField
+            <InputTextField
               placeholder="Nombre de la calle"
-              variant="outlined"
-              {...commonStyles}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
+              name="nombreCalle"
+            />
 
             {/* Número de la calle */}
 
-            <TextField
+            <InputTextField
               placeholder="Número de la calle"
-              variant="outlined"
-              {...commonStyles}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
+              name="numeroCalle"
+            />
 
             {/* Código postal */}
 
-            <TextField
-              placeholder="Código postal"
-              variant="outlined"
-              {...commonStyles}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
+            <InputTextField placeholder="Código postal" name="codigoPostal" />
 
             {/* Número de piso */}
 
-            <TextField
-              placeholder="Número de piso"
-              variant="outlined"
-              {...commonStyles}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
+            <InputTextField placeholder="Número de piso" name="numeroPiso" />
 
             {/* Número de departamento */}
 
-            <TextField
+            <InputTextField
               placeholder="Número de departamento"
-              variant="outlined"
-              {...commonStyles}
-              InputProps={{
-                style: {
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  color: "#FFFFFF",
-                  height: "50px",
-                  fontSize: "14px",
-                },
-              }}
-            ></TextField>
+              name="numeroDepartamento"
+            />
           </Box>
         </Box>
 
