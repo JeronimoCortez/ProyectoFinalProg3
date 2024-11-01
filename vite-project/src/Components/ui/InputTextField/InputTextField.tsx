@@ -1,5 +1,6 @@
-import { TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { FC } from "react";
+import ImageIcon from "@mui/icons-material/Image";
 
 interface IPropsInputTextField {
   placeholder: string;
@@ -11,36 +12,39 @@ export const InputTextField: FC<IPropsInputTextField> = ({
   name,
 }) => {
   return (
-    <TextField
-      name={name}
-      placeholder={placeholder}
-      variant="outlined"
-      sx={{
-        "& .MuiOutlinedInput-root": {
-          "& fieldset": {
-            borderColor: "rgba(217, 217, 217, 0.35)",
-          },
-          "&:hover fieldset": {
-            borderColor: "#FFFFFF",
-          },
-          "&.Mui-focused fieldset": {
-            borderColor: "#FFFFFF",
-          },
-        },
-      }}
-      InputProps={{
-        style: {
-          backgroundColor: "rgba(217, 217, 217, 0.35)",
-          color: "#FFFFFF",
-          height: "50px",
-          fontSize: "14px",
-        },
-      }}
-      InputLabelProps={{
-        style: {
-          color: "rgba(217, 217, 217, 0.35)",
-        },
-      }}
-    />
+    <>
+      <Box
+        sx={{
+          background: "rgba(217,217,217,.35)",
+          borderRadius: ".4rem",
+          marginY: "4px",
+          width: "100%",
+          height: "52px",
+        }}
+      >
+        <TextField
+          name={name}
+          placeholder={placeholder}
+          sx={{
+            "& input": {
+              color: "#FFF",
+              borderRadius: ".4rem",
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: "none",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#FFFFFF",
+            },
+            "& input:focus": {
+              backgroundColor: "rgba(217, 217, 217, 0.35)",
+            },
+          }}
+        />
+        {name === "logo" && (
+          <ImageIcon sx={{ color: "#FFF", fontSize: "50px" }}></ImageIcon>
+        )}
+      </Box>
+    </>
   );
 };

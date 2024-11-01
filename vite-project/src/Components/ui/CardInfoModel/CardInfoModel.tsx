@@ -42,7 +42,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
           <Box
             sx={{
               width: "300px",
-              height: "450px",
+              minHeight: "450px",
               backgroundColor: "#EE964B",
               display: "flex",
               justifyContent: "center",
