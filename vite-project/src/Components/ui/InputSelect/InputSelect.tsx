@@ -6,24 +6,32 @@ import styles from "./InputSelect.module.css";
 
 interface IPropsInputSelect {
   options: IPais[] | IProvincia[] | ILocalidad[];
-  name: string;
+  returnOptionSelected: IPais | IProvincia | ILocalidad;
   placeholder: string;
+  name: string;
 }
 
-const InputSelect: FC<IPropsInputSelect> = ({ options, name, placeholder }) => {
-  const [selectedValue, setSelectedValue] = useState("");
+const InputSelect: FC<IPropsInputSelect> = ({
+  options,
+  returnOptionSelected,
+  placeholder,
+  name,
+}) => {
+  const [optionSelected, setOptionSelected] = useState<
+    IPais | ILocalidad | IProvincia
+  >();
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedValue(event.target.value);
+  const onHandleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(event.target.value);
+    const findOption = options.find((option) => option.id === id);
+    setOptionSelected(findOption);
   };
   return (
     <>
       <select
         className={styles.selectContainer}
-        id={name}
-        name={name}
-        value={selectedValue}
-        onChange={handleChange}
+        value={name}
+        onChange={() => onHandleChange}
       >
         <option className={styles.selectOption} value="" disabled>
           {placeholder}
@@ -32,7 +40,7 @@ const InputSelect: FC<IPropsInputSelect> = ({ options, name, placeholder }) => {
           <option
             className={styles.selectOption}
             key={option.id}
-            value={option.nombre}
+            value={option.id}
           >
             {option.nombre}
           </option>

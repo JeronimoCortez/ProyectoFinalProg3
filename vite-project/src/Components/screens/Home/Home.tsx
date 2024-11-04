@@ -147,6 +147,7 @@ export const Home = () => {
                     fontSize: "1.2rem",
                     fontFamily: "Prompt, sans-serif",
                   }}
+                  onClick={() => openModal("addBranch")}
                 >
                   Agregar
                 </Button>
@@ -171,6 +172,10 @@ export const Home = () => {
 
         {isModalOpen && activeModal === "add" && (
           <CardCreateCompany onClose={closeModal} />
+        )}
+
+        {isModalOpen && companyActive && activeModal === "addBranch" && (
+          <CreateBranch onClose={closeModal} idCompany={companyActive?.id} />
         )}
       </ThemeProvider>
     </>

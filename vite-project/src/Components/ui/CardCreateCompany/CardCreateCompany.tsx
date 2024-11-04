@@ -210,12 +210,8 @@ export const CardCreateCompany: FC<IPropsCreateCompany> = ({
 
               {/* Botones de Aceptar y Cancelar */}
               <Box mt={3} display="flex" justifyContent="space-between">
-                <CheckButton typeCheck="Company" isCompany={true} />
-                <CloseButton
-                  typeClose="Company"
-                  isCompany={true}
-                  onclick={onClose}
-                />
+                <CheckButton isCompany={true} />
+                <CloseButton isCompany={true} onclick={onClose} />
               </Box>
             </FormContainer>
           </Form>

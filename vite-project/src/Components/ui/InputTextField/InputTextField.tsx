@@ -4,12 +4,19 @@ import ImageIcon from "@mui/icons-material/Image";
 
 interface IPropsInputTextField {
   placeholder: string;
+  value: any;
   name: string;
+  onChange: any;
+  errors: any;
+  helperText: any;
 }
 
 export const InputTextField: FC<IPropsInputTextField> = ({
   placeholder,
+  value,
   name,
+  onChange,
+  errors,
 }) => {
   return (
     <>
@@ -23,7 +30,10 @@ export const InputTextField: FC<IPropsInputTextField> = ({
         }}
       >
         <TextField
+          onChange={onChange}
+          error={errors}
           name={name}
+          value={value}
           placeholder={placeholder}
           sx={{
             "& input": {
@@ -41,7 +51,7 @@ export const InputTextField: FC<IPropsInputTextField> = ({
             },
           }}
         />
-        {name === "logo" && (
+        {value === "logo" && (
           <ImageIcon sx={{ color: "#FFF", fontSize: "50px" }}></ImageIcon>
         )}
       </Box>

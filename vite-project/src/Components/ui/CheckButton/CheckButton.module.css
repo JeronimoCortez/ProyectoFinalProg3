@@ -1,5 +1,5 @@
 .containerCheckIcon {
-  background-color: #eef4ed;
+  background-color: rgba(217, 217, 217, 0.31);
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -10,9 +10,7 @@
   cursor: pointer;
 }
 
-.company {
-  background-color: #ee964b;
-}
+
 
 .checkIcon {
   font-size: 17px;

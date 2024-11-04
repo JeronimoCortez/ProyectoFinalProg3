@@ -8,6 +8,7 @@ import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 import { FC } from "react";
 import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
 import useModal from "../../../hooks/useModal";
+import { CreateBranch } from "../CreateBranch/CreateBranch";
 
 interface ICardBranch {
   branch: ISucursal;
@@ -76,6 +77,10 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
 
       {isModalOpen && activeModal === "info" && (
         <CardInfoModel type={branch} onClose={closeModal} />
+      )}
+
+      {isModalOpen && activeModal === "edit" && (
+        <CreateBranch onClose={closeModal} idCompany={branch.empresa.id} />
       )}
     </>
   );

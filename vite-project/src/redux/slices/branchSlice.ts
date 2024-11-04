@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ISucursal } from "../../types/dtos/sucursal/ISucursal";
+import { ICreateSucursal } from "../../types/dtos/sucursal/ICreateSucursal";
 
 interface PayloadSetElement {
-  element: ISucursal
+  element: ICreateSucursal | ISucursal
 }
 
 interface IInitialState{
   branches: ISucursal[],
-  elementActive: null | ISucursal,
+  elementActive: null | ICreateSucursal | ISucursal,
 }
 
 const initialState: IInitialState = {
