@@ -19,3 +19,9 @@
 - Redux Toolkit
 - React Redux
 - React Router
+
+## Librerias
+
+- YUP
+- Formik
+- SweetAlert2

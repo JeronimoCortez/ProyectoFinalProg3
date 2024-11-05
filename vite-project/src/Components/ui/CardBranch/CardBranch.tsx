@@ -8,6 +8,7 @@ import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 import { FC } from "react";
 import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
 import useModal from "../../../hooks/useModal";
+import { CreateBranch } from "../CreateBranch/CreateBranch";
 
 interface ICardBranch {
   branch: ISucursal;
@@ -44,7 +45,15 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
           >
             {branch.nombre}
           </Typography>
-          <img src="../../public/assets/BranchImg.png" alt="" />
+          <img
+            src={
+              branch.logo
+                ? branch.logo
+                : "https://i.postimg.cc/FRKsWfmM/Branch-Img.png"
+            }
+            alt=""
+            height={"120px"}
+          />
           <div className={styles.containerTime}>
             <WatchIcon style={{ color: "#d9d9d9" }} />
             <p className={styles.time}>
@@ -53,7 +62,10 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
           </div>
           <div className={styles.containerIcons}>
             <BranchDataButton typeEdit="Companies" />
-            <EditButton typeEdit="Company" isCompany={false} />
+            <EditButton
+              isCompany={false}
+              onEditClick={() => openModal("edit")}
+            />
             <InfoButton
               typeEdit="Brunch"
               isCompany={false}
@@ -65,6 +77,10 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
 
       {isModalOpen && activeModal === "info" && (
         <CardInfoModel type={branch} onClose={closeModal} />
+      )}
+
+      {isModalOpen && activeModal === "edit" && (
+        <CreateBranch onClose={closeModal} idCompany={branch.empresa.id} />
       )}
     </>
   );

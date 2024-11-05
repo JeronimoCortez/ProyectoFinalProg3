@@ -42,7 +42,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
           <Box
             sx={{
               width: "300px",
-              height: "450px",
+              minHeight: "450px",
               backgroundColor: "#EE964B",
               display: "flex",
               justifyContent: "center",
@@ -130,11 +130,7 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
                   <strong>Logo:</strong>
                 </Typography>
                 {type.logo ? (
-                  <img
-                    src={type.logo}
-                    alt="logo"
-                    style={{ maxWidth: "100px", height: "auto" }}
-                  />
+                  <img src={type.logo} alt="logo" height={"100px"} />
                 ) : (
                   <p>No tiene</p>
                 )}
@@ -241,7 +237,15 @@ export const CardInfoModel: FC<IInfoProps> = ({ type, onClose }) => {
               >
                 Logo:
               </Typography>
-              <img src={type.logo} alt="" />
+              {type.logo ? (
+                <img src={type.logo} alt="logo" height={"120px"} />
+              ) : (
+                <img
+                  src="https://i.postimg.cc/FRKsWfmM/Branch-Img.png"
+                  alt="logo"
+                  height={"120px"}
+                />
+              )}
             </Box>
           </Box>
         </Box>
