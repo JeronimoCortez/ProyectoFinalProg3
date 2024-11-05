@@ -7,16 +7,34 @@ interface ICheckButtonProps {
   isCompany: boolean;
 }
 
-export const CheckButton: FC<ICheckButtonProps> = ({ isCompany }) => {
+export const CheckButton: FC<ICheckButtonProps> = ({
+  typeCheck,
+  isCompany,
+}) => {
+  const handleEdit = () => {
+    switch (typeCheck) {
+      case "Company":
+        console.log("Empresa");
+        break;
+      case "Allergens":
+        console.log("Alergenos");
+        break;
+      case "Categories":
+        console.log("Categoria");
+        break;
+      case "Product":
+        console.log("Producto");
+        break;
+    }
+  };
   return (
     <>
-      <button
-        type="submit"
+      <div
         className={`${styles.containerCheckIcon} 
         ${isCompany ? styles.company : ""}`}
       >
-        <CheckIcon className={styles.checkIcon} />
-      </button>
+        <CheckIcon className={styles.checkIcon} onClick={handleEdit} />
+      </div>
     </>
   );
 };
