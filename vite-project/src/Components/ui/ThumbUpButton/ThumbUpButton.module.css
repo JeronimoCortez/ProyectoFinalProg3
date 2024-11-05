@@ -1,0 +1,23 @@
+/* ThumbUpButton.module.css */
+.containerThumbUpIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.enabled {
+  background-color: #4caf50; /* Color verde cuando está habilitado */
+}
+
+.disabled {
+  background-color: #757575; /* Color gris cuando está deshabilitado */
+}
+
+.thumbUpIcon {
+  color: white;
+  font-size: 24px;
+}

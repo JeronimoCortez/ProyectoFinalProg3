@@ -3,42 +3,22 @@ import { FC } from "react";
 import styles from "./EditButton.module.css";
 
 interface IEditButtonProps {
-  typeEdit: string;
   isCompany: boolean;
   onEditClick: () => void;
 }
 
 export const EditButton: FC<IEditButtonProps> = ({
-  typeEdit,
   isCompany,
   onEditClick,
 }) => {
-  const handleEdit = () => {
-    switch (typeEdit) {
-      case "Company":
-        console.log("Empresa");
-        break;
-      case "Brunch":
-        console.log("Sucursal");
-        break;
-      case "Allergens":
-        console.log("Alergenos");
-        break;
-      case "Categories":
-        console.log("Categoria");
-        break;
-      case "Product":
-        console.log("Producto");
-        break;
-    }
-  };
   return (
     <>
       <div
         className={`${styles.containerEditIcon} 
         ${isCompany ? styles.company : ""}`}
+        onClick={onEditClick}
       >
-        <EditIcon className={styles.editIcon} onClick={onEditClick} />
+        <EditIcon className={styles.editIcon} />
       </div>
     </>
   );
