@@ -11,10 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 
-import { InfoButton } from "../../Components/ui/InfoButton/InfoButton";
-import { EditButton } from "../ui/EditButton/EditButton";
-import { DeleteButton } from "../ui/DeleteButton/DeleteButton";
-import { AddButton } from "../ui/AddButton/AddButton";
+import { InfoButton } from "../../ui/InfoButton/InfoButton";
+import { EditButton } from "../../ui/EditButton/EditButton";
+import { DeleteButton } from "../../ui/DeleteButton/DeleteButton";
+import { AddButton } from "../../ui/AddButton/AddButton";
 
 const theme = createTheme({
   typography: {
