@@ -10,99 +10,64 @@ import { CardCompany } from "../../ui/CardCompany/CardCompany";
 import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
-import { FC, useState } from "react";
-import useModal from "../../../hooks/useModal";
+import { useEffect, useState } from "react";
+import { EmpresaService } from "../../../services/EmpresaService";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { RootState } from "../../../redux/store/store";
+import { setCompanies } from "../../../redux/slices/companySlice";
 import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
+import useModal from "../../../hooks/useModal";
+import { CardCreateCompany } from "../../ui/CardCreateCompany/CardCreateCompany";
+import { SucursalService } from "../../../services/SucursalService";
+import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 
-interface IHomeProps {
-  companies?: IEmpresa[];
-}
-
+const API_URL = import.meta.env.VITE_BASE_URL;
 const theme = createTheme({
   typography: {
     fontFamily: "Prompt, sans-serif",
   },
 });
 
-export const Home: FC<IHomeProps> = ({ companies }) => {
-  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
+export const Home = () => {
+  const companies = useAppSelector(
+    (state: RootState) => state.company.companies
+  );
+
+  //Instanciamos servicios
+  const serviceCompany = new EmpresaService(API_URL + "/empresas");
+  const serviceBranch = new SucursalService(API_URL + "/sucursales");
+  const dispatch = useAppDispatch();
+
+  // Estado para renderizar las sucursales de la empresa seleccionada
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
+  const [branches, setBranches] = useState<ISucursal[]>([]);
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   const activateCompany = (company: IEmpresa) => {
     setCompanyActive(company);
+    getSucursalesPorEmpresa(company.id);
   };
 
-  /* Creamos una lista de objetos empresa, renderizado momentaneo hasta que conectemos con la api */
-  const comp: IEmpresa[] = [
-    {
-      id: 12,
-      nombre: "Nombre empresa",
-      razonSocial: "Razón Social de la Empresa",
-      cuit: 2222222,
-      logo: "../../../public/assets/BranchImg.png",
-      pais: { nombre: "Argentina", id: 12 },
-      sucursales: [
-        {
-          id: 1,
-          nombre: "sucursal",
-          empresa: {
-            id: 12,
-            nombre: "Nombre empresa",
-            razonSocial: "Razón Social de la Empresa",
-            cuit: 2222222,
-            logo: "../../../public/assets/BranchImg.png",
-            pais: { nombre: "Argentina", id: 12 },
-            sucursales: [],
-          },
-          domicilio: {
-            id: 12,
-            calle: "calle",
-            numero: 123,
-            cp: 5500,
-            piso: 12,
-            nroDpto: 12,
-            localidad: {
-              id: 12,
-              nombre: "mendoza",
-              provincia: {
-                nombre: "Mendoza",
-                pais: {
-                  nombre: "Argentina",
-                  id: 12,
-                },
-                id: 12,
-              },
-            },
-          },
-          calle: "Calle",
-          latitud: 123,
-          longitud: 123,
-          categorias: [],
-          esCasaMatriz: true,
-          horarioApertura: "1212",
-          eliminado: false,
-          horarioCierre: "123",
-          logo: "../public/assets/BranchImg.png",
-        },
-      ],
-    },
-    {
-      id: 12,
-      nombre: "Nombre empresa",
-      razonSocial: "Razón Social de la Empresa",
-      cuit: 2222222,
-      logo: "",
-      pais: { nombre: "Argentina", id: 12 },
-      sucursales: [],
-    },
-  ];
+  const getEmpresas = async () => {
+    await serviceCompany.getAll().then((companyData) => {
+      dispatch(setCompanies(companyData));
+    });
+  };
 
-  companies = comp;
+  const getSucursalesPorEmpresa = async (idEmpresa: number) => {
+    await serviceBranch.getSucursalByEmpresaId(idEmpresa).then((sucursales) => {
+      setBranches(sucursales);
+    });
+  };
+
+  useEffect(() => {
+    getEmpresas();
+  }, []);
+
   return (
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-
         {/* Seccion empresas */}
         <Box
           component="section"
@@ -128,11 +93,15 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
               scrollBehavior: "smooth",
             }}
           >
-            {companies.map((e) => (
-              <CardCompany company={e} onOpen={activateCompany} />
+            {companies?.map((e) => (
+              <CardCompany
+                key={e.id}
+                company={e}
+                onOpen={() => activateCompany(e)}
+              />
             ))}
           </Box>
-          <AddButton typeAdd="Company" isCompany={true} />
+          <AddButton isCompany={true} onAddClick={() => openModal("add")} />
         </Box>
 
         {/* Seccion sucursales */}
@@ -174,7 +143,7 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
                     fontSize: "1.2rem",
                     fontFamily: "Prompt, sans-serif",
                   }}
-                  onClick={() => openModal("add")}
+                  onClick={() => openModal("addBranch")}
                 >
                   Agregar
                 </Button>
@@ -189,16 +158,20 @@ export const Home: FC<IHomeProps> = ({ companies }) => {
                   margin: "0 auto",
                 }}
               >
-                {companyActive &&
-                  companyActive.sucursales?.map((e) => (
-                    <CardBranch branch={e} />
-                  ))}
+                {branches.map((e) => (
+                  <CardBranch branch={e} />
+                ))}
               </Box>
             </Box>
           )}
         </Box>
+
         {isModalOpen && activeModal === "add" && (
-          <CreateBranch onClose={closeModal} />
+          <CardCreateCompany onClose={closeModal} />
+        )}
+
+        {isModalOpen && companyActive && activeModal === "addBranch" && (
+          <CreateBranch onClose={closeModal} idCompany={companyActive?.id} />
         )}
       </ThemeProvider>
     </>

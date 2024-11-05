@@ -4,12 +4,14 @@
   align-items: center;
   gap: 2rem;
 }
+
 .containerTime {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
   align-items: center;
 }
+
 .time {
   color: #d9d9d9;
   font-family: "Prompt", sans-serif;

@@ -11,9 +11,9 @@ export const CloseButton: FC<ICloseButtonProps> = ({ isCompany, onclick }) => {
   return (
     <>
       <div
+        onClick={onclick}
         className={`${styles.containerCloseIcon} 
         ${isCompany ? styles.company : ""}`}
-        onClick={onclick}
       >
         <CloseIcon className={styles.closeIcon} />
       </div>
