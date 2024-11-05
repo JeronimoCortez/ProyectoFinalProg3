@@ -8,6 +8,12 @@ import {
 } from "@mui/material";
 import { AddButton } from "../ui/AddButton/AddButton";
 import Allergen from "../ui/Allergen/Allergen";
+import { AlergenoService } from "../../services/AlergenoService";
+import { useEffect } from "react";
+import { IAlergenos } from "../../types/dtos/alergenos/IAlergenos";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { setAllergens } from "../../redux/slices/allergenSlice";
+import { RootState } from "../../redux/store/store";
 
 const theme = createTheme({
   typography: {
@@ -15,7 +21,23 @@ const theme = createTheme({
   },
 });
 
+const API_URL = import.meta.env.VITE_BASE_URL;
 export const Allergens = () => {
+  const allergens = useAppSelector(
+    (state: RootState) => state.allergen.allergens
+  );
+  const allergenService = new AlergenoService(`${API_URL}/alergenos`);
+  const dispatch = useAppDispatch();
+
+  const getAlergenos = async () => {
+    await allergenService.getAll().then((allergenData) => {
+      dispatch(setAllergens(allergenData));
+    });
+  };
+
+  useEffect(() => {
+    getAlergenos();
+  }, []);
   return (
     <Box sx={{ backgroundColor: "#0B2545", minHeight: "100vh" }}>
       <ThemeProvider theme={theme}></ThemeProvider>
@@ -51,7 +73,7 @@ export const Allergens = () => {
             className="addButton"
             sx={{ position: "absolute", top: 30, right: -500 }}
           >
-            <AddButton typeAdd={"addAllergen"} isCompany={false} />
+            <AddButton onAddClick={() => {}} isCompany={false} />
           </Box>
         </Box>
 
@@ -75,8 +97,8 @@ export const Allergens = () => {
             </Typography>
           </Grid>
         </Grid>
-        {[1, 2, 3].map((item) => (
-          <Allergen allergen={{ id: 0, denominacion: "Nombre" }} key={item} />
+        {allergens?.map((item: IAlergenos) => (
+          <Allergen allergen={item} key={item.id} />
         ))}
       </Box>
     </Box>

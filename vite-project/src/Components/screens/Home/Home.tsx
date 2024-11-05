@@ -101,11 +101,7 @@ export const Home = () => {
               />
             ))}
           </Box>
-          <AddButton
-            typeAdd="Company"
-            isCompany={true}
-            onAddClick={() => openModal("add")}
-          />
+          <AddButton isCompany={true} onAddClick={() => openModal("add")} />
         </Box>
 
         {/* Seccion sucursales */}

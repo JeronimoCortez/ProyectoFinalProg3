@@ -9,13 +9,19 @@ import { FC } from "react";
 import { CardInfoModel } from "../CardInfoModel/CardInfoModel";
 import useModal from "../../../hooks/useModal";
 import { CreateBranch } from "../CreateBranch/CreateBranch";
+import { useNavigate } from "react-router-dom";
 
 interface ICardBranch {
   branch: ISucursal;
 }
 
 export const CardBranch: FC<ICardBranch> = ({ branch }) => {
+  const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
+
+  const handleNavigate = () => {
+    navigate("/allergen");
+  };
 
   return (
     <>
@@ -61,13 +67,12 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
             </p>
           </div>
           <div className={styles.containerIcons}>
-            <BranchDataButton typeEdit="Companies" />
+            <BranchDataButton onClick={handleNavigate} />
             <EditButton
               isCompany={false}
               onEditClick={() => openModal("edit")}
             />
             <InfoButton
-              typeEdit="Brunch"
               isCompany={false}
               onInfoClick={() => openModal("info")}
             />

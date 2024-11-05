@@ -3,18 +3,13 @@ import BranchDataIcon from "@mui/icons-material/ApartmentRounded";
 import styles from "./BranchDataButton.module.css";
 
 interface IBrachDataButtonProps {
-  typeEdit: string;
+  onClick: () => void;
 }
 
-export const BranchDataButton: FC<IBrachDataButtonProps> = ({ typeEdit }) => {
-  const handleData = () => {
-    if (typeEdit === "Companies") {
-      console.log("Companies");
-    }
-  };
+export const BranchDataButton: FC<IBrachDataButtonProps> = ({ onClick }) => {
   return (
     <div className={styles.containerBranchDataIcon}>
-      <BranchDataIcon className={styles.branchDataIcon} onClick={handleData} />
+      <BranchDataIcon className={styles.branchDataIcon} onClick={onClick} />
     </div>
   );
 };
