@@ -49,7 +49,6 @@ export const CardCompany: FC<IPropsCardCompany> = ({ company, onOpen }) => {
               onEditClick={() => openModal("edit")}
             />
             <InfoButton
-              typeEdit="Company"
               isCompany={true}
               onInfoClick={() => openModal("info")}
             />
