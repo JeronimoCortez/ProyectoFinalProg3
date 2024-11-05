@@ -1,13 +1,11 @@
-// import { AppRouter } from "./routes/AppRouter";
-import { CardCreateAllergens } from "./Components/ui/CardCreateAllergens/CardCreateAllergens";
-import { Header } from "./Components/ui/Header/Header";
+// import CustomHeaderWithDrawer from "./Components/ui/Drawer/Drawer";
+import { AppRouter } from "./routes/AppRouter";
 
 function App() {
   return (
     <>
-      <Header />
-      <CardCreateAllergens />
-      {/* <AppRouter /> */}
+      {/* <CustomHeaderWithDrawer /> */}
+      <AppRouter />
     </>
   );
 }

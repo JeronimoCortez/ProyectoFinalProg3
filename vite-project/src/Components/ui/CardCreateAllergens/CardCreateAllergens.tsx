@@ -1,18 +1,16 @@
-import * as React from "react";
-import { Box, Button, Typography, Modal, TextField } from "@mui/material";
+import { Box, Typography, Modal, TextField } from "@mui/material";
 import { AddButton } from "../AddButton/AddButton";
 import { CloseButton } from "../CloseButton/CloseButton";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import useModal from "../../../hooks/useModal";
 
-// Definir el tema con la fuente Prompt
 const theme = createTheme({
   typography: {
     fontFamily: "Prompt, sans-serif",
   },
 });
 
-// Estilos del modal
 const style = {
   position: "absolute",
   top: "50%",
@@ -28,19 +26,19 @@ const style = {
 };
 
 export const CardCreateAllergens = () => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   return (
     <ThemeProvider theme={theme}>
       <div>
-        <Button onClick={handleOpen}>
-          <AddButton typeAdd={"Allergens"} isCompany={false} />
-        </Button>
+        <AddButton
+          typeAdd="Allergens"
+          isCompany={false}
+          onAddClick={() => openModal("allergensModal")}
+        />
         <Modal
-          open={open}
-          onClose={handleClose}
+          open={isModalOpen && activeModal === "allergensModal"}
+          onClose={closeModal}
           aria-labelledby="modal-title"
           aria-describedby="modal-description"
         >
@@ -67,9 +65,9 @@ export const CardCreateAllergens = () => {
               sx={{
                 mb: 2,
                 backgroundColor: "rgba(217,217,217,.12)",
-                borderRadius: 1,
               }}
             />
+            {/* Selector de imagen */}
             <Box
               sx={{
                 display: "flex",
@@ -105,7 +103,11 @@ export const CardCreateAllergens = () => {
               }}
             >
               <CheckButton typeCheck="Allergens" isCompany={false} />
-              <CloseButton typeClose="Allergens" isCompany={false} />
+              <CloseButton
+                typeClose="Allergens"
+                isCompany={false}
+                onclick={closeModal}
+              />
             </Box>
           </Box>
         </Modal>

@@ -5,11 +5,13 @@ import styles from "./CloseButton.module.css";
 interface ICloseButtonProps {
   typeClose: String;
   isCompany: boolean;
+  onclick: () => void;
 }
 
 export const CloseButton: FC<ICloseButtonProps> = ({
   typeClose,
   isCompany,
+  onclick,
 }) => {
   const handleEdit = () => {
     switch (typeClose) {
@@ -31,10 +33,10 @@ export const CloseButton: FC<ICloseButtonProps> = ({
     <>
       <div
         className={`${styles.containerCloseIcon} 
-        ${isCompany ? styles.company : ""}
-        ${typeClose === "Allergens" ? styles.allergens : ""}`}
+        ${isCompany ? styles.company : ""}`}
+        onClick={onclick}
       >
-        <CloseIcon className={styles.closeIcon} onClick={handleEdit} />
+        <CloseIcon className={styles.closeIcon} />
       </div>
     </>
   );

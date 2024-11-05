@@ -1,5 +1,5 @@
 .containerCloseIcon {
-  background-color: #eef4ed;
+  background-color: rgba(217, 217, 217, 0.31);
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -8,10 +8,6 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-}
-
-.allergens {
-  background-color: rgba(217, 217, 217, 0.12);
 }
 
 .company {
