@@ -1,5 +1,4 @@
 .containerAddIcon {
-  background-color: #134074;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -14,9 +13,18 @@
   color: #ee964b;
 }
 
-.company {
+.Allergens {
+  font-size: large;
+}
+
+.Products {
+  font-size: large;
+}
+
+.Company {
   background-color: #8da9c4;
   color: #fff;
+  background-color: #134074;
 }
 
 .containerAddIcon:hover {

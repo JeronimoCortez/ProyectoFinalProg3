@@ -3,13 +3,11 @@ import { FC } from "react";
 import styles from "./DeleteButton.module.css";
 
 interface IDeleteButtonProps {
-  typeDelete: string;
   isCompany: boolean;
   onDeleteClick: () => void;
 }
 
 export const DeleteButton: FC<IDeleteButtonProps> = ({
-  typeDelete,
   isCompany,
   onDeleteClick,
 }) => {
