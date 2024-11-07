@@ -33,40 +33,40 @@ const API_URL = import.meta.env.VITE_BASE_URL;
 
 const validationSchema = Yup.object({
   nombre: Yup.string().required("Ingrese un nombre"),
-  domicilio: Yup.object({
-    calle: Yup.string().required("Ingrese una calle"),
-    numero: Yup.number()
-      .typeError("Debe ingresar un numero")
-      .positive("Debe ingresar un numero positivo")
-      .integer("Debe ingresar un numero entero")
-      .required("Ingrese numero"),
-    cp: Yup.number()
-      .typeError("Debe ingresar un numero")
-      .positive("Debe ingresar un numero positivo")
-      .integer("Debe ingresar un numero entero")
-      .required("Ingrese codigo postal"),
-    piso: Yup.number()
-      .typeError("Debe ingresar un numero")
-      .positive("Debe ingresar un numero positivo")
-      .integer("Debe ingresar un numero entero")
-      .required("Ingrese numero"),
-    nroDpto: Yup.number()
-      .typeError("Debe ingresar un numero")
-      .positive("Debe ingresar un numero positivo")
-      .integer("Debe ingresar un numero entero")
-      .required("Ingrese numero"),
-    // localidad: Yup.object({
-    //   id: Yup.number().required("Seleccione localidad"),
-    //   provincia: Yup.object({
-    //     id: Yup.number().required("Seleccione provincia"),
-    //     pais: Yup.object({
-    //       id: Yup.number().required("Seleccione pais"),
-    //     }),
-    //   }),
-    // }),
-  }),
+  // domicilio: Yup.object({
+  //   calle: Yup.string().required("Ingrese una calle"),
+  //   numero: Yup.number()
+  //     .typeError("Debe ingresar un numero")
+  //     .positive("Debe ingresar un numero positivo")
+  //     .integer("Debe ingresar un numero entero")
+  //     .required("Ingrese numero"),
+  //   cp: Yup.number()
+  //     .typeError("Debe ingresar un numero")
+  //     .positive("Debe ingresar un numero positivo")
+  //     .integer("Debe ingresar un numero entero")
+  //     .required("Ingrese codigo postal"),
+  //   piso: Yup.number()
+  //     .typeError("Debe ingresar un numero")
+  //     .positive("Debe ingresar un numero positivo")
+  //     .integer("Debe ingresar un numero entero")
+  //     .required("Ingrese numero"),
+  //   nroDpto: Yup.number()
+  //     .typeError("Debe ingresar un numero")
+  //     .positive("Debe ingresar un numero positivo")
+  //     .integer("Debe ingresar un numero entero")
+  //     .required("Ingrese numero"),
+  // localidad: Yup.object({
+  //   id: Yup.number().required("Seleccione localidad"),
+  //   provincia: Yup.object({
+  //     id: Yup.number().required("Seleccione provincia"),
+  //     pais: Yup.object({
+  //       id: Yup.number().required("Seleccione pais"),
+  //     }),
+  //   }),
+  // }),
+  // }),
   calle: Yup.string().required("Ingrese una calle"),
-  esCasaMatriz: Yup.boolean(),
+  // esCasaMatriz: Yup.boolean(),
 
   latitud: Yup.number()
     .typeError("Debe ingresar un numero")
@@ -79,7 +79,7 @@ const validationSchema = Yup.object({
 
   horarioApertura: Yup.string().required("Ingrese horario de apertura"),
   horarioCierre: Yup.string().required("Ingrese horario de cierre"),
-  eliminado: Yup.boolean(),
+  // eliminado: Yup.boolean(),
   logo: Yup.string().url("Debe ser una url valida"),
 });
 
@@ -190,6 +190,10 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const onLocalidadHandleChange = (idLocalidad: number) => {
+    setLocalityId(idLocalidad);
   };
 
   useEffect(() => {
@@ -426,7 +430,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                       }
                     }}
                   >
-                    <option className={styles.selectOption} value="" disabled>
+                    <option className={styles.selectOption} value="">
                       Ingrese un país
                     </option>
                     {countries?.map((country) => (
@@ -460,7 +464,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                       }
                     }}
                   >
-                    <option className={styles.selectOption} value="" disabled>
+                    <option className={styles.selectOption} value="">
                       Ingrese una provincia
                     </option>
                     {provinces?.map((province) => (
@@ -482,7 +486,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                       handleChange(e);
                       const selectedLocalityId = Number(e.target.value);
                       if (selectedLocalityId) {
-                        onProvinciaHandleChange(selectedLocalityId);
+                        onLocalidadHandleChange(selectedLocalityId);
                         const localidadSeleccionada = localities.find(
                           (localidad) => localidad.id === selectedLocalityId
                         );
@@ -494,7 +498,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                       }
                     }}
                   >
-                    <option className={styles.selectOption} value="" disabled>
+                    <option className={styles.selectOption} value="">
                       Ingrese una localidad
                     </option>
                     {localities?.map((locality) => (
