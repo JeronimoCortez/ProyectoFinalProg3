@@ -4,20 +4,12 @@ import styles from "./ThumbUpButton.module.css";
 
 interface IThumbUpButtonProps {
   enabled: boolean;
-  onClick: () => void;
+  active: boolean;
 }
 
-export const ThumbUpButton: FC<IThumbUpButtonProps> = ({
-  enabled,
-  onClick,
-}) => {
+export const ThumbUpButton: FC<IThumbUpButtonProps> = () => {
   return (
-    <div
-      className={`${styles.containerThumbUpIcon} ${
-        enabled ? styles.enabled : styles.disabled
-      }`}
-      onClick={onClick}
-    >
+    <div className={`${styles.containerThumbUpIcon} ${styles.enabled}`}>
       <ThumbUpIcon className={styles.thumbUpIcon} />
     </div>
   );

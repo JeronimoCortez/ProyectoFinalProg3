@@ -1,12 +1,13 @@
 import { Box, Paper, Typography, Select, MenuItem } from "@mui/material";
-import { DeleteButton } from "../DeleteButton/DeleteButton";
-import { ThumbUpButton } from "../ThumbUpButton/ThumbUpButton";
-import { AddButton } from "../AddButton/AddButton";
-import { InfoButton } from "../InfoButton/InfoButton";
-import { EditButton } from "../EditButton/EditButton";
+import { DeleteButton } from "../../ui/DeleteButton/DeleteButton";
+import { ThumbUpButton } from "../../ui/ThumbUpButton/ThumbUpButton";
+import { AddButton } from "../../ui/AddButton/AddButton";
+import { InfoButton } from "../../ui/InfoButton/InfoButton";
+import { EditButton } from "../../ui/EditButton/EditButton";
 import useModal from "../../../hooks/useModal";
+import Product from "../../ui/Product/Product";
 
-export const Product = () => {
+export const Products = () => {
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   return (
@@ -35,7 +36,6 @@ export const Product = () => {
           <MenuItem value="Promociones">Promociones</MenuItem>
         </Select>
         <AddButton
-          typeAdd="Products"
           isCompany={false}
           onAddClick={() => openModal("productsModal")}
         />
@@ -72,43 +72,8 @@ export const Product = () => {
         </Typography>
       </Box>
 
-      {[1, 2].map((item, index) => (
-        <Paper
-          key={index}
-          elevation={3}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: 1.5,
-            mb: 2,
-            backgroundColor: "rgba(217, 217, 217, 0.2)",
-            borderRadius: 10,
-          }}
-        >
-          <Typography variant="body2" color="white">
-            PAPAS + GASEOSA
-          </Typography>
-          <Typography variant="body2" color="white">
-            $5000
-          </Typography>
-          <Typography variant="body2" color="white">
-            PROMO ..
-          </Typography>
-          <Typography variant="body2" color="white">
-            PROMOCIONES
-          </Typography>
-
-          <Box>
-            <ThumbUpButton enabled={false} onClick={() => openModal} />
-          </Box>
-
-          <Box display="flex" alignItems="center" gap={1.5}>
-            <InfoButton isCompany={false} onInfoClick={() => openModal} />
-            <EditButton isCompany={false} onEditClick={() => openModal} />
-            <DeleteButton isCompany={false} onDeleteClick={() => openModal} />
-          </Box>
-        </Paper>
+      {[1, 2].map(() => (
+        <Product />
       ))}
     </Box>
   );
