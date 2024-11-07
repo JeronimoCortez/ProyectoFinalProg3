@@ -171,7 +171,7 @@ export const Home = () => {
         )}
 
         {isModalOpen && companyActive && activeModal === "addBranch" && (
-          <CreateBranch onClose={closeModal} idCompany={companyActive?.id} />
+          <CreateBranch onClose={closeModal} company={companyActive} />
         )}
       </ThemeProvider>
     </>

@@ -1,7 +1,6 @@
 import CheckIcon from "@mui/icons-material/Check";
 import { FC } from "react";
 import styles from "./CheckButton.module.css";
-import { Button } from "@mui/material";
 
 interface ICheckButtonProps {
   isCompany: boolean;

@@ -20,7 +20,7 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   const handleNavigate = () => {
-    navigate("/allergen");
+    navigate("/branch");
   };
 
   return (

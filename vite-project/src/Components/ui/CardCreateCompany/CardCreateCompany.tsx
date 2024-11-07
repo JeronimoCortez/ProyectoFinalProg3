@@ -9,6 +9,7 @@ import { useAppSelector } from "../../../hooks/redux";
 import * as Yup from "yup";
 import { EmpresaService } from "../../../services/EmpresaService";
 import Swal from "sweetalert2";
+import ImageIcon from "@mui/icons-material/Image";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -39,7 +40,6 @@ const FormContainer = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 const FieldContainer = styled(Box)(({ theme }) => ({
-  border: "1px solid #ffffff",
   borderRadius: "0.4 rem",
   marginBottom: theme.spacing(3),
 }));
@@ -54,7 +54,6 @@ export const CardCreateCompany: FC<IPropsCreateCompany> = ({
     elementActive = company;
   }
 
-  // Consultar si el valor del id lo generamos nosotros o lo genera la api
   const initialValues: IEmpresa = company ||
     elementActive || {
       id: 0,
@@ -199,12 +198,7 @@ export const CardCreateCompany: FC<IPropsCreateCompany> = ({
                     }}
                     sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
                   />
-                  <img
-                    src="../../public/assets/BranchImg.png"
-                    alt=""
-                    width="60px"
-                    height="46px"
-                  />
+                  <ImageIcon sx={{ fontSize: "50px", color: "#FFFFFF" }} />
                 </FieldContainer>
               </Stack>
 

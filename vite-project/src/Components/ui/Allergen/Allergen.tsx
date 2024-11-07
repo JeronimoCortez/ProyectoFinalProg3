@@ -8,6 +8,7 @@ import useModal from "../../../hooks/useModal";
 import InfoAllergen from "../InfoAllergen/InfoAllergen";
 import { AlergenoService } from "../../../services/AlergenoService";
 import Swal from "sweetalert2";
+import { CardCreateAllergens } from "../CardCreateAllergens/CardCreateAllergens";
 
 interface IPropsAllergen {
   allergen: IAlergenos;
@@ -65,7 +66,12 @@ const Allergen: FC<IPropsAllergen> = ({ allergen }) => {
             />
           </IconButton>
           <IconButton color="inherit">
-            {<EditButton onEditClick={() => {}} isCompany={false} />}
+            {
+              <EditButton
+                onEditClick={() => openModal("editAllergen")}
+                isCompany={false}
+              />
+            }
           </IconButton>
           <IconButton sx={{ paddingLeft: "1rem" }}>
             <DeleteButton
@@ -78,6 +84,9 @@ const Allergen: FC<IPropsAllergen> = ({ allergen }) => {
       </Paper>
       {isModalOpen && activeModal === "info" && (
         <InfoAllergen allergen={allergen} onClose={closeModal} />
+      )}
+      {isModalOpen && activeModal === "editAllergen" && (
+        <CardCreateAllergens allergen={allergen} onClose={closeModal} />
       )}
     </>
   );
