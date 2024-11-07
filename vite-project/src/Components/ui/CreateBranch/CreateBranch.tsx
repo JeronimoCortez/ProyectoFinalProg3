@@ -2,11 +2,10 @@ import {
   Box,
   Checkbox,
   FormControlLabel,
-  InputAdornment,
   TextField,
+  Typography,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import WatchIcon from "@mui/icons-material/WatchLater";
 import ImageIcon from "@mui/icons-material/Image";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
@@ -20,75 +19,115 @@ import { LocalidadService } from "../../../services/LocalidadService";
 import { SucursalService } from "../../../services/SucursalService";
 import * as Yup from "yup";
 import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
-import { ICreateSucursal } from "../../../types/dtos/sucursal/ICreateSucursal";
 import { useAppSelector } from "../../../hooks/redux";
 import { Form, Formik } from "formik";
+import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 
 interface IPropsCreateBranch {
   onClose: () => void;
   branch?: ISucursal;
-  idCompany: number;
+  company: IEmpresa;
 }
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
 const validationSchema = Yup.object({
   nombre: Yup.string().required("Ingrese un nombre"),
-  horarioApertura: Yup.string().required("Ingrese horario de apertura"),
-  horarioCierre: Yup.string().required("Ingrese horario de cierre"),
+  domicilio: Yup.object({
+    calle: Yup.string().required("Ingrese una calle"),
+    numero: Yup.number()
+      .typeError("Debe ingresar un numero")
+      .positive("Debe ingresar un numero positivo")
+      .integer("Debe ingresar un numero entero")
+      .required("Ingrese numero"),
+    cp: Yup.number()
+      .typeError("Debe ingresar un numero")
+      .positive("Debe ingresar un numero positivo")
+      .integer("Debe ingresar un numero entero")
+      .required("Ingrese codigo postal"),
+    piso: Yup.number()
+      .typeError("Debe ingresar un numero")
+      .positive("Debe ingresar un numero positivo")
+      .integer("Debe ingresar un numero entero")
+      .required("Ingrese numero"),
+    nroDpto: Yup.number()
+      .typeError("Debe ingresar un numero")
+      .positive("Debe ingresar un numero positivo")
+      .integer("Debe ingresar un numero entero")
+      .required("Ingrese numero"),
+    // localidad: Yup.object({
+    //   id: Yup.number().required("Seleccione localidad"),
+    //   provincia: Yup.object({
+    //     id: Yup.number().required("Seleccione provincia"),
+    //     pais: Yup.object({
+    //       id: Yup.number().required("Seleccione pais"),
+    //     }),
+    //   }),
+    // }),
+  }),
+  calle: Yup.string().required("Ingrese una calle"),
   esCasaMatriz: Yup.boolean(),
+
   latitud: Yup.number()
     .typeError("Debe ingresar un numero")
-    .positive("Debe ingresar un numero positivo")
     .integer("Debe ingresar un numero entero")
     .required("Ingrese latitud"),
   longitud: Yup.number()
     .typeError("Debe ingresar un numero")
-    .positive("Debe ingresar un numero positivo")
     .integer("Debe ingresar un numero entero")
     .required("Ingrese longitud"),
-  calle: Yup.string().required("Ingrese una calle"),
-  numero: Yup.number()
-    .typeError("Debe ingresar un numero")
-    .positive("Debe ingresar un numero positivo")
-    .integer("Debe ingresar un numero entero")
-    .required("Ingrese un numero"),
-  cp: Yup.number()
-    .typeError("Debe ingresar un numero")
-    .positive("Debe ingresar un numero positivo")
-    .integer("Debe ingresar un numero entero")
-    .required("Ingrese un codigo postal"),
+
+  horarioApertura: Yup.string().required("Ingrese horario de apertura"),
+  horarioCierre: Yup.string().required("Ingrese horario de cierre"),
+  eliminado: Yup.boolean(),
   logo: Yup.string().url("Debe ser una url valida"),
 });
 
 export const CreateBranch: FC<IPropsCreateBranch> = ({
   onClose,
   branch,
-  idCompany,
+  company,
 }) => {
   let elementActive = useAppSelector((state) => state.branch.elementActive);
   if (branch) {
     elementActive = branch;
   }
   // VALORES INICIALES
-  const initialValues: ICreateSucursal | ISucursal = branch ||
+  const initialValues: ISucursal = branch ||
     elementActive || {
+      id: 0,
       nombre: "",
-      horarioApertura: "",
-      horarioCierre: "",
-      esCasaMatriz: false,
-      latitud: 0,
-      longitud: 0,
+      empresa: company,
       domicilio: {
+        id: 0,
         calle: "",
         numero: 0,
         cp: 0,
         piso: 0,
         nroDpto: 0,
-        idLocalidad: 0,
+        eliminado: false,
+        localidad: {
+          id: 0,
+          nombre: "",
+          provincia: {
+            nombre: "",
+            pais: {
+              id: 0,
+              nombre: "",
+            },
+            id: 0,
+          },
+        },
       },
-      idEmpresa: idCompany ?? 0,
-      logo: null,
+      calle: "",
+      categorias: [],
+      esCasaMatriz: false,
+      latitud: 0,
+      longitud: 0,
+      horarioApertura: "",
+      horarioCierre: "",
+      eliminado: false,
+      logo: "",
     };
 
   //INSTANCIAMOS SERVICIOS
@@ -98,26 +137,25 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
   const serviceBranches = new SucursalService(`${API_URL}/sucursales`);
 
   // Declaramos estados
-  const [checked, setChecked] = useState(false);
-  const [countries, setCountries] = useState<IPais[]>();
-  const [countryId, setCountryId] = useState<number>();
-  const [provinces, setProvinces] = useState<IProvincia[]>();
-  const [provinceId, setPronvinceId] = useState<number>();
-  const [localities, setLocalities] = useState<ILocalidad[]>();
+  const [checked, setChecked] = useState<boolean>(false);
   const [localityId, setLocalityId] = useState<number>();
+  const [countryId, setCountryId] = useState<number | undefined>(undefined);
+  const [provinceId, setProvinceId] = useState<number | undefined>(undefined);
+  const [countries, setCountries] = useState<IPais[]>([]);
+  const [provinces, setProvinces] = useState<IProvincia[]>([]);
+  const [localities, setLocalities] = useState<ILocalidad[]>([]);
 
   // Manejador del evento cuando el usuario marca/desmarca el checkbox
-  const handleCheckedChange = (event: any) => {
-    setChecked(event.target.checked);
+  const handleCheckedChange = (prevEvent: any) => {
+    setChecked((prevEvent) => !prevEvent);
+  };
+  const onPaisHandleChange = (idPais: number) => {
+    setCountryId(idPais);
   };
   const getPaises = async () => {
     await serviceCountries.getAll().then((data) => {
       setCountries(data);
     });
-  };
-
-  const onPaisHandleChange = (idPais: number) => {
-    setCountryId(idPais);
   };
 
   useEffect(() => {
@@ -140,7 +178,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
   }, [countryId]);
 
   const onProvinciaHandleChange = (idProvincia: number) => {
-    setPronvinceId(idProvincia);
+    setProvinceId(idProvincia);
   };
 
   const getLocalidades = async (provinceId: number) => {
@@ -160,6 +198,19 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
     }
   }, [provinceId]);
 
+  const stylesTextField = {
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "rgba(217, 217, 217, 0.35)",
+      },
+      "&:hover fieldset": {
+        borderColor: "#FFFFFF",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#FFFFFF",
+      },
+    },
+  };
   return (
     <Box
       sx={{
@@ -182,7 +233,8 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
           maxHeight: "700px",
           backgroundColor: "#2E64A1",
           fontFamily: "Prompt, sans-serif",
-          padding: "1rem",
+          padding: ".4rem",
+          overflow: "hidden",
         }}
       >
         <Formik
@@ -190,6 +242,8 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
           enableReinitialize
           validationSchema={validationSchema}
           onSubmit={(values) => {
+            values.calle = values.domicilio.calle;
+            console.log(values.nombre);
             if (branch) {
               serviceBranches.put(branch.id, values);
             } else {
@@ -197,13 +251,21 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
             }
           }}
         >
-          {({ values, handleChange, errors, touched }) => (
+          {({ values, handleChange, setFieldValue, errors, touched }) => (
             <Form>
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ margin: "0 auto", maxWidth: "250px" }}>
                 {elementActive ? (
-                  <h3>Editar sucursal</h3>
+                  <Typography
+                    sx={{ fontSize: "24px", color: "#FFF", fontWeight: "300" }}
+                  >
+                    Editar sucursal
+                  </Typography>
                 ) : (
-                  <h3>Crear una sucursal</h3>
+                  <Typography
+                    sx={{ fontSize: "24px", color: "#FFF", fontWeight: "300" }}
+                  >
+                    Crear una sucursal
+                  </Typography>
                 )}
               </Box>
               <Box
@@ -219,26 +281,11 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                   sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
                 >
                   <TextField
-                    value={values.nombre}
-                    name="nombre"
                     placeholder="Ingrese un nombre"
+                    fullWidth
                     variant="outlined"
-                    onChange={handleChange}
-                    error={touched.nombre && Boolean(errors.nombre)}
-                    helperText={touched && errors.nombre}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
+                    size="small"
+                    sx={stylesTextField}
                     InputProps={{
                       style: {
                         backgroundColor: "rgba(217, 217, 217, 0.35)",
@@ -247,26 +294,43 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                         fontSize: "14px",
                       },
                     }}
+                    name="nombre"
+                    value={values.nombre}
+                    onChange={handleChange}
+                    error={touched.nombre && Boolean(errors.nombre)}
+                    helperText={touched.nombre && errors.nombre}
                   />
                   <TextField
-                    value={values.horarioApertura}
-                    name="horarioApertura"
                     placeholder="Horario apertura"
+                    fullWidth
                     variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
+                    InputProps={{
+                      style: {
+                        backgroundColor: "rgba(217, 217, 217, 0.35)",
+                        color: "#FFFFFF",
+                        height: "50px",
+                        fontSize: "14px",
+                      },
+                    }}
+                    name="horarioApertura"
+                    value={values.horarioApertura}
                     onChange={handleChange}
                     error={
                       touched.horarioApertura && Boolean(errors.horarioApertura)
                     }
-                    helperText={touched && errors.horarioApertura}
+                    helperText={
+                      touched.horarioApertura && errors.horarioApertura
+                    }
+                  />
+                  <TextField
+                    placeholder="Horario de cierre"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
                     InputProps={{
-                      endAdornment: (
-                        <InputAdornment
-                          position="end"
-                          sx={{ color: "#FFFFFF" }}
-                        >
-                          <WatchIcon />
-                        </InputAdornment>
-                      ),
                       style: {
                         backgroundColor: "rgba(217, 217, 217, 0.35)",
                         color: "#FFFFFF",
@@ -274,70 +338,15 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                         fontSize: "14px",
                       },
                     }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
-                  />
-                  <TextField
-                    value={values.horarioCierre}
                     name="horarioCierre"
-                    placeholder="Horario cierre"
+                    value={values.horarioCierre}
                     onChange={handleChange}
                     error={
                       touched.horarioCierre && Boolean(errors.horarioCierre)
                     }
-                    helperText={touched && errors.horarioCierre}
-                    variant="outlined"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment
-                          position="end"
-                          sx={{ color: "#FFFFFF" }}
-                        >
-                          <WatchIcon />
-                        </InputAdornment>
-                      ),
-                      style: {
-                        backgroundColor: "rgba(217, 217, 217, 0.35)",
-                        color: "#FFFFFF",
-                        height: "50px",
-                        fontSize: "14px",
-                      },
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
+                    helperText={touched.horarioCierre && errors.horarioCierre}
                   />
                   <FormControlLabel
-                    value={values.esCasaMatriz}
-                    name="esCasaMatriz"
-                    checked={checked}
-                    onChange={handleCheckedChange}
-                    // error={touched.esCasaMatriz && Boolean(errors.esCasaMatriz)}
-                    // helperText={touched && errors.esCasaMatriz}
-                    sx={{
-                      color: "#FFFFFF",
-                    }}
                     control={
                       <Checkbox
                         sx={{
@@ -346,11 +355,48 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                             color: "#4CE415",
                           },
                         }}
-                        checked={checked}
-                        onChange={handleChange}
+                        checked={values.eliminado}
+                        onChange={(event) => {
+                          handleCheckedChange(event);
+                          handleChange({
+                            target: {
+                              name: "eliminado",
+                              value: checked,
+                            },
+                          });
+                        }}
                       />
                     }
                     label="Habilitado"
+                    sx={{
+                      color: "#FFFFFF",
+                    }}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        sx={{
+                          color: "#FFFFFF",
+                          "&.Mui-checked": {
+                            color: "#4CE415",
+                          },
+                        }}
+                        checked={values.esCasaMatriz}
+                        onChange={(event) => {
+                          handleCheckedChange(event);
+                          handleChange({
+                            target: {
+                              name: "esCasaMatriz",
+                              value: checked,
+                            },
+                          });
+                        }}
+                      />
+                    }
+                    label="Es casa matriz"
+                    sx={{
+                      color: "#FFFFFF",
+                    }}
                   />
                 </Box>
 
@@ -360,9 +406,25 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                 >
                   <select
                     className={styles.selectContainer}
-                    onChange={(e) => onPaisHandleChange(Number(e.target.value))}
-                    value={countryId || ""}
-                    name="pais"
+                    name="domicilio.localidad.provincia.pais.id"
+                    value={
+                      values.domicilio.localidad.provincia.pais.id &&
+                      values.domicilio.localidad.provincia.pais.id
+                    }
+                    onChange={(e) => {
+                      handleChange(e);
+                      const selectedCountryId = Number(e.target.value);
+                      if (selectedCountryId) {
+                        onPaisHandleChange(selectedCountryId);
+                        const paisSeleccionado = countries.find(
+                          (pais) => pais.id === selectedCountryId
+                        );
+                        setFieldValue(
+                          "domicilio.localidad.provincia.pais.nombre",
+                          paisSeleccionado?.nombre || ""
+                        );
+                      }
+                    }}
                   >
                     <option className={styles.selectOption} value="" disabled>
                       Ingrese un país
@@ -380,11 +442,23 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
 
                   <select
                     className={styles.selectContainer}
-                    onChange={(e) =>
-                      onProvinciaHandleChange(Number(e.target.value))
-                    }
-                    value={provinceId || ""}
-                    name="provincia"
+                    name="domicilio.localidad.provincia.id"
+                    value={values.domicilio.localidad.provincia.id}
+                    onChange={(e) => {
+                      handleChange(e);
+                      const selectedProvinceId = Number(e.target.value);
+                      if (selectedProvinceId) {
+                        onProvinciaHandleChange(selectedProvinceId);
+                        const provinciaSeleccionada = provinces.find(
+                          (provincia) => provincia.id === selectedProvinceId
+                        );
+
+                        setFieldValue(
+                          "domicilio.localidad.provincia.nombre",
+                          provinciaSeleccionada?.nombre || ""
+                        );
+                      }
+                    }}
                   >
                     <option className={styles.selectOption} value="" disabled>
                       Ingrese una provincia
@@ -402,9 +476,23 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
 
                   <select
                     className={styles.selectContainer}
-                    onChange={(e) => setLocalityId(Number(e.target.value))}
-                    value={localityId || ""}
-                    name="localidad"
+                    name="domicilio.localidad.id"
+                    value={values.domicilio.localidad.id}
+                    onChange={(e) => {
+                      handleChange(e);
+                      const selectedLocalityId = Number(e.target.value);
+                      if (selectedLocalityId) {
+                        onProvinciaHandleChange(selectedLocalityId);
+                        const localidadSeleccionada = localities.find(
+                          (localidad) => localidad.id === selectedLocalityId
+                        );
+
+                        setFieldValue(
+                          "domicilio.localidad.nombre",
+                          localidadSeleccionada?.nombre || ""
+                        );
+                      }
+                    }}
                   >
                     <option className={styles.selectOption} value="" disabled>
                       Ingrese una localidad
@@ -421,31 +509,32 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                   </select>
 
                   {/* Longitud */}
-
                   <TextField
-                    value={values.longitud}
-                    name="longitud"
                     placeholder="Longitud"
+                    fullWidth
                     variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
+                    InputProps={{
+                      style: {
+                        backgroundColor: "rgba(217, 217, 217, 0.35)",
+                        color: "#FFFFFF",
+                        height: "50px",
+                        fontSize: "14px",
+                      },
+                    }}
+                    name="longitud"
+                    value={values.longitud}
                     onChange={handleChange}
                     error={touched.longitud && Boolean(errors.longitud)}
-                    helperText={touched && errors.longitud}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
+                    helperText={touched.longitud && errors.longitud}
+                  />
+                  <TextField
+                    placeholder="latitud"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
                     InputProps={{
                       style: {
                         backgroundColor: "rgba(217, 217, 217, 0.35)",
@@ -454,43 +543,12 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                         fontSize: "14px",
                       },
                     }}
-                  ></TextField>
-
-                  {/* Latitud */}
-
-                  <TextField
-                    value={values.latitud}
                     name="latitud"
-                    placeholder="Latitud"
-                    variant="outlined"
+                    value={values.latitud}
                     onChange={handleChange}
                     error={touched.latitud && Boolean(errors.latitud)}
-                    helperText={touched && errors.latitud}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
-                    InputProps={{
-                      style: {
-                        backgroundColor: "rgba(217, 217, 217, 0.35)",
-                        color: "#FFFFFF",
-                        height: "50px",
-                        fontSize: "14px",
-                      },
-                    }}
-                  ></TextField>
+                    helperText={touched.latitud && errors.latitud}
+                  />
                 </Box>
 
                 {/* Columna 3 */}
@@ -501,32 +559,37 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                   sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
                 >
                   <TextField
-                    value={values.domicilio.calle}
-                    name="domicilio.calle"
                     placeholder="Nombre de la calle"
+                    fullWidth
                     variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
+                    InputProps={{
+                      style: {
+                        backgroundColor: "rgba(217, 217, 217, 0.35)",
+                        color: "#FFFFFF",
+                        height: "50px",
+                        fontSize: "14px",
+                      },
+                    }}
+                    name="domicilio.calle"
+                    value={values.domicilio.calle}
                     onChange={handleChange}
                     error={
                       touched.domicilio?.calle &&
                       Boolean(errors.domicilio?.calle)
                     }
-                    helperText={touched && errors.domicilio?.calle}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
+                    helperText={
+                      touched.domicilio?.calle && errors.domicilio?.calle
+                    }
+                  />
+                  {/* Número de la calle */}
+                  <TextField
+                    placeholder="Numero de la calle"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
                     InputProps={{
                       style: {
                         backgroundColor: "rgba(217, 217, 217, 0.35)",
@@ -535,37 +598,24 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                         fontSize: "14px",
                       },
                     }}
-                  ></TextField>
-
-                  {/* Número de la calle */}
-
-                  <TextField
-                    value={values.domicilio.numero}
                     name="domicilio.numero"
-                    placeholder="Número de la calle"
-                    variant="outlined"
+                    value={values.domicilio.numero}
                     onChange={handleChange}
                     error={
                       touched.domicilio?.numero &&
                       Boolean(errors.domicilio?.numero)
                     }
-                    helperText={touched && errors.domicilio?.numero}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
+                    helperText={
+                      touched.domicilio?.numero && errors.domicilio?.numero
+                    }
+                  />
+                  {/* Código postal */}
+                  <TextField
+                    placeholder="Codigo postal"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
                     InputProps={{
                       style: {
                         backgroundColor: "rgba(217, 217, 217, 0.35)",
@@ -574,36 +624,21 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                         fontSize: "14px",
                       },
                     }}
-                  ></TextField>
-
-                  {/* Código postal */}
-
-                  <TextField
-                    value={values.domicilio.cp}
                     name="domicilio.cp"
-                    placeholder="Código postal"
-                    variant="outlined"
+                    value={values.domicilio.cp}
                     onChange={handleChange}
                     error={
                       touched.domicilio?.cp && Boolean(errors.domicilio?.cp)
                     }
-                    helperText={touched && errors.domicilio?.cp}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
+                    helperText={touched.domicilio?.cp && errors.domicilio?.cp}
+                  />
+                  {/* Número de piso */}
+                  <TextField
+                    placeholder="Numero de piso"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
                     InputProps={{
                       style: {
                         backgroundColor: "rgba(217, 217, 217, 0.35)",
@@ -612,36 +647,23 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                         fontSize: "14px",
                       },
                     }}
-                  ></TextField>
-
-                  {/* Número de piso */}
-
-                  <TextField
-                    value={values.domicilio.piso}
                     name="domicilio.piso"
-                    placeholder="Número de piso"
-                    variant="outlined"
+                    value={values.domicilio.piso}
                     onChange={handleChange}
                     error={
                       touched.domicilio?.piso && Boolean(errors.domicilio?.piso)
                     }
-                    helperText={touched && errors.domicilio?.piso}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
+                    helperText={
+                      touched.domicilio?.piso && errors.domicilio?.piso
+                    }
+                  />
+                  {/* Número de departamento */}
+                  <TextField
+                    placeholder="Numero departamento"
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    sx={stylesTextField}
                     InputProps={{
                       style: {
                         backgroundColor: "rgba(217, 217, 217, 0.35)",
@@ -650,91 +672,33 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                         fontSize: "14px",
                       },
                     }}
-                  ></TextField>
-
-                  {/* Número de departamento */}
-
-                  <TextField
-                    value={values.domicilio.nroDpto}
                     name="domicilio.nroDpto"
-                    placeholder="Número de departamento"
-                    variant="outlined"
+                    value={values.domicilio.nroDpto}
                     onChange={handleChange}
                     error={
                       touched.domicilio?.nroDpto &&
                       Boolean(errors.domicilio?.nroDpto)
                     }
-                    helperText={touched && errors.domicilio?.nroDpto}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "rgba(217, 217, 217, 0.35)",
-                        },
-                        "&:hover fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                        "&.Mui-focused fieldset": {
-                          color: "#FFFFFF",
-                          borderColor: "#FFFFFF",
-                        },
-                      },
-                    }}
-                    InputProps={{
-                      style: {
-                        backgroundColor: "rgba(217, 217, 217, 0.35)",
-                        color: "#FFFFFF",
-                        height: "50px",
-                        fontSize: "14px",
-                      },
-                    }}
-                  ></TextField>
+                    helperText={
+                      touched.domicilio?.nroDpto && errors.domicilio?.nroDpto
+                    }
+                  />
                 </Box>
               </Box>
               <Box
                 sx={{
                   display: "flex",
+                  width: "50%",
+                  margin: "0 auto",
                   alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                  gap: "16vh",
-                  width: "400px",
-                  height: "55px",
-                  backgroundColor: "rgba(217, 217, 217, 0.35)",
-                  borderRadius: "4px",
-                  border: "2px solid transparent", // Borde inicial transparente
-                  "&:hover": {
-                    border: "2px solid white", // Borde blanco al hacer hover
-                  },
-                  cursor: "pointer",
-                  marginLeft: "32vh",
                 }}
               >
                 <TextField
-                  value={values.logo}
-                  name="logo"
-                  placeholder="Elige una imagen"
+                  placeholder="Ingrese una imagen"
+                  fullWidth
                   variant="outlined"
-                  onChange={handleChange}
-                  error={touched.logo && Boolean(errors.logo)}
-                  helperText={touched && errors.logo}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        color: "#FFFFFF",
-                        borderColor: "rgba(217, 217, 217, 0.35)",
-                      },
-                      "&:hover fieldset": {
-                        color: "#FFFFFF",
-                        borderColor: "#FFFFFF",
-                      },
-                      "&.Mui-focused fieldset": {
-                        color: "#FFFFFF",
-                        borderColor: "#FFFFFF",
-                      },
-                    },
-                  }}
+                  size="small"
+                  sx={stylesTextField}
                   InputProps={{
                     style: {
                       backgroundColor: "rgba(217, 217, 217, 0.35)",
@@ -743,9 +707,15 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                       fontSize: "14px",
                     },
                   }}
-                ></TextField>
-                <ImageIcon sx={{ color: "#FFF", fontSize: "32px" }}></ImageIcon>
+                  name="logo"
+                  value={values.logo}
+                  onChange={handleChange}
+                  error={touched.logo && Boolean(errors.logo)}
+                  helperText={touched.logo && errors.logo}
+                />
+                <ImageIcon sx={{ fontSize: "50px", color: "#FFFFFF" }} />
               </Box>
+
               <Box
                 sx={{
                   display: "flex",

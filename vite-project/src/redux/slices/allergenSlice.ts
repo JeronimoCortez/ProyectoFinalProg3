@@ -1,14 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICreateAlergeno } from "../../types/dtos/alergenos/ICreateAlergeno";
 import { IAlergenos } from "../../types/dtos/alergenos/IAlergenos";
 
 interface PayloadSetElement {
-  element: ICreateAlergeno | IAlergenos 
+  element:  IAlergenos 
 }
 
 interface IInitialState{
   allergens: IAlergenos[],
-  elementActive: null | ICreateAlergeno | IAlergenos ,
+  elementActive: null |  IAlergenos ,
 }
 
 const initialState: IInitialState = {

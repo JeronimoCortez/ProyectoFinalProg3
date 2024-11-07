@@ -54,7 +54,6 @@ export const CardCreateCompany: FC<IPropsCreateCompany> = ({
     elementActive = company;
   }
 
-  // Consultar si el valor del id lo generamos nosotros o lo genera la api
   const initialValues: IEmpresa = company ||
     elementActive || {
       id: 0,

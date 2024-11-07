@@ -10,8 +10,16 @@ import { CardCompany } from "../../ui/CardCompany/CardCompany";
 import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
-import { FC, useState } from "react";
+import { useEffect, useState } from "react";
+import { EmpresaService } from "../../../services/EmpresaService";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { RootState } from "../../../redux/store/store";
+import { setCompanies } from "../../../redux/slices/companySlice";
 import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
+import useModal from "../../../hooks/useModal";
+import { CardCreateCompany } from "../../ui/CardCreateCompany/CardCreateCompany";
+import { SucursalService } from "../../../services/SucursalService";
+import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 const theme = createTheme({
@@ -32,6 +40,8 @@ export const Home = () => {
 
   // Estado para renderizar las sucursales de la empresa seleccionada
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
+  const [branches, setBranches] = useState<ISucursal[]>([]);
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   const activateCompany = (company: IEmpresa) => {
     setCompanyActive(company);
@@ -91,7 +101,7 @@ export const Home = () => {
               />
             ))}
           </Box>
-          <AddButton typeAdd="Company" isCompany={true} />
+          <AddButton isCompany={true} onAddClick={() => openModal("add")} />
         </Box>
 
         {/* Seccion sucursales */}
@@ -155,6 +165,14 @@ export const Home = () => {
             </Box>
           )}
         </Box>
+
+        {isModalOpen && activeModal === "add" && (
+          <CardCreateCompany onClose={closeModal} />
+        )}
+
+        {isModalOpen && companyActive && activeModal === "addBranch" && (
+          <CreateBranch onClose={closeModal} company={companyActive} />
+        )}
       </ThemeProvider>
     </>
   );

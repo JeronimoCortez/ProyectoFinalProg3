@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC, useState } from "react";
 import {
   AppBar,
   Box,
@@ -14,6 +14,9 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import { createTheme, ThemeProvider, SxProps } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
+import Branch from "../../screens/Branch/Branch";
 
 const theme = createTheme({
   typography: {
@@ -24,11 +27,22 @@ const theme = createTheme({
 
 const drawerWidth = 350;
 
-const CustomHeaderWithDrawer: React.FC = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+const CustomHeaderWithDrawer = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const toggleDrawer = (open: boolean) => () => {
-    setIsDrawerOpen(open);
+  const toggleDrawer = () => {
+    setIsDrawerOpen((prevState) => !prevState);
+  };
+
+  const handleNavigate = (text: string) => {
+    if (text === "CATEGORIAS") {
+      // NAVEGAR A CATEGORIA
+    } else if (text === "ALERGENOS") {
+      navigate("/allergen");
+    } else if (text === "PRODUCTOS") {
+      // LOGICA PARA NAV_EGAR A PRODUCTO
+    }
   };
 
   const drawerStyles: SxProps = {
@@ -42,10 +56,14 @@ const CustomHeaderWithDrawer: React.FC = () => {
   };
 
   const DrawerList = (
-    <Box sx={drawerStyles} role="presentation" onClick={toggleDrawer(false)}>
+    <Box sx={drawerStyles} role="presentation" onClick={toggleDrawer}>
       <List sx={{ marginTop: "3em" }}>
         {["CATEGORIAS", "ALERGENOS", "PRODUCTO"].map((text) => (
-          <ListItem key={text} disablePadding>
+          <ListItem
+            key={text}
+            disablePadding
+            onClick={() => handleNavigate(text)}
+          >
             <ListItemButton sx={{ "&:hover": { backgroundColor: "#8DA9C4" } }}>
               <ListItemText
                 primary={text}
@@ -71,7 +89,7 @@ const CustomHeaderWithDrawer: React.FC = () => {
           marginBottom: "1.4em",
         }}
       >
-        <ListItemButton>
+        <ListItemButton onClick={() => navigate("/")}>
           <HomeIcon sx={{ color: "white", marginRight: 1 }} />
           <ListItemText
             primary="HOME"
@@ -99,7 +117,7 @@ const CustomHeaderWithDrawer: React.FC = () => {
         >
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <IconButton
-              onClick={toggleDrawer(true)}
+              onClick={toggleDrawer}
               edge="start"
               color="inherit"
               aria-label="menu"
@@ -115,7 +133,7 @@ const CustomHeaderWithDrawer: React.FC = () => {
                 textAlign: "center",
               }}
             >
-              NOMBRE DE LA EMPRESA - SUCURSAL
+              NOMBRE DE LA SUCURSAL
             </Typography>
           </Toolbar>
         </AppBar>
@@ -124,7 +142,7 @@ const CustomHeaderWithDrawer: React.FC = () => {
           variant="temporary"
           anchor="left"
           open={isDrawerOpen}
-          onClose={toggleDrawer(false)}
+          onClose={toggleDrawer}
           ModalProps={{
             keepMounted: true,
           }}

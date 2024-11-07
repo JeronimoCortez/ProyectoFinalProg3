@@ -30,7 +30,7 @@ const InfoAllergen: FC<IPropsInfoAllergen> = ({ allergen, onClose }) => {
           sx={{
             minWidth: "400px",
             minHeight: "150px",
-            backgroundColor: "rgba(217,217,217,.50)",
+            backgroundColor: "#8DA9C4",
             border: "1px solid #134074",
             display: "flex",
             flexDirection: "column",
