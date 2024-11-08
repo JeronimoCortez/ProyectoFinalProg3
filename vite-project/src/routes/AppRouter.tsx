@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "../Components/screens/Home/Home";
-import { Allergens } from "../Components/screens/Allergens/Allergens";
+import { Categories } from "../Components/screens/Categories/Categories";
 
 export const AppRouter = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/allergen" element={<Allergens />}></Route>
+        <Route path="/category" element={<Categories />}></Route>
       </Routes>
     </>
   );

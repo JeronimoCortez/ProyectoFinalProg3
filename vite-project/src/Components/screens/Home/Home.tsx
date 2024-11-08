@@ -10,8 +10,14 @@ import { CardCompany } from "../../ui/CardCompany/CardCompany";
 import styles from "./Home.module.css";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { CreateBranch } from "../../ui/CreateBranch/CreateBranch";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { RootState } from "../../../redux/store/store";
+import { EmpresaService } from "../../../services/EmpresaService";
+import { SucursalService } from "../../../services/SucursalService";
+import { setCompanies } from "../../../redux/slices/companySlice";
+import { setBranches } from "../../../redux/slices/branchSlice";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 const theme = createTheme({
@@ -25,6 +31,8 @@ export const Home = () => {
     (state: RootState) => state.company.companies
   );
 
+  const branches = useAppSelector((state: RootState) => state.branch.branches);
+
   //Instanciamos servicios
   const serviceCompany = new EmpresaService(API_URL + "/empresas");
   const serviceBranch = new SucursalService(API_URL + "/sucursales");
@@ -32,6 +40,7 @@ export const Home = () => {
 
   // Estado para renderizar las sucursales de la empresa seleccionada
   const [companyActive, setCompanyActive] = useState<IEmpresa>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const activateCompany = (company: IEmpresa) => {
     setCompanyActive(company);
@@ -48,6 +57,12 @@ export const Home = () => {
     await serviceBranch.getSucursalByEmpresaId(idEmpresa).then((sucursales) => {
       setBranches(sucursales);
     });
+  };
+
+  const openModal = (modalType: string) => {
+    if (modalType === "addBranch") {
+      setIsModalOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -91,7 +106,7 @@ export const Home = () => {
               />
             ))}
           </Box>
-          <AddButton typeAdd="Company" isCompany={true} />
+          <AddButton isCompany={true} onAddClick={() => {}} />
         </Box>
 
         {/* Seccion sucursales */}

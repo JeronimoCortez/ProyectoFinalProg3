@@ -1,0 +1,16 @@
+.downButtonContainer {
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  background-color: #eef4ed;
+  cursor: pointer;
+  margin-right: 3vh;
+  margin-left: 1vh;
+}
+.downIcon {
+  font-size: 18px;
+  color: #969696;
+}

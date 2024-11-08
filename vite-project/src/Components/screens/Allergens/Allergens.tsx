@@ -6,14 +6,15 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { AddButton } from "../ui/AddButton/AddButton";
-import Allergen from "../ui/Allergen/Allergen";
-import { AlergenoService } from "../../services/AlergenoService";
+// import { AddButton } from "../ui/AddButton/AddButton";
+import { AddButton } from "../../ui/AddButton/AddButton";
+import Allergen from "../../ui/Allergen/Allergen";
+import { AlergenoService } from "../../../services/AlergenoService";
 import { useEffect } from "react";
-import { IAlergenos } from "../../types/dtos/alergenos/IAlergenos";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { setAllergens } from "../../redux/slices/allergenSlice";
-import { RootState } from "../../redux/store/store";
+import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { setAllergens } from "../../../redux/slices/allergenSlice";
+import { RootState } from "../../../redux/store/store";
 
 const theme = createTheme({
   typography: {
