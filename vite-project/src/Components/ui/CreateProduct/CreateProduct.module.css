@@ -8,6 +8,16 @@
   color: rgba(217, 217, 217, 100%);
 }
 
+.containerSelectAlergen {
+  width: 100%;
+  max-height: 400px;
+  background-color: rgba(217, 217, 217, .36);
+  border-radius: .4rem;
+  border: "none";
+  margin: 4px 0;
+  color: rgba(217, 217, 217, 100%);
+}
+
 .selectOption {
   color: #000;
 }

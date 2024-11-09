@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "../Components/screens/Home/Home";
-import { Allergens } from "../Components/screens/Allergens";
+import { Allergens } from "../Components/screens/Allergen/Allergens";
 import Branch from "../Components/screens/Branch/Branch";
 
 export const AppRouter = () => {

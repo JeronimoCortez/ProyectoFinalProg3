@@ -41,7 +41,7 @@ const CustomHeaderWithDrawer = () => {
     } else if (text === "ALERGENOS") {
       navigate("/allergen");
     } else if (text === "PRODUCTOS") {
-      // LOGICA PARA NAV_EGAR A PRODUCTO
+      navigate("/");
     }
   };
 

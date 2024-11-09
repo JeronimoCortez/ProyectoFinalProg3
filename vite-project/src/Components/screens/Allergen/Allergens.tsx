@@ -6,17 +6,17 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { AddButton } from "../ui/AddButton/AddButton";
-import Allergen from "../ui/Allergen/Allergen";
-import { AlergenoService } from "../../services/AlergenoService";
+import { AddButton } from "../../ui/AddButton/AddButton";
+import Allergen from "../../ui/Allergen/Allergen";
+import { AlergenoService } from "../../../services/AlergenoService";
 import { useEffect } from "react";
-import { IAlergenos } from "../../types/dtos/alergenos/IAlergenos";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { setAllergens } from "../../redux/slices/allergenSlice";
-import { RootState } from "../../redux/store/store";
-import CustomHeaderWithDrawer from "../ui/Drawer/Drawer";
-import useModal from "../../hooks/useModal";
-import { CardCreateAllergens } from "../ui/CardCreateAllergens/CardCreateAllergens";
+import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { setAllergens } from "../../../redux/slices/allergenSlice";
+import { RootState } from "../../../redux/store/store";
+import CustomHeaderWithDrawer from "../../ui/Drawer/Drawer";
+import useModal from "../../../hooks/useModal";
+import { CardCreateAllergens } from "../../ui/CardCreateAllergens/CardCreateAllergens";
 
 const theme = createTheme({
   typography: {

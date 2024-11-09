@@ -22,6 +22,7 @@ import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 import { useAppSelector } from "../../../hooks/redux";
 import { Form, Formik } from "formik";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
+import { ICreateSucursal } from "../../../types/dtos/sucursal/ICreateSucursal";
 
 interface IPropsCreateBranch {
   onClose: () => void;
@@ -33,41 +34,9 @@ const API_URL = import.meta.env.VITE_BASE_URL;
 
 const validationSchema = Yup.object({
   nombre: Yup.string().required("Ingrese un nombre"),
-  // domicilio: Yup.object({
-  //   calle: Yup.string().required("Ingrese una calle"),
-  //   numero: Yup.number()
-  //     .typeError("Debe ingresar un numero")
-  //     .positive("Debe ingresar un numero positivo")
-  //     .integer("Debe ingresar un numero entero")
-  //     .required("Ingrese numero"),
-  //   cp: Yup.number()
-  //     .typeError("Debe ingresar un numero")
-  //     .positive("Debe ingresar un numero positivo")
-  //     .integer("Debe ingresar un numero entero")
-  //     .required("Ingrese codigo postal"),
-  //   piso: Yup.number()
-  //     .typeError("Debe ingresar un numero")
-  //     .positive("Debe ingresar un numero positivo")
-  //     .integer("Debe ingresar un numero entero")
-  //     .required("Ingrese numero"),
-  //   nroDpto: Yup.number()
-  //     .typeError("Debe ingresar un numero")
-  //     .positive("Debe ingresar un numero positivo")
-  //     .integer("Debe ingresar un numero entero")
-  //     .required("Ingrese numero"),
-  // localidad: Yup.object({
-  //   id: Yup.number().required("Seleccione localidad"),
-  //   provincia: Yup.object({
-  //     id: Yup.number().required("Seleccione provincia"),
-  //     pais: Yup.object({
-  //       id: Yup.number().required("Seleccione pais"),
-  //     }),
-  //   }),
-  // }),
-  // }),
-  calle: Yup.string().required("Ingrese una calle"),
-  // esCasaMatriz: Yup.boolean(),
-
+  horarioApertura: Yup.string().required("Ingrese horario de apertura"),
+  horarioCierre: Yup.string().required("Ingrese horario de cierre"),
+  esCasaMatriz: Yup.boolean(),
   latitud: Yup.number()
     .typeError("Debe ingresar un numero")
     .integer("Debe ingresar un numero entero")
@@ -76,11 +45,31 @@ const validationSchema = Yup.object({
     .typeError("Debe ingresar un numero")
     .integer("Debe ingresar un numero entero")
     .required("Ingrese longitud"),
-
-  horarioApertura: Yup.string().required("Ingrese horario de apertura"),
-  horarioCierre: Yup.string().required("Ingrese horario de cierre"),
-  // eliminado: Yup.boolean(),
-  logo: Yup.string().url("Debe ser una url valida"),
+  domicilio: Yup.object({
+    calle: Yup.string().required("Ingrese una calle"),
+    numero: Yup.number()
+      .typeError("Debe ingresar un numero")
+      .positive("Debe ingresar un numero positivo")
+      .integer("Debe ingresar un numero entero")
+      .required("Ingrese numero"),
+    cp: Yup.number()
+      .typeError("Debe ingresar un numero")
+      .positive("Debe ingresar un numero positivo")
+      .integer("Debe ingresar un numero entero")
+      .required("Ingrese codigo postal"),
+    piso: Yup.number()
+      .typeError("Debe ingresar un numero")
+      .positive("Debe ingresar un numero positivo")
+      .integer("Debe ingresar un numero entero")
+      .required("Ingrese numero"),
+    nroDpto: Yup.number()
+      .typeError("Debe ingresar un numero")
+      .positive("Debe ingresar un numero positivo")
+      .integer("Debe ingresar un numero entero")
+      .required("Ingrese numero"),
+    idLocalidad: Yup.number(),
+    logo: Yup.string().url("Debe ser una url valida"),
+  }),
 });
 
 export const CreateBranch: FC<IPropsCreateBranch> = ({
@@ -93,42 +82,24 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
     elementActive = branch;
   }
   // VALORES INICIALES
-  const initialValues: ISucursal = branch ||
-    elementActive || {
-      id: 0,
-      nombre: "",
-      empresa: company,
-      domicilio: {
-        id: 0,
-        calle: "",
-        numero: 0,
-        cp: 0,
-        piso: 0,
-        nroDpto: 0,
-        eliminado: false,
-        localidad: {
-          id: 0,
-          nombre: "",
-          provincia: {
-            nombre: "",
-            pais: {
-              id: 0,
-              nombre: "",
-            },
-            id: 0,
-          },
-        },
-      },
+  const initialValues: ICreateSucursal = {
+    nombre: "",
+    horarioApertura: "",
+    horarioCierre: "",
+    esCasaMatriz: false,
+    latitud: 0,
+    longitud: 0,
+    domicilio: {
       calle: "",
-      categorias: [],
-      esCasaMatriz: false,
-      latitud: 0,
-      longitud: 0,
-      horarioApertura: "",
-      horarioCierre: "",
-      eliminado: false,
-      logo: "",
-    };
+      numero: 0,
+      cp: 0,
+      piso: 0,
+      nroDpto: 0,
+      idLocalidad: 0,
+    },
+    idEmpresa: company.id,
+    logo: null,
+  };
 
   //INSTANCIAMOS SERVICIOS
   const serviceCountries = new PaisService(`${API_URL}/paises`);
@@ -246,8 +217,23 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
           enableReinitialize
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            values.calle = values.domicilio.calle;
-            console.log(values.nombre);
+            console.log(
+              `nombre: ${values.nombre},
+              horarioApertura: ${values.horarioApertura},
+              horarioCierre: ${values.horarioCierre},
+              esCasaMatriz: ${values.esCasaMatriz},
+              latitud: ${values.latitud},
+              longitud: ${values.longitud},
+              domicilio.calle: ${values.domicilio.calle},
+              domicilio.numero: ${values.domicilio.numero},
+              domicilio.cp: ${values.domicilio.cp},
+              domicilio.piso: ${values.domicilio.piso},
+              domicilio.nroDpto: ${values.domicilio.nroDpto},
+              domicilio.idLocalidad: ${values.domicilio.idLocalidad},
+              idEmpresa: ${values.idEmpresa},
+              logo: ${values.logo}`
+            );
+
             if (branch) {
               serviceBranches.put(branch.id, values);
             } else {
@@ -255,7 +241,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
             }
           }}
         >
-          {({ values, handleChange, setFieldValue, errors, touched }) => (
+          {({ values, handleChange, errors, touched }) => (
             <Form>
               <Box sx={{ margin: "0 auto", maxWidth: "250px" }}>
                 {elementActive ? (
@@ -359,33 +345,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                             color: "#4CE415",
                           },
                         }}
-                        checked={values.eliminado}
-                        onChange={(event) => {
-                          handleCheckedChange(event);
-                          handleChange({
-                            target: {
-                              name: "eliminado",
-                              value: checked,
-                            },
-                          });
-                        }}
-                      />
-                    }
-                    label="Habilitado"
-                    sx={{
-                      color: "#FFFFFF",
-                    }}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "#FFFFFF",
-                          "&.Mui-checked": {
-                            color: "#4CE415",
-                          },
-                        }}
-                        checked={values.esCasaMatriz}
+                        checked={values.esCasaMatriz.valueOf()}
                         onChange={(event) => {
                           handleCheckedChange(event);
                           handleChange({
@@ -410,23 +370,11 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                 >
                   <select
                     className={styles.selectContainer}
-                    name="domicilio.localidad.provincia.pais.id"
-                    value={
-                      values.domicilio.localidad.provincia.pais.id &&
-                      values.domicilio.localidad.provincia.pais.id
-                    }
                     onChange={(e) => {
                       handleChange(e);
                       const selectedCountryId = Number(e.target.value);
                       if (selectedCountryId) {
                         onPaisHandleChange(selectedCountryId);
-                        const paisSeleccionado = countries.find(
-                          (pais) => pais.id === selectedCountryId
-                        );
-                        setFieldValue(
-                          "domicilio.localidad.provincia.pais.nombre",
-                          paisSeleccionado?.nombre || ""
-                        );
                       }
                     }}
                   >
@@ -446,21 +394,11 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
 
                   <select
                     className={styles.selectContainer}
-                    name="domicilio.localidad.provincia.id"
-                    value={values.domicilio.localidad.provincia.id}
                     onChange={(e) => {
                       handleChange(e);
                       const selectedProvinceId = Number(e.target.value);
                       if (selectedProvinceId) {
                         onProvinciaHandleChange(selectedProvinceId);
-                        const provinciaSeleccionada = provinces.find(
-                          (provincia) => provincia.id === selectedProvinceId
-                        );
-
-                        setFieldValue(
-                          "domicilio.localidad.provincia.nombre",
-                          provinciaSeleccionada?.nombre || ""
-                        );
                       }
                     }}
                   >
@@ -480,21 +418,13 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
 
                   <select
                     className={styles.selectContainer}
-                    name="domicilio.localidad.id"
-                    value={values.domicilio.localidad.id}
+                    name="domicilio.idLocalidad"
+                    value={values.domicilio.idLocalidad}
                     onChange={(e) => {
                       handleChange(e);
                       const selectedLocalityId = Number(e.target.value);
                       if (selectedLocalityId) {
                         onLocalidadHandleChange(selectedLocalityId);
-                        const localidadSeleccionada = localities.find(
-                          (localidad) => localidad.id === selectedLocalityId
-                        );
-
-                        setFieldValue(
-                          "domicilio.localidad.nombre",
-                          localidadSeleccionada?.nombre || ""
-                        );
                       }
                     }}
                   >

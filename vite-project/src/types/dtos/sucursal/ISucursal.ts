@@ -8,7 +8,6 @@ export interface ISucursal {
   nombre: string;
   empresa: IEmpresa;
   domicilio: IDomicilio;
-  calle: string;
   latitud: number;
   longitud: number;
   categorias: ICategorias[];
