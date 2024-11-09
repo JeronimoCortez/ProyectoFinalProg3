@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "../Components/screens/Home/Home";
 import { Allergens } from "../Components/screens/Allergen/Allergens";
-import Branch from "../Components/screens/Branch/Branch";
+import { Products } from "../Components/screens/Products/Products";
 
 export const AppRouter = () => {
   return (
@@ -9,7 +9,7 @@ export const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/allergen" element={<Allergens />}></Route>
-        <Route path="/branch" element={<Branch />}></Route>
+        <Route path="/products" element={<Products />}></Route>
       </Routes>
     </>
   );
