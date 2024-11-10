@@ -20,7 +20,7 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
 
   const handleNavigate = () => {
-    navigate("/branch");
+    navigate(`/branch/${branch.empresa.id}/${branch.id}`);
   };
 
   return (
@@ -85,7 +85,7 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
       )}
 
       {isModalOpen && activeModal === "edit" && (
-        <CreateBranch onClose={closeModal} idCompany={branch.empresa.id} />
+        <CreateBranch onClose={closeModal} company={branch.empresa} />
       )}
     </>
   );

@@ -2,8 +2,6 @@ import {
   Box,
   Checkbox,
   FormControlLabel,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,9 +11,17 @@ import ImageIcon from "@mui/icons-material/Image";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
 import { IProductos } from "../../../types/dtos/productos/IProductos";
-import { FC, useState } from "react";
-import * as Yup from "yup";
-import { CheckBox } from "@mui/icons-material";
+import { FC, useEffect, useState } from "react";
+import { ICreateProducto } from "../../../types/dtos/productos/ICreateProducto";
+import { Form, Formik } from "formik";
+import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
+import { AlergenoService } from "../../../services/AlergenoService";
+import { ICreateAlergeno } from "../../../types/dtos/alergenos/ICreateAlergeno";
+import { IUpdateAlergeno } from "../../../types/dtos/alergenos/IUpdateAlergeno";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { RootState } from "../../../redux/store/store";
+
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 const FormContainer = styled(Box)(({ theme }) => ({
   maxWidth: 800,
@@ -38,21 +44,15 @@ interface IPropsCreateProduct {
   onClose: () => void;
 }
 
-const validationSchema = Yup.object({
-  denominacion: Yup.string().required("Ingrese una denominacion"),
-  precioVenta: Yup.number()
-    .positive("Ingrese un numero positivo")
-    .required("Ingrese precio de venta"),
-  descripcion: Yup.string().required("Ingrese una descripcion"),
-  habilitado: Yup.boolean(),
-  codigo: Yup.string().required("Ingrese un codigo"),
-});
-
 const CreateProduct: FC<IPropsCreateProduct> = ({ product, onClose }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [allergns, setAllergns] = useState<IAlergenos[]>();
+  const [productActive, setProductActive] = useState<IProductos>();
+  const [checked, setChecked] = useState<boolean>(false);
+
+  const allergenService = new AlergenoService(`${API_URL}/alergenos`);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    // Obtén un array de opciones seleccionadas
     const selectedValues = Array.from(
       event.target.selectedOptions,
       (option) => option.value
@@ -60,18 +60,31 @@ const CreateProduct: FC<IPropsCreateProduct> = ({ product, onClose }) => {
     setSelectedOptions(selectedValues);
   };
 
-  const [productActive, setProductActive] = useState<IProductos>();
-  const [checked, setChecked] = useState<boolean>(false);
-
-  if (product) {
-    setProductActive(product);
-  }
-
   const onHandleCheckedChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setChecked(event.target.checked);
   };
+
+  const getAllergens = async () => {};
+
+  useEffect(() => {
+    if (product) {
+      setProductActive(product);
+    }
+  });
+
+  const initialValues: ICreateProducto = {
+    denominacion: "",
+    precioVenta: 0,
+    descripcion: "",
+    habilitado: false,
+    codigo: "",
+    imagenes: [],
+    idCategoria: 0,
+    idAlergenos: [],
+  };
+
   return (
     <Box
       sx={{
@@ -88,168 +101,171 @@ const CreateProduct: FC<IPropsCreateProduct> = ({ product, onClose }) => {
         left: 0,
       }}
     >
-      <FormContainer>
-        <Typography
-          sx={{
-            marginBottom: "15px",
-            color: "#134074",
-            fontFamily: "Promp, sans-serif",
-            fontWeight: "600",
-            fontSize: "24px",
-          }}
-        >
-          Crear un producto
-        </Typography>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "3rem",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
-            <FieldContainer>
-              <TextField
-                fullWidth
-                label="Ingrese una denominacion"
-                variant="outlined"
-                size="small"
-                inputProps={{ style: { border: "none" } }}
-                InputLabelProps={{
-                  style: { color: "#FFFFFF", fontSize: "16px" },
-                }}
-                sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-              />
-            </FieldContainer>
-            <FieldContainer>
-              <TextField
-                fullWidth
-                label="Ingrese una denominacion"
-                variant="outlined"
-                size="small"
-                inputProps={{ style: { border: "none" } }}
-                InputLabelProps={{
-                  style: { color: "#FFFFFF", fontSize: "16px" },
-                }}
-                sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-              />
-            </FieldContainer>
-            <FieldContainer>
-              <select className={styles.selectContainer}>
-                <option className={styles.selectOption} value="">
-                  Categoria
-                </option>
-                <option className={styles.selectOption} value="">
-                  1
-                </option>
-                <option className={styles.selectOption} value="">
-                  2
-                </option>
-              </select>
-            </FieldContainer>
-
-            <FieldContainer>
-              <TextField
-                fullWidth
-                label="Ingrese precio de venta"
-                variant="outlined"
-                size="small"
-                inputProps={{ style: { border: "none" } }}
-                InputLabelProps={{
-                  style: { color: "#FFFFFF", fontSize: "16px" },
-                }}
-                sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-              />
-            </FieldContainer>
-            <FieldContainer>
-              <TextField
-                fullWidth
-                label="Ingrese un codigo"
-                variant="outlined"
-                size="small"
-                inputProps={{ style: { border: "none" } }}
-                InputLabelProps={{
-                  style: { color: "#FFFFFF", fontSize: "16px" },
-                }}
-                sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-              />
-            </FieldContainer>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{
-                    color: "#FFFFFF",
-                    "&.Mui-checked": {
-                      color: "#4CE415",
-                    },
-                  }}
-                  checked={checked}
-                  onChange={onHandleCheckedChange}
-                />
-              }
-              label="Habilitado"
-              sx={{ color: "#FFFFFF" }}
-            />
-          </Box>
-          <Box>
-            <TextField
-              fullWidth
-              label="Ingrese una descripcion"
-              variant="outlined"
-              size="small"
-              rows={10}
-              multiline
-              inputProps={{ style: { border: "none" } }}
-              InputLabelProps={{
-                style: { color: "#FFFFFF", fontSize: "16px" },
-              }}
-              sx={{
-                backgroundColor: "rgba(217,217,217,.12)",
-                marginBottom: "1.5rem",
-              }}
-            />
-            <Box>
-              <TextField
-                label="Ingrese una imagen"
-                variant="outlined"
-                size="small"
-                inputProps={{ style: { border: "none" } }}
-                InputLabelProps={{
-                  style: { color: "#FFFFFF", fontSize: "16px" },
-                }}
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={() => {}}
+      >
+        {({ values, handleChange, setFieldValue, errors, touched }) => (
+          <Form>
+            <FormContainer>
+              <Typography
                 sx={{
-                  backgroundColor: "rgba(217,217,217,.12)",
+                  marginBottom: "15px",
+                  color: "#134074",
+                  fontFamily: "Promp, sans-serif",
+                  fontWeight: "600",
+                  fontSize: "24px",
                 }}
-              />
-              <ImageIcon sx={{ fontSize: "40px", color: "#FFFFFF" }} />
-            </Box>
-          </Box>
-          <Box>
-            <Box sx={{ maxHeight: "400px" }}>
-              <select className={styles.containerSelectAlergen} multiple>
-                <option className={styles.selectOption} value="" disabled>
-                  Alergenos
-                </option>
-                <option className={styles.selectOption} value="">
-                  1
-                </option>
-                <option className={styles.selectOption} value="">
-                  2
-                </option>
-              </select>
-              <Typography sx={{ color: "#FFFFFF", fontSize: "12px" }}>
-                Para seleccionar mas de una opcion mantenga la tecla Ctrl
+              >
+                Crear un producto
               </Typography>
-            </Box>
-          </Box>
-        </Box>
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "3rem",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box>
+                  <FieldContainer>
+                    <TextField
+                      fullWidth
+                      label="Ingrese una denominacion"
+                      variant="outlined"
+                      size="small"
+                      inputProps={{ style: { border: "none" } }}
+                      InputLabelProps={{
+                        style: { color: "#FFFFFF", fontSize: "16px" },
+                      }}
+                      sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+                      name="denominacion"
+                      value={values.denominacion}
+                      onChange={handleChange}
+                    />
+                  </FieldContainer>
+                  <FieldContainer>
+                    <select className={styles.selectContainer}>
+                      <option className={styles.selectOption} value="">
+                        Categoria
+                      </option>
+                      <option className={styles.selectOption} value="">
+                        1
+                      </option>
+                      <option className={styles.selectOption} value="">
+                        2
+                      </option>
+                    </select>
+                  </FieldContainer>
 
-        <Box mt={3} display="flex" justifyContent="space-between">
-          <CheckButton isCompany={true} />
-          <CloseButton isCompany={true} onclick={onClose} />
-        </Box>
-      </FormContainer>
+                  <FieldContainer>
+                    <TextField
+                      fullWidth
+                      label="Ingrese precio de venta"
+                      variant="outlined"
+                      size="small"
+                      inputProps={{ style: { border: "none" } }}
+                      InputLabelProps={{
+                        style: { color: "#FFFFFF", fontSize: "16px" },
+                      }}
+                      sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+                    />
+                  </FieldContainer>
+                  <FieldContainer>
+                    <TextField
+                      fullWidth
+                      label="Ingrese un codigo"
+                      variant="outlined"
+                      size="small"
+                      inputProps={{ style: { border: "none" } }}
+                      InputLabelProps={{
+                        style: { color: "#FFFFFF", fontSize: "16px" },
+                      }}
+                      sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+                    />
+                  </FieldContainer>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        sx={{
+                          color: "#FFFFFF",
+                          "&.Mui-checked": {
+                            color: "#4CE415",
+                          },
+                        }}
+                        checked={checked}
+                        onChange={onHandleCheckedChange}
+                      />
+                    }
+                    label="Habilitado"
+                    sx={{ color: "#FFFFFF" }}
+                  />
+                </Box>
+                <Box>
+                  <TextField
+                    fullWidth
+                    label="Ingrese una descripcion"
+                    variant="outlined"
+                    size="small"
+                    rows={10}
+                    multiline
+                    inputProps={{ style: { border: "none" } }}
+                    InputLabelProps={{
+                      style: { color: "#FFFFFF", fontSize: "16px" },
+                    }}
+                    sx={{
+                      backgroundColor: "rgba(217,217,217,.12)",
+                      marginBottom: "1.5rem",
+                    }}
+                  />
+                  <Box>
+                    <TextField
+                      label="Ingrese una imagen"
+                      variant="outlined"
+                      size="small"
+                      inputProps={{ style: { border: "none" } }}
+                      InputLabelProps={{
+                        style: { color: "#FFFFFF", fontSize: "16px" },
+                      }}
+                      sx={{
+                        backgroundColor: "rgba(217,217,217,.12)",
+                      }}
+                    />
+                    <ImageIcon sx={{ fontSize: "40px", color: "#FFFFFF" }} />
+                  </Box>
+                </Box>
+                <Box>
+                  <Box sx={{ maxHeight: "400px" }}>
+                    <select className={styles.containerSelectAlergen} multiple>
+                      <option className={styles.selectOption} value="" disabled>
+                        Alergenos
+                      </option>
+                      {allergns?.map((a) => (
+                        <option className={styles.selectOption} value={a.id}>
+                          {a.denominacion}
+                        </option>
+                      ))}
+
+                      <option className={styles.selectOption} value="">
+                        2
+                      </option>
+                    </select>
+                    <Typography sx={{ color: "#FFFFFF", fontSize: "12px" }}>
+                      Para seleccionar mas de una opcion mantenga la tecla Ctrl
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+
+              <Box mt={3} display="flex" justifyContent="space-between">
+                <CheckButton isCompany={true} />
+                <CloseButton isCompany={true} onclick={onClose} />
+              </Box>
+            </FormContainer>
+          </Form>
+        )}
+      </Formik>
     </Box>
   );
 };

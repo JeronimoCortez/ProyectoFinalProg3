@@ -1,13 +1,45 @@
 import { Box, Paper, Typography } from "@mui/material";
-import React from "react";
 import { ThumbUpButton } from "../ThumbUpButton/ThumbUpButton";
 import { InfoButton } from "../InfoButton/InfoButton";
 import { EditButton } from "../EditButton/EditButton";
 import { DeleteButton } from "../DeleteButton/DeleteButton";
 import useModal from "../../../hooks/useModal";
+import { IProductos } from "../../../types/dtos/productos/IProductos";
+import { FC } from "react";
+import CreateProduct from "../CreateProduct/CreateProduct";
+import { ProductoService } from "../../../services/ProductoService";
+import Swal from "sweetalert2";
+import { InfoProduct } from "../InfoProduct/InfoProduct";
 
-const Product = () => {
+interface IPropsProduct {
+  product: IProductos;
+}
+
+const API_URL = import.meta.env.VITE_BASE_URL;
+
+const Product: FC<IPropsProduct> = ({ product }) => {
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
+  const productService = new ProductoService(`${API_URL}/articulos`);
+
+  const deleteProduct = async (idProduct: number) => {
+    const result = await Swal.fire({
+      title: "¿Deseas eliminar el alergeno?",
+      text: "¡Los cambios son irreversibles!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar!",
+    });
+
+    if (result.isConfirmed) {
+      await productService.delete(idProduct);
+      Swal.fire({
+        title: "¡Alergeno eliminado con éxito!",
+        icon: "success",
+      });
+    }
+  };
   return (
     <>
       <Paper
@@ -23,28 +55,42 @@ const Product = () => {
         }}
       >
         <Typography variant="body2" color="white">
-          PAPAS + GASEOSA
+          {product.denominacion}
         </Typography>
         <Typography variant="body2" color="white">
-          $5000
+          {product.precioVenta}
         </Typography>
         <Typography variant="body2" color="white">
-          PROMO ..
+          {product.descripcion}
         </Typography>
         <Typography variant="body2" color="white">
-          PROMOCIONES
+          {product.categoria.denominacion}
         </Typography>
 
-        <Box>
-          <ThumbUpButton enabled={false} active={true} />
-        </Box>
+        <Box>{product.habilitado ? <ThumbUpButton /> : "...."}</Box>
 
         <Box display="flex" alignItems="center" gap={1.5}>
-          <InfoButton isCompany={false} onInfoClick={() => openModal} />
-          <EditButton isCompany={false} onEditClick={() => openModal} />
-          <DeleteButton isCompany={false} onDeleteClick={() => openModal} />
+          <InfoButton
+            isCompany={false}
+            onInfoClick={() => openModal("infoProduct")}
+          />
+          <EditButton
+            isCompany={false}
+            onEditClick={() => openModal("editProduct")}
+          />
+          <DeleteButton
+            isCompany={false}
+            onDeleteClick={() => deleteProduct(product.id)}
+          />
         </Box>
       </Paper>
+      {isModalOpen && activeModal === "editProduct" && (
+        <CreateProduct onClose={closeModal} product={product} />
+      )}
+
+      {isModalOpen && activeModal === "infoProduct" && (
+        <InfoProduct producto={product} onClose={closeModal} />
+      )}
     </>
   );
 };

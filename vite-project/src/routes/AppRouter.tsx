@@ -1,15 +1,16 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "../Components/screens/Home/Home";
-import { Allergens } from "../Components/screens/Allergen/Allergens";
-import { Products } from "../Components/screens/Products/Products";
+import Branch from "../Components/screens/Branch/Branch";
 
 export const AppRouter = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/allergen" element={<Allergens />}></Route>
-        <Route path="/products" element={<Products />}></Route>
+        <Route
+          path="/branch/:idEmpresa/:idSucursal/:section?"
+          element={<Branch />}
+        ></Route>
       </Routes>
     </>
   );

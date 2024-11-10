@@ -46,7 +46,6 @@ export const Allergens = () => {
     <Box sx={{ backgroundColor: "#0B2545", minHeight: "100vh" }}>
       <ThemeProvider theme={theme}></ThemeProvider>
       <CssBaseline />
-      <CustomHeaderWithDrawer />
 
       {/* LISTA DE ALÉRGENOS */}
       <Box

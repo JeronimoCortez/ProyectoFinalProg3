@@ -75,7 +75,6 @@ const Allergen: FC<IPropsAllergen> = ({ allergen }) => {
           </IconButton>
           <IconButton sx={{ paddingLeft: "1rem" }}>
             <DeleteButton
-              typeDelete="deleteAllergen"
               isCompany={false}
               onDeleteClick={() => deleteAllergen(allergen.id)}
             />

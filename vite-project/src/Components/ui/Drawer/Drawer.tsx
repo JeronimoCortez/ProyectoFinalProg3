@@ -18,6 +18,10 @@ import { useNavigate } from "react-router-dom";
 import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
 import Branch from "../../screens/Branch/Branch";
 
+interface IPropsDrawer {
+  branch?: ISucursal;
+}
+
 const theme = createTheme({
   typography: {
     fontFamily: "Prompt, sans-serif",
@@ -27,7 +31,7 @@ const theme = createTheme({
 
 const drawerWidth = 350;
 
-const CustomHeaderWithDrawer = () => {
+const CustomHeaderWithDrawer: FC<IPropsDrawer> = ({ branch }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -39,9 +43,9 @@ const CustomHeaderWithDrawer = () => {
     if (text === "CATEGORIAS") {
       // NAVEGAR A CATEGORIA
     } else if (text === "ALERGENOS") {
-      navigate("/allergen");
-    } else if (text === "PRODUCTOS") {
-      navigate("/");
+      navigate(`/branch/${branch?.empresa.id}/${branch?.id}/allergens`);
+    } else if (text === "PRODUCTO") {
+      navigate(`/branch/${branch?.empresa.id}/${branch?.id}/products`);
     }
   };
 
@@ -133,7 +137,7 @@ const CustomHeaderWithDrawer = () => {
                 textAlign: "center",
               }}
             >
-              NOMBRE DE LA SUCURSAL
+              {branch?.nombre}
             </Typography>
           </Toolbar>
         </AppBar>

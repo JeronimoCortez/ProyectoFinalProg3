@@ -159,7 +159,7 @@ export const Home = () => {
                 }}
               >
                 {branches.map((e) => (
-                  <CardBranch branch={e} />
+                  <CardBranch key={e.id} branch={e} />
                 ))}
               </Box>
             </Box>
