@@ -1,0 +1,14 @@
+.AddButtonCategoryContainer {
+  background-color: #eef4ed;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+}
+.AddButtonCategory {
+  font-size: 18px;
+  color: #4ce415;
+}

@@ -6,6 +6,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
+// import { AddButton } from "../ui/AddButton/AddButton";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import Allergen from "../../ui/Allergen/Allergen";
 import { AlergenoService } from "../../../services/AlergenoService";
@@ -14,9 +15,6 @@ import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { setAllergens } from "../../../redux/slices/allergenSlice";
 import { RootState } from "../../../redux/store/store";
-import CustomHeaderWithDrawer from "../../ui/Drawer/Drawer";
-import useModal from "../../../hooks/useModal";
-import { CardCreateAllergens } from "../../ui/CardCreateAllergens/CardCreateAllergens";
 
 const theme = createTheme({
   typography: {
@@ -29,7 +27,6 @@ export const Allergens = () => {
   const allergens = useAppSelector(
     (state: RootState) => state.allergen.allergens
   );
-  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   const allergenService = new AlergenoService(`${API_URL}/alergenos`);
   const dispatch = useAppDispatch();
 
@@ -55,6 +52,7 @@ export const Allergens = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            // alignItems: "center",
             position: "relative",
           }}
         >
@@ -76,10 +74,7 @@ export const Allergens = () => {
             className="addButton"
             sx={{ position: "absolute", top: 30, right: -500 }}
           >
-            <AddButton
-              onAddClick={() => openModal("addAllergen")}
-              isCompany={false}
-            />
+            <AddButton onAddClick={() => {}} isCompany={false} />
           </Box>
         </Box>
 
@@ -107,9 +102,6 @@ export const Allergens = () => {
           <Allergen allergen={item} key={item.id} />
         ))}
       </Box>
-      {isModalOpen && activeModal === "addAllergen" && (
-        <CardCreateAllergens onClose={closeModal} />
-      )}
     </Box>
   );
 };
