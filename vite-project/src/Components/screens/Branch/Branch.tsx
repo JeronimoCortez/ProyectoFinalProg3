@@ -7,8 +7,9 @@ import { useParams } from "react-router-dom";
 import { SucursalService } from "../../../services/SucursalService";
 import { ICreateSucursal } from "../../../types/dtos/sucursal/ICreateSucursal";
 import { Products } from "../Products/Products";
-import { Allergens } from "../Allergen/Allergens";
+import { Allergens } from "../Allergens/Allergens";
 import { AddButton } from "../../ui/AddButton/AddButton";
+import { Categories } from "../Categories/Categories";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -35,6 +36,7 @@ const Branch = () => {
         <CustomHeaderWithDrawer branch={branchActive} />
         {section === "products" && <Products idBranch={branchActive?.id} />}
         {section === "allergens" && <Allergens />}
+        {section === "categories" && <Categories />}
       </Box>
     </>
   );

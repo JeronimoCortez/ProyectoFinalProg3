@@ -11,8 +11,11 @@ import {
 import { DownButton } from "../DownButton/DownButton";
 import { EditButton } from "../EditButton/EditButton";
 import { AddButtonLabel } from "../AddButtonLabel/AddButtonLabel";
+import useModal from "../../../hooks/useModal";
+import { CreateSubcategory } from "../CreateSubcategory/CreateSubcategory";
 
 export const CategoryLabel = () => {
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   return (
     <Accordion
       sx={{
@@ -65,7 +68,7 @@ export const CategoryLabel = () => {
             <EditButton isCompany={false} onEditClick={() => {}} />
           </IconButton>
           <IconButton>
-            <AddButtonLabel />
+            <AddButtonLabel onClick={() => openModal("addSubcategory")} />
           </IconButton>
         </Box>
       </AccordionSummary>
@@ -83,6 +86,9 @@ export const CategoryLabel = () => {
           </ListItem>
         </List>
       </AccordionDetails>
+      {isModalOpen && activeModal === "addSubcategory" && (
+        <CreateSubcategory onClose={closeModal} />
+      )}
     </Accordion>
   );
 };

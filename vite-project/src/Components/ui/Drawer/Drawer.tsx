@@ -41,7 +41,7 @@ const CustomHeaderWithDrawer: FC<IPropsDrawer> = ({ branch }) => {
 
   const handleNavigate = (text: string) => {
     if (text === "CATEGORIAS") {
-      // NAVEGAR A CATEGORIA
+      navigate(`/branch/${branch?.empresa.id}/${branch?.id}/categories`);
     } else if (text === "ALERGENOS") {
       navigate(`/branch/${branch?.empresa.id}/${branch?.id}/allergens`);
     } else if (text === "PRODUCTO") {

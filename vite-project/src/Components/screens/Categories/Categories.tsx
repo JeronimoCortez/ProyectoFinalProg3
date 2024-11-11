@@ -8,6 +8,8 @@ import {
 import CustomHeaderWithDrawer from "../../ui/Drawer/Drawer";
 import { AddButton } from "../../ui/AddButton/AddButton";
 import { CategoryLabel } from "../../ui/CategoryLabel/CategoryLabel";
+import useModal from "../../../hooks/useModal";
+import { CreateCategory } from "../../ui/CreateCategory/CreateCategory";
 
 const theme = createTheme({
   typography: {
@@ -16,17 +18,16 @@ const theme = createTheme({
 });
 
 export const Categories = () => {
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   return (
     <Box sx={{ backgroundColor: "#0B2545", minHeight: "100vh" }}>
       <ThemeProvider theme={theme}></ThemeProvider>
       <CssBaseline />
-      <CustomHeaderWithDrawer />
       <Box
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
         <Box
           sx={{
-            border: "1px solid black",
             display: "flex",
             flexDirection: "column",
             position: "relative",
@@ -53,7 +54,10 @@ export const Categories = () => {
             className="addButton"
             sx={{ position: "absolute", top: 34, right: -24 }}
           >
-            <AddButton onAddClick={() => {}} isCompany={false} />
+            <AddButton
+              onAddClick={() => openModal("addCategory")}
+              isCompany={false}
+            />
           </Box>
 
           {/* SERVICIO AL CLIENTE */}
@@ -69,6 +73,9 @@ export const Categories = () => {
           <CategoryLabel />
         </Box>
       </Box>
+      {isModalOpen && activeModal === "addCategory" && (
+        <CreateCategory onClose={closeModal} />
+      )}
     </Box>
   );
 };
