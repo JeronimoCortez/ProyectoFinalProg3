@@ -18,6 +18,8 @@ import { EmpresaService } from "../../../services/EmpresaService";
 import { SucursalService } from "../../../services/SucursalService";
 import { setCompanies } from "../../../redux/slices/companySlice";
 import { setBranches } from "../../../redux/slices/branchSlice";
+import { CreateSubcategory } from "../../ui/CreateSubcategory/CreateSubcategory";
+import { CreateCategory } from "../../ui/CreateCategory/CreateCategory";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 const theme = createTheme({
@@ -171,6 +173,8 @@ export const Home = () => {
           )}
         </Box>
       </ThemeProvider>
+      <CreateSubcategory />
+      <CreateCategory />
     </>
   );
 };
