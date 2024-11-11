@@ -85,7 +85,11 @@ export const CardBranch: FC<ICardBranch> = ({ branch }) => {
       )}
 
       {isModalOpen && activeModal === "edit" && (
-        <CreateBranch onClose={closeModal} company={branch.empresa} />
+        <CreateBranch
+          onClose={closeModal}
+          company={branch.empresa}
+          branch={branch}
+        />
       )}
     </>
   );

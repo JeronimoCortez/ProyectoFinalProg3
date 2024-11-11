@@ -23,6 +23,8 @@ import { useAppSelector } from "../../../hooks/redux";
 import { Form, Formik } from "formik";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { ICreateSucursal } from "../../../types/dtos/sucursal/ICreateSucursal";
+import Swal from "sweetalert2";
+import { IUpdateSucursal } from "../../../types/dtos/sucursal/IUpdateSucursal";
 
 interface IPropsCreateBranch {
   onClose: () => void;
@@ -81,26 +83,28 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
   if (branch) {
     elementActive = branch;
   }
-  // VALORES INICIALES
-  const initialValues: ICreateSucursal = {
-    nombre: "",
-    horarioApertura: "",
-    horarioCierre: "",
-    esCasaMatriz: false,
-    latitud: 0,
-    longitud: 0,
-    domicilio: {
-      calle: "",
-      numero: 0,
-      cp: 0,
-      piso: 0,
-      nroDpto: 0,
-      idLocalidad: 0,
-    },
-    idEmpresa: company.id,
-    logo: null,
-  };
 
+  const initialValues: ICreateSucursal | IUpdateSucursal = {
+    nombre: branch?.nombre || "",
+    horarioApertura: branch?.horarioApertura || "",
+    horarioCierre: branch?.horarioCierre || "",
+    esCasaMatriz: branch?.esCasaMatriz || false,
+    latitud: branch?.latitud || 0,
+    longitud: branch?.longitud || 0,
+    domicilio: {
+      id: branch?.domicilio?.id || 0,
+      calle: branch?.domicilio?.calle || "",
+      numero: branch?.domicilio?.numero || 0,
+      cp: branch?.domicilio?.cp || 0,
+      piso: branch?.domicilio?.piso || 0,
+      nroDpto: branch?.domicilio?.nroDpto || 0,
+      idLocalidad: branch?.domicilio?.localidad?.id || 0,
+    },
+    idEmpresa: branch?.empresa?.id || company.id,
+    logo: branch?.logo || null,
+    categorias: branch?.categorias || [],
+    eliminado: branch?.eliminado || false,
+  };
   //INSTANCIAMOS SERVICIOS
   const serviceCountries = new PaisService(`${API_URL}/paises`);
   const serviceProvinces = new ProvinciaService(`${API_URL}/provincias`);
@@ -213,32 +217,34 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
         }}
       >
         <Formik
-          initialValues={initialValues}
+          initialValues={initialValues as ICreateSucursal | IUpdateSucursal} // Conversion explícita
           enableReinitialize
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            console.log(
-              `nombre: ${values.nombre},
-              horarioApertura: ${values.horarioApertura},
-              horarioCierre: ${values.horarioCierre},
-              esCasaMatriz: ${values.esCasaMatriz},
-              latitud: ${values.latitud},
-              longitud: ${values.longitud},
-              domicilio.calle: ${values.domicilio.calle},
-              domicilio.numero: ${values.domicilio.numero},
-              domicilio.cp: ${values.domicilio.cp},
-              domicilio.piso: ${values.domicilio.piso},
-              domicilio.nroDpto: ${values.domicilio.nroDpto},
-              domicilio.idLocalidad: ${values.domicilio.idLocalidad},
-              idEmpresa: ${values.idEmpresa},
-              logo: ${values.logo}`
-            );
-
             if (branch) {
-              serviceBranches.put(branch.id, values);
+              serviceBranches.updateSucursalByEmpresa(
+                branch.id,
+                values as IUpdateSucursal
+              );
+              Swal.fire({
+                title: "Éxito!",
+                text: `La empresa: ${values.nombre} se editó correctamente!`,
+                icon: "success",
+                confirmButtonText: "Aceptar",
+              });
             } else {
-              serviceBranches.post(values);
+              // En el caso de crear
+              serviceBranches.createSucursalByEmpresa(
+                values as ICreateSucursal
+              );
+              Swal.fire({
+                title: "Éxito!",
+                text: `La empresa: ${values.nombre} se creó correctamente!`,
+                icon: "success",
+                confirmButtonText: "Aceptar",
+              });
             }
+            onClose();
           }}
         >
           {({ values, handleChange, errors, touched }) => (
