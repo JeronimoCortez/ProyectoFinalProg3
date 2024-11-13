@@ -1,14 +1,11 @@
 import { Box } from "@mui/material";
 import CustomHeaderWithDrawer from "../../ui/Drawer/Drawer";
 import { ISucursal } from "../../../types/dtos/sucursal/ISucursal";
-import CreateProduct from "../../ui/CreateProduct/CreateProduct";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SucursalService } from "../../../services/SucursalService";
-import { ICreateSucursal } from "../../../types/dtos/sucursal/ICreateSucursal";
 import { Products } from "../Products/Products";
 import { Allergens } from "../Allergens/Allergens";
-import { AddButton } from "../../ui/AddButton/AddButton";
 import { Categories } from "../Categories/Categories";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
@@ -36,7 +33,12 @@ const Branch = () => {
         <CustomHeaderWithDrawer branch={branchActive} />
         {section === "products" && <Products idBranch={branchActive?.id} />}
         {section === "allergens" && <Allergens />}
-        {section === "categories" && <Categories />}
+        {section === "categories" && (
+          <Categories
+            idBranch={branchActive?.id}
+            idEmpresa={Number(idEmpresa)}
+          />
+        )}
       </Box>
     </>
   );

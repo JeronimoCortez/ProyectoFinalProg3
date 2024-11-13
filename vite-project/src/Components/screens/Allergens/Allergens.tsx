@@ -15,6 +15,8 @@ import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { setAllergens } from "../../../redux/slices/allergenSlice";
 import { RootState } from "../../../redux/store/store";
+import useModal from "../../../hooks/useModal";
+import { CardCreateAllergens } from "../../ui/CardCreateAllergens/CardCreateAllergens";
 
 const theme = createTheme({
   typography: {
@@ -24,6 +26,7 @@ const theme = createTheme({
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 export const Allergens = () => {
+  const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   const allergens = useAppSelector(
     (state: RootState) => state.allergen.allergens
   );
@@ -74,7 +77,10 @@ export const Allergens = () => {
             className="addButton"
             sx={{ position: "absolute", top: 30, right: -500 }}
           >
-            <AddButton onAddClick={() => {}} isCompany={false} />
+            <AddButton
+              onAddClick={() => openModal("addAllergen")}
+              isCompany={false}
+            />
           </Box>
         </Box>
 
@@ -101,6 +107,10 @@ export const Allergens = () => {
         {allergens?.map((item: IAlergenos) => (
           <Allergen allergen={item} key={item.id} />
         ))}
+
+        {isModalOpen && activeModal === "addAllergen" && (
+          <CardCreateAllergens onClose={closeModal} />
+        )}
       </Box>
     </Box>
   );

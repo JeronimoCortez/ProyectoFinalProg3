@@ -16,10 +16,8 @@ import { ICreateProducto } from "../../../types/dtos/productos/ICreateProducto";
 import { Form, Formik } from "formik";
 import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
 import { AlergenoService } from "../../../services/AlergenoService";
-import { ICreateAlergeno } from "../../../types/dtos/alergenos/ICreateAlergeno";
-import { IUpdateAlergeno } from "../../../types/dtos/alergenos/IUpdateAlergeno";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { RootState } from "../../../redux/store/store";
+import { CategoriaService } from "../../../services/CategoriaService";
+import { ICategorias } from "../../../types/dtos/categorias/ICategorias";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -41,16 +39,23 @@ const FieldContainer = styled(Box)(({ theme }) => ({
 
 interface IPropsCreateProduct {
   product?: IProductos;
+  idBranch?: number;
   onClose: () => void;
 }
 
-const CreateProduct: FC<IPropsCreateProduct> = ({ product, onClose }) => {
+const CreateProduct: FC<IPropsCreateProduct> = ({
+  product,
+  onClose,
+  idBranch,
+}) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [allergns, setAllergns] = useState<IAlergenos[]>();
   const [productActive, setProductActive] = useState<IProductos>();
   const [checked, setChecked] = useState<boolean>(false);
+  const [categorias, setCategorias] = useState<ICategorias[]>([]);
 
   const allergenService = new AlergenoService(`${API_URL}/alergenos`);
+  const categoryService = new CategoriaService(`${API_URL}/categorias`);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValues = Array.from(
@@ -66,13 +71,29 @@ const CreateProduct: FC<IPropsCreateProduct> = ({ product, onClose }) => {
     setChecked(event.target.checked);
   };
 
-  const getAllergens = async () => {};
+  const getAllergens = async () => {
+    allergenService.getAll().then((data) => {
+      setAllergns(data as IAlergenos[]);
+    });
+  };
+
+  const getCategorias = async () => {
+    if (idBranch) {
+      categoryService.getCategoriasBySucursal(idBranch).then((data) => {
+        setCategorias(data);
+      });
+    }
+  };
 
   useEffect(() => {
     if (product) {
       setProductActive(product);
     }
   });
+  useEffect(() => {
+    getAllergens();
+    getCategorias();
+  }, []);
 
   const initialValues: ICreateProducto = {
     denominacion: "",
@@ -150,12 +171,11 @@ const CreateProduct: FC<IPropsCreateProduct> = ({ product, onClose }) => {
                       <option className={styles.selectOption} value="">
                         Categoria
                       </option>
-                      <option className={styles.selectOption} value="">
-                        1
-                      </option>
-                      <option className={styles.selectOption} value="">
-                        2
-                      </option>
+                      {categorias?.map((categoria) => (
+                        <option className={styles.selectOption} value="">
+                          {categoria.denominacion}
+                        </option>
+                      ))}
                     </select>
                   </FieldContainer>
 
@@ -238,7 +258,7 @@ const CreateProduct: FC<IPropsCreateProduct> = ({ product, onClose }) => {
                 <Box>
                   <Box sx={{ maxHeight: "400px" }}>
                     <select className={styles.containerSelectAlergen} multiple>
-                      <option className={styles.selectOption} value="" disabled>
+                      <option className={styles.optionTitle} value="" disabled>
                         Alergenos
                       </option>
                       {allergns?.map((a) => (
@@ -246,10 +266,6 @@ const CreateProduct: FC<IPropsCreateProduct> = ({ product, onClose }) => {
                           {a.denominacion}
                         </option>
                       ))}
-
-                      <option className={styles.selectOption} value="">
-                        2
-                      </option>
                     </select>
                     <Typography sx={{ color: "#FFFFFF", fontSize: "12px" }}>
                       Para seleccionar mas de una opcion mantenga la tecla Ctrl

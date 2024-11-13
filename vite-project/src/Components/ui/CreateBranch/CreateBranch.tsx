@@ -25,6 +25,7 @@ import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { ICreateSucursal } from "../../../types/dtos/sucursal/ICreateSucursal";
 import Swal from "sweetalert2";
 import { IUpdateSucursal } from "../../../types/dtos/sucursal/IUpdateSucursal";
+import { UploadImage } from "../UploadImage/UploadImage";
 
 interface IPropsCreateBranch {
   onClose: () => void;
@@ -112,6 +113,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
   const serviceBranches = new SucursalService(`${API_URL}/sucursales`);
 
   // Declaramos estados
+  const [image, setImage] = useState<string | null>(null);
   const [checked, setChecked] = useState<boolean>(false);
   const [localityId, setLocalityId] = useState<number>();
   const [countryId, setCountryId] = useState<number | undefined>(undefined);
@@ -217,7 +219,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
         }}
       >
         <Formik
-          initialValues={initialValues as ICreateSucursal | IUpdateSucursal} // Conversion explícita
+          initialValues={initialValues as ICreateSucursal | IUpdateSucursal}
           enableReinitialize
           validationSchema={validationSchema}
           onSubmit={(values) => {
@@ -625,37 +627,13 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                   />
                 </Box>
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  width: "50%",
-                  margin: "0 auto",
-                  alignItems: "center",
-                }}
-              >
-                <TextField
-                  placeholder="Ingrese una imagen"
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                  sx={stylesTextField}
-                  InputProps={{
-                    style: {
-                      backgroundColor: "rgba(217, 217, 217, 0.35)",
-                      color: "#FFFFFF",
-                      height: "50px",
-                      fontSize: "14px",
-                    },
-                  }}
-                  name="logo"
-                  value={values.logo}
-                  onChange={handleChange}
-                  error={touched.logo && Boolean(errors.logo)}
-                  helperText={touched.logo && errors.logo}
+              <Box sx={{ margin: "0 auto", width: "50%", height: "80px" }}>
+                <UploadImage
+                  image={image}
+                  setImage={setImage}
+                  fieldName={"logo"}
                 />
-                <ImageIcon sx={{ fontSize: "50px", color: "#FFFFFF" }} />
               </Box>
-
               <Box
                 sx={{
                   display: "flex",

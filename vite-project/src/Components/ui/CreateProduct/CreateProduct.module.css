@@ -25,3 +25,8 @@
 .selectContainer:hover {
   cursor: pointer;
 }
+
+.optionTitle {
+  color: #FFF;
+  text-decoration: underline;
+}

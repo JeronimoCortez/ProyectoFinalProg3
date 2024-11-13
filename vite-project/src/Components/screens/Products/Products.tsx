@@ -6,6 +6,8 @@ import { ProductoService } from "../../../services/ProductoService";
 import { FC, useEffect, useState } from "react";
 import { IProductos } from "../../../types/dtos/productos/IProductos";
 import CreateProduct from "../../ui/CreateProduct/CreateProduct";
+import { ICategorias } from "../../../types/dtos/categorias/ICategorias";
+import { CategoriaService } from "../../../services/CategoriaService";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -16,8 +18,10 @@ interface IPropsProducts {
 export const Products: FC<IPropsProducts> = ({ idBranch }) => {
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   const [products, setProducts] = useState<IProductos[]>();
+  const [categorias, setCategorias] = useState<ICategorias[]>([]);
 
   const productService = new ProductoService(`${API_URL}/articulos`);
+  const categoriaService = new CategoriaService(`${API_URL}/categorias`);
 
   const getArticulosBySucursalId = () => {
     if (idBranch) {
@@ -27,9 +31,21 @@ export const Products: FC<IPropsProducts> = ({ idBranch }) => {
     }
   };
 
+  const getAllCategorias = () => {
+    if (idBranch) {
+      categoriaService.getCategoriasBySucursal(idBranch).then((data) => {
+        setCategorias(data);
+      });
+    }
+  };
+
   useEffect(() => {
     getArticulosBySucursalId();
   });
+
+  useEffect(() => {
+    getAllCategorias();
+  }, []);
 
   return (
     <Box sx={{ padding: 4, backgroundColor: "#0B2545", minHeight: "100vh" }}>
@@ -54,7 +70,9 @@ export const Products: FC<IPropsProducts> = ({ idBranch }) => {
           <MenuItem value="" disabled>
             SELECCIONE CATEGORIA
           </MenuItem>
-          <MenuItem value="Promociones">Promociones</MenuItem>
+          {categorias?.map((categoria) => (
+            <MenuItem value={categoria.id}>{categoria.denominacion}</MenuItem>
+          ))}
         </Select>
         <AddButton
           isCompany={false}
@@ -94,10 +112,10 @@ export const Products: FC<IPropsProducts> = ({ idBranch }) => {
       </Box>
 
       {products?.map((product) => (
-        <Product product={product} />
+        <Product product={product} idBranch={idBranch} />
       ))}
       {isModalOpen && activeModal === "createProduct" && (
-        <CreateProduct onClose={closeModal} />
+        <CreateProduct onClose={closeModal} idBranch={idBranch} />
       )}
     </Box>
   );

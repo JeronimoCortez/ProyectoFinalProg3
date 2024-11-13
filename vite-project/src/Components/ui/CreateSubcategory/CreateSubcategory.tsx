@@ -7,7 +7,15 @@ import {
 } from "@mui/material";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
+import * as Yup from "yup";
+import { ICategorias } from "../../../types/dtos/categorias/ICategorias";
 import { FC } from "react";
+import { ICreateCategoria } from "../../../types/dtos/categorias/ICreateCategoria";
+import { IUpdateCategoria } from "../../../types/dtos/categorias/IUpdateCategoria";
+import { Form, Formik } from "formik";
+import { CategoriaService } from "../../../services/CategoriaService";
+
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 const theme = createTheme({
   typography: {
@@ -15,11 +23,40 @@ const theme = createTheme({
   },
 });
 
-interface IPropsCreateSubcategory {
+const validationSchema = Yup.object({
+  denominacion: Yup.string().required("Ingrese una denominación"),
+});
+
+interface IPropsCreateSubCategory {
   onClose: () => void;
+  subCategory?: ICategorias;
+  idCategoriaPadre: number;
+  idEmpresa: number;
 }
 
-export const CreateSubcategory: FC<IPropsCreateSubcategory> = ({ onClose }) => {
+export const CreateSubcategory: FC<IPropsCreateSubCategory> = ({
+  onClose,
+  subCategory,
+  idCategoriaPadre,
+  idEmpresa,
+}) => {
+  const subCategoriaService = new CategoriaService(`${API_URL}/categorias`);
+
+  const initialValues: ICreateCategoria | IUpdateCategoria = subCategory
+    ? {
+        id: subCategory.id,
+        denominacion: subCategory.denominacion,
+        eliminado: subCategory.eliminado,
+        idEmpresa: idEmpresa,
+        idSucursales: subCategory.sucursales.map((sucursal) => sucursal.id),
+        idCategoriaPadre: idCategoriaPadre,
+      }
+    : {
+        denominacion: "",
+        idEmpresa: idEmpresa,
+        idCategoriaPadre: idCategoriaPadre,
+      };
+
   return (
     <Box
       sx={{
@@ -57,56 +94,83 @@ export const CreateSubcategory: FC<IPropsCreateSubcategory> = ({ onClose }) => {
             marginBottom: "4vh",
           }}
         >
-          Crear una subcategoría
+          {subCategory ? "Editar una subcategoría" : "Crear una subcategoría"}
         </Typography>
-        <TextField
-          variant="outlined"
-          placeholder="Ingrese una denominación"
-          InputProps={{
-            style: {
-              width: "34vw",
-              color: "#134074", // Color del texto
-            },
-          }}
-          InputLabelProps={{
-            style: {
-              color: "#FFFFFF", // Color del label
-              fontSize: "1.5rem", // Cambia el tamaño del label
-            },
-          }}
-          sx={{
-            display: "flex",
-            margin: "3.1rem",
-            borderRadius: "2px",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(217, 217, 217, 0.7)",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#D9D9D9", // Color del borde
-              },
-              "&:hover fieldset": {
-                borderColor: "#FFFFFF", // Color del borde al hacer hover
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#FFFFFF", // Color del borde cuando está enfocado
-              },
-            },
-          }}
-        ></TextField>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "2rem",
-            marginTop: "2vh",
-            gap: "20vw",
+        <Formik
+          validationSchema={validationSchema}
+          enableReinitialize
+          initialValues={initialValues}
+          onSubmit={(values) => {
+            if (subCategory) {
+              subCategoriaService.editarCategoria(
+                values as IUpdateCategoria,
+                subCategory.id
+              );
+              onClose();
+            } else {
+              subCategoriaService.crearCategoria(values as ICreateCategoria);
+              onClose();
+            }
           }}
         >
-          <CheckButton isCompany={false} />
-          <CloseButton isCompany={false} onclick={onClose} />
-        </Box>
+          {({ values, handleChange, errors, touched }) => (
+            <Form>
+              <TextField
+                name="denominacion"
+                value={values.denominacion}
+                onChange={handleChange}
+                error={touched.denominacion && Boolean(errors.denominacion)}
+                helperText={touched.denominacion && errors.denominacion}
+                variant="outlined"
+                placeholder="Ingrese una denominación"
+                InputProps={{
+                  style: {
+                    width: "34vw",
+                    color: "#134074", // Color del texto
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: "#FFFFFF", // Color del label
+                    fontSize: "1.5rem", // Cambia el tamaño del label
+                  },
+                }}
+                sx={{
+                  display: "flex",
+                  margin: "3.1rem",
+                  borderRadius: "2px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "rgba(217, 217, 217, 0.7)",
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#D9D9D9", // Color del borde
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#FFFFFF", // Color del borde al hacer hover
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#FFFFFF", // Color del borde cuando está enfocado
+                    },
+                  },
+                }}
+              ></TextField>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "2rem",
+                  marginTop: "2vh",
+                  gap: "20vw",
+                }}
+              >
+                <CheckButton isCompany={false} />
+                <CloseButton isCompany={false} onclick={onClose} />
+              </Box>
+            </Form>
+          )}
+        </Formik>
       </Box>
     </Box>
   );

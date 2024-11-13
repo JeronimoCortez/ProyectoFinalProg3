@@ -2,13 +2,14 @@ import { Box, Typography, TextField } from "@mui/material";
 import { CloseButton } from "../CloseButton/CloseButton";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { FC } from "react";
+import { FC, useState } from "react";
 import * as Yup from "yup";
 import { AlergenoService } from "../../../services/AlergenoService";
 import { useAppSelector } from "../../../hooks/redux";
 import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
 import { Form, Formik } from "formik";
 import Swal from "sweetalert2";
+import { UploadImage } from "../UploadImage/UploadImage";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -45,6 +46,7 @@ export const CardCreateAllergens: FC<IPropsCreateAllergens> = ({
   onClose,
   allergen,
 }) => {
+  const [image, setImage] = useState<string | null>(null);
   const serviceAllergen = new AlergenoService(`${API_URL}/alergenos`);
   let elementActive = useAppSelector((state) => state.allergen.elementActive);
 
@@ -163,31 +165,10 @@ export const CardCreateAllergens: FC<IPropsCreateAllergens> = ({
                     alignItems: "center",
                   }}
                 >
-                  <TextField
-                    fullWidth
-                    label="Elige una imagen"
-                    variant="outlined"
-                    inputProps={{ style: { border: "none" } }}
-                    InputLabelProps={{
-                      style: {
-                        color: "#134074",
-                        fontSize: "18px",
-                      },
-                    }}
-                    sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-                    value={values.imagen.url}
-                    onChange={(e) =>
-                      setFieldValue("imagen.url", e.target.value)
-                    }
-                    error={touched.imagen?.url && Boolean(errors.imagen?.url)}
-                    helperText={touched.imagen?.url && errors.imagen?.url}
-                    name="imagen.url"
-                  />
-                  <img
-                    src="https://i.postimg.cc/FRKsWfmM/Branch-Img.png"
-                    alt=""
-                    width="60px"
-                    height="46px"
+                  <UploadImage
+                    image={image}
+                    setImage={setImage}
+                    fieldName={"logo"}
                   />
                 </Box>
                 <Box

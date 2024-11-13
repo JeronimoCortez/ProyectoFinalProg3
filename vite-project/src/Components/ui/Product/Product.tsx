@@ -13,17 +13,18 @@ import { InfoProduct } from "../InfoProduct/InfoProduct";
 
 interface IPropsProduct {
   product: IProductos;
+  idBranch?: number;
 }
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
-const Product: FC<IPropsProduct> = ({ product }) => {
+const Product: FC<IPropsProduct> = ({ product, idBranch }) => {
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   const productService = new ProductoService(`${API_URL}/articulos`);
 
   const deleteProduct = async (idProduct: number) => {
     const result = await Swal.fire({
-      title: "¿Deseas eliminar el alergeno?",
+      title: "¿Deseas eliminar el producto?",
       text: "¡Los cambios son irreversibles!",
       icon: "warning",
       showCancelButton: true,
@@ -35,7 +36,7 @@ const Product: FC<IPropsProduct> = ({ product }) => {
     if (result.isConfirmed) {
       await productService.delete(idProduct);
       Swal.fire({
-        title: "¡Alergeno eliminado con éxito!",
+        title: "¡Producto eliminado con éxito!",
         icon: "success",
       });
     }
@@ -85,7 +86,11 @@ const Product: FC<IPropsProduct> = ({ product }) => {
         </Box>
       </Paper>
       {isModalOpen && activeModal === "editProduct" && (
-        <CreateProduct onClose={closeModal} product={product} />
+        <CreateProduct
+          onClose={closeModal}
+          product={product}
+          idBranch={idBranch}
+        />
       )}
 
       {isModalOpen && activeModal === "infoProduct" && (

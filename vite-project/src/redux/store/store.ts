@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import companyReducer from "../slices/companySlice";
 import branchReducer from "../slices/branchSlice"
 import allergenSlice from "../slices/allergenSlice"
+import categorySlice from "../slices/categorySlice"
 
 export const store = configureStore({
   reducer: {
     company: companyReducer,
     branch: branchReducer,
-    allergen: allergenSlice
+    allergen: allergenSlice,
+    category: categorySlice,
   },
 });
 
