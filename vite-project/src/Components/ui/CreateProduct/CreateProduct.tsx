@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import styles from "./CreateProduct.module.css";
-import ImageIcon from "@mui/icons-material/Image";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
 import { IProductos } from "../../../types/dtos/productos/IProductos";
@@ -22,8 +21,20 @@ import { IUpdateProducto } from "../../../types/dtos/productos/IUpdateProducto";
 import { IImagen } from "../../../types/IImagen";
 import { UploadImage } from "../UploadImage/UploadImage";
 import { ProductoService } from "../../../services/ProductoService";
+import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
+
+const validationSchema = Yup.object({
+  denominacion: Yup.string().required("La denominación es obligatoria."),
+  precioVenta: Yup.number()
+    .required("El precio es obligatorio.")
+    .min(0, "Debe ser un número positivo."),
+  descripcion: Yup.string().optional(),
+  habilitado: Yup.boolean().required(),
+  codigo: Yup.string().required("El código es obligatorio."),
+});
 
 const FormContainer = styled(Box)(({ theme }) => ({
   maxWidth: 800,
@@ -144,16 +155,40 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
       <Formik
         initialValues={initialValues}
         enableReinitialize
+        validationSchema={validationSchema}
         onSubmit={(values) => {
-          console.log("Datos enviados:", values);
+          const parsedValues = {
+            ...values,
+            precioVenta: Number(values.precioVenta),
+            idCategoria: Number(values.idCategoria),
+            imagenes: Array.isArray(values.imagenes)
+              ? values.imagenes
+              : [values.imagenes],
+          };
+
+          console.log("Datos enviados:", parsedValues);
 
           if (product) {
             productService.editarProducto(
               product.id,
-              values as IUpdateProducto
+              parsedValues as IUpdateProducto
             );
+            onClose();
+            Swal.fire({
+              title: "Éxito!",
+              text: `La empresa: ${product.denominacion} se edito correctamente!`,
+              icon: "success",
+              confirmButtonText: "Aceptar",
+            });
           } else {
-            productService.crearProducto(values as ICreateProducto);
+            productService.crearProducto(parsedValues as ICreateProducto);
+            onClose();
+            Swal.fire({
+              title: "Éxito!",
+              text: `La empresa: ${values.denominacion} se creo correctamente!`,
+              icon: "success",
+              confirmButtonText: "Aceptar",
+            });
           }
         }}
       >
@@ -194,6 +229,10 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                       name="denominacion"
                       value={values.denominacion}
                       onChange={handleChange}
+                      error={
+                        touched.denominacion && Boolean(errors.denominacion)
+                      }
+                      helperText={touched.denominacion && errors.denominacion}
                     />
                   </FieldContainer>
                   <FieldContainer>
@@ -231,6 +270,8 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                       name="precioVenta"
                       value={values.precioVenta}
                       onChange={handleChange}
+                      error={touched.precioVenta && Boolean(errors.precioVenta)}
+                      helperText={touched.precioVenta && errors.precioVenta}
                     />
                   </FieldContainer>
                   <FieldContainer>
@@ -247,6 +288,8 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                       name="codigo"
                       value={values.codigo}
                       onChange={handleChange}
+                      error={touched.codigo && Boolean(errors.codigo)}
+                      helperText={touched.codigo && errors.codigo}
                     />
                   </FieldContainer>
                   <FormControlLabel
@@ -258,8 +301,10 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                             color: "#4CE415",
                           },
                         }}
-                        checked={checked}
-                        onChange={onHandleCheckedChange}
+                        checked={values.habilitado}
+                        onChange={(e) => {
+                          setFieldValue("habilitado", e.target.checked);
+                        }}
                         name="habilitado"
                         value={values.habilitado}
                       />
@@ -287,6 +332,8 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                     name="descripcion"
                     value={values.descripcion}
                     onChange={handleChange}
+                    error={touched.descripcion && Boolean(errors.descripcion)}
+                    helperText={touched.descripcion && errors.descripcion}
                   />
                   <Box>
                     <UploadImage
@@ -310,9 +357,6 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                       multiple
                       value={values.idAlergenos.map(String)}
                       onChange={(e) => {
-                        // handleChange(e);
-                        // setFieldValue("idAlergenos", selectedOptions);
-                        // handleSelectChange(e);
                         const selectedValues = Array.from(
                           e.target.selectedOptions,
                           (option) => Number(option.value)

@@ -41,7 +41,7 @@ export const Allergens = () => {
 
   useEffect(() => {
     getAlergenos();
-  }, []);
+  });
   return (
     <Box sx={{ backgroundColor: "#0B2545", minHeight: "100vh" }}>
       <ThemeProvider theme={theme}></ThemeProvider>

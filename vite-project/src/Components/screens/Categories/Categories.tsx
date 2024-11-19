@@ -44,7 +44,7 @@ export const Categories: FC<IPropsCategories> = ({ idBranch, idEmpresa }) => {
 
   useEffect(() => {
     getAllCategorias();
-  }, []);
+  });
 
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   return (

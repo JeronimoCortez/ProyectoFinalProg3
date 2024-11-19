@@ -62,8 +62,13 @@ export const Home = () => {
 
   useEffect(() => {
     getEmpresas();
-  }, []);
+  });
 
+  useEffect(() => {
+    if (companyActive) {
+      getSucursalesPorEmpresa(companyActive?.id);
+    }
+  });
   return (
     <>
       <ThemeProvider theme={theme}>

@@ -10,11 +10,13 @@
 }
 
 .enabled {
-  background-color: #4caf50; /* Color verde cuando está habilitado */
+  background-color: #4caf50;
+  /* Color verde cuando está habilitado */
 }
 
 .disabled {
-  background-color: #757575; /* Color gris cuando está deshabilitado */
+  background-color: #757575;
+  /* Color gris cuando está deshabilitado */
 }
 
 .thumbUpIcon {
