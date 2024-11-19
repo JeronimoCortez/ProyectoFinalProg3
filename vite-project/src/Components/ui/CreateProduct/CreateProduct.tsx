@@ -18,6 +18,10 @@ import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
 import { AlergenoService } from "../../../services/AlergenoService";
 import { CategoriaService } from "../../../services/CategoriaService";
 import { ICategorias } from "../../../types/dtos/categorias/ICategorias";
+import { IUpdateProducto } from "../../../types/dtos/productos/IUpdateProducto";
+import { IImagen } from "../../../types/IImagen";
+import { UploadImage } from "../UploadImage/UploadImage";
+import { ProductoService } from "../../../services/ProductoService";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -48,19 +52,20 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
   onClose,
   idBranch,
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [allergns, setAllergns] = useState<IAlergenos[]>();
   const [productActive, setProductActive] = useState<IProductos>();
   const [checked, setChecked] = useState<boolean>(false);
   const [categorias, setCategorias] = useState<ICategorias[]>([]);
+  const [imageProducto, setImagenProducto] = useState<IImagen | null>(null);
 
   const allergenService = new AlergenoService(`${API_URL}/alergenos`);
   const categoryService = new CategoriaService(`${API_URL}/categorias`);
+  const productService = new ProductoService(`${API_URL}/articulos`);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValues = Array.from(
-      event.target.selectedOptions,
-      (option) => option.value
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValues = Array.from(event.target.selectedOptions, (option) =>
+      Number(option.value)
     );
     setSelectedOptions(selectedValues);
   };
@@ -79,7 +84,7 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
 
   const getCategorias = async () => {
     if (idBranch) {
-      categoryService.getCategoriasBySucursal(idBranch).then((data) => {
+      categoryService.getSubcategoriasPorSucursal(idBranch).then((data) => {
         setCategorias(data);
       });
     }
@@ -95,16 +100,30 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
     getCategorias();
   }, []);
 
-  const initialValues: ICreateProducto = {
-    denominacion: "",
-    precioVenta: 0,
-    descripcion: "",
-    habilitado: false,
-    codigo: "",
-    imagenes: [],
-    idCategoria: 0,
-    idAlergenos: [],
-  };
+  const initialValues: ICreateProducto | IUpdateProducto = product
+    ? {
+        id: product.id,
+        denominacion: product.denominacion,
+        precioVenta: product.precioVenta,
+        descripcion: product.descripcion,
+        habilitado: product.habilitado,
+        imagenes: product.imagenes,
+        codigo: product.codigo,
+        idCategoria: product.categoria.id,
+        idAlergenos: product.alergenos
+          ? product.alergenos.map((alergeno) => alergeno.id)
+          : [],
+      }
+    : {
+        denominacion: "",
+        precioVenta: 0,
+        descripcion: "",
+        habilitado: false,
+        codigo: "",
+        imagenes: [],
+        idCategoria: 0,
+        idAlergenos: [],
+      };
 
   return (
     <Box
@@ -125,7 +144,18 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
       <Formik
         initialValues={initialValues}
         enableReinitialize
-        onSubmit={() => {}}
+        onSubmit={(values) => {
+          console.log("Datos enviados:", values);
+
+          if (product) {
+            productService.editarProducto(
+              product.id,
+              values as IUpdateProducto
+            );
+          } else {
+            productService.crearProducto(values as ICreateProducto);
+          }
+        }}
       >
         {({ values, handleChange, setFieldValue, errors, touched }) => (
           <Form>
@@ -139,7 +169,7 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                   fontSize: "24px",
                 }}
               >
-                Crear un producto
+                {product ? "Editar producto" : "Crear un producto"}
               </Typography>
               <Box
                 sx={{
@@ -167,12 +197,20 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                     />
                   </FieldContainer>
                   <FieldContainer>
-                    <select className={styles.selectContainer}>
+                    <select
+                      className={styles.selectContainer}
+                      name="idCategoria"
+                      onChange={handleChange}
+                      value={values.idCategoria}
+                    >
                       <option className={styles.selectOption} value="">
                         Categoria
                       </option>
                       {categorias?.map((categoria) => (
-                        <option className={styles.selectOption} value="">
+                        <option
+                          className={styles.selectOption}
+                          value={categoria.id}
+                        >
                           {categoria.denominacion}
                         </option>
                       ))}
@@ -190,6 +228,9 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                         style: { color: "#FFFFFF", fontSize: "16px" },
                       }}
                       sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+                      name="precioVenta"
+                      value={values.precioVenta}
+                      onChange={handleChange}
                     />
                   </FieldContainer>
                   <FieldContainer>
@@ -203,6 +244,9 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                         style: { color: "#FFFFFF", fontSize: "16px" },
                       }}
                       sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
+                      name="codigo"
+                      value={values.codigo}
+                      onChange={handleChange}
                     />
                   </FieldContainer>
                   <FormControlLabel
@@ -216,6 +260,8 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                         }}
                         checked={checked}
                         onChange={onHandleCheckedChange}
+                        name="habilitado"
+                        value={values.habilitado}
                       />
                     }
                     label="Habilitado"
@@ -238,26 +284,42 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
                       backgroundColor: "rgba(217,217,217,.12)",
                       marginBottom: "1.5rem",
                     }}
+                    name="descripcion"
+                    value={values.descripcion}
+                    onChange={handleChange}
                   />
                   <Box>
-                    <TextField
-                      label="Ingrese una imagen"
-                      variant="outlined"
-                      size="small"
-                      inputProps={{ style: { border: "none" } }}
-                      InputLabelProps={{
-                        style: { color: "#FFFFFF", fontSize: "16px" },
+                    <UploadImage
+                      imageObjeto={imageProducto}
+                      setImageObjeto={(newImage) => {
+                        setImagenProducto(newImage);
+                        setFieldValue("imagenes", [
+                          ...values.imagenes,
+                          newImage,
+                        ]);
                       }}
-                      sx={{
-                        backgroundColor: "rgba(217,217,217,.12)",
-                      }}
+                      typeElement="articulos"
+                      fieldName="imagenes"
                     />
-                    <ImageIcon sx={{ fontSize: "40px", color: "#FFFFFF" }} />
                   </Box>
                 </Box>
                 <Box>
                   <Box sx={{ maxHeight: "400px" }}>
-                    <select className={styles.containerSelectAlergen} multiple>
+                    <select
+                      className={styles.containerSelectAlergen}
+                      multiple
+                      value={values.idAlergenos.map(String)}
+                      onChange={(e) => {
+                        // handleChange(e);
+                        // setFieldValue("idAlergenos", selectedOptions);
+                        // handleSelectChange(e);
+                        const selectedValues = Array.from(
+                          e.target.selectedOptions,
+                          (option) => Number(option.value)
+                        );
+                        setFieldValue("idAlergenos", selectedValues);
+                      }}
+                    >
                       <option className={styles.optionTitle} value="" disabled>
                         Alergenos
                       </option>

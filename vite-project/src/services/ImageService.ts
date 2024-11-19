@@ -2,7 +2,7 @@
 import Swal from "sweetalert2";
 import { BackendClient } from "./BackendClient";
 import { IImagen } from "../types/IImagen";
-const API_URL = import.meta.env.VITE_URL_API;
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 export class ImageService extends BackendClient<IImagen> {
   constructor(baseUrl: string) {
@@ -12,25 +12,25 @@ export class ImageService extends BackendClient<IImagen> {
   async uploadImage(data: FormData): Promise<string> {
     Swal.fire({
       title: "Subiendo Imagen...",
-      allowOutsideClick: false, 
+      allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
       },
     });
-
     try {
       const response = await fetch(`${this.baseUrl}/uploads`, {
         method: "POST",
+        body: data,
       });
-
       if (!response.ok) {
-        throw new Error("Error al subir la imagen");
+        throw new Error(`Error`);
       }
 
       const newData = await response.text();
+
       return newData;
     } finally {
-      Swal.close(); 
+      Swal.close();
     }
   }
 

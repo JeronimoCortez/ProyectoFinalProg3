@@ -14,6 +14,7 @@ import { ICreateCategoria } from "../../../types/dtos/categorias/ICreateCategori
 import { IUpdateCategoria } from "../../../types/dtos/categorias/IUpdateCategoria";
 import { Form, Formik } from "formik";
 import { CategoriaService } from "../../../services/CategoriaService";
+import Swal from "sweetalert2";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -107,9 +108,21 @@ export const CreateSubcategory: FC<IPropsCreateSubCategory> = ({
                 subCategory.id
               );
               onClose();
+              Swal.fire({
+                title: "Éxito!",
+                text: `La categoria: ${values.denominacion} se editó correctamente!`,
+                icon: "success",
+                confirmButtonText: "Aceptar",
+              });
             } else {
               subCategoriaService.crearCategoria(values as ICreateCategoria);
               onClose();
+              Swal.fire({
+                title: "Éxito!",
+                text: `La categoria: ${values.denominacion} se creo correctamente!`,
+                icon: "success",
+                confirmButtonText: "Aceptar",
+              });
             }
           }}
         >

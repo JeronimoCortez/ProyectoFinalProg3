@@ -10,6 +10,7 @@ import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
 import { Form, Formik } from "formik";
 import Swal from "sweetalert2";
 import { UploadImage } from "../UploadImage/UploadImage";
+import { IImagen } from "../../../types/IImagen";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -46,7 +47,7 @@ export const CardCreateAllergens: FC<IPropsCreateAllergens> = ({
   onClose,
   allergen,
 }) => {
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<IImagen | null>(null);
   const serviceAllergen = new AlergenoService(`${API_URL}/alergenos`);
   let elementActive = useAppSelector((state) => state.allergen.elementActive);
 
@@ -115,7 +116,7 @@ export const CardCreateAllergens: FC<IPropsCreateAllergens> = ({
             }
           }}
         >
-          {({ values, handleChange, setFieldValue, errors, touched }) => (
+          {({ values, handleChange, errors, touched }) => (
             <Form>
               <Box sx={style}>
                 {elementActive ? (
@@ -166,9 +167,9 @@ export const CardCreateAllergens: FC<IPropsCreateAllergens> = ({
                   }}
                 >
                   <UploadImage
-                    image={image}
-                    setImage={setImage}
-                    fieldName={"logo"}
+                    imageObjeto={image}
+                    setImageObjeto={setImage}
+                    fieldName={"imagen"}
                   />
                 </Box>
                 <Box

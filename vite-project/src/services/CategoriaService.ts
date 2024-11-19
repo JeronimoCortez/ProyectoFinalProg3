@@ -5,18 +5,24 @@ import { BackendClient } from "./BackendClient";
 
 export class CategoriaService extends BackendClient<ICategorias | ICreateCategoria | IUpdateCategoria>{
   async getCategoriasBySucursal(idSucursal: number): Promise<ICategorias[]> {
-    const response = await fetch(`${this.baseUrl}/allCategoriasPorSucursal/${idSucursal}`);
+    const response = await fetch(`${this.baseUrl}/allCategoriasPadrePorSucursal/${idSucursal}`);
     const data = await response.json();
     return data;
   }
 
   async getSubcategoriasByCategoria(idSucursal: number, idCategoria: number): Promise<ICategorias[]> {
-    const response = await fetch(`${this.baseUrl}/allSubCategoriasPorCategoriaPadre/${idSucursal}/${idCategoria}`);
+    const response = await fetch(`${this.baseUrl}/allSubCategoriasPorCategoriaPadre/${idCategoria}/${idSucursal}`);
     const data = await response.json();
     console.log(idSucursal, idCategoria);
-    
     return data;
   }
+
+  async getSubcategoriasPorSucursal(idSucursal: number): Promise<ICategorias[]> {
+    const response = await fetch(`${this.baseUrl}/allSubCategoriasPorSucursal/${idSucursal}`);
+    const data = await response.json();
+    return data;
+  }
+
 
   async crearCategoria(data: ICreateCategoria): Promise<ICategorias> {
     const response = await fetch(`${this.baseUrl}/create`, {

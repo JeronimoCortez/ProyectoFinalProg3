@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import ImageIcon from "@mui/icons-material/Image";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
 import styles from "./CreateBranch.module.css";
@@ -85,27 +84,47 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
     elementActive = branch;
   }
 
-  const initialValues: ICreateSucursal | IUpdateSucursal = {
-    nombre: branch?.nombre || "",
-    horarioApertura: branch?.horarioApertura || "",
-    horarioCierre: branch?.horarioCierre || "",
-    esCasaMatriz: branch?.esCasaMatriz || false,
-    latitud: branch?.latitud || 0,
-    longitud: branch?.longitud || 0,
-    domicilio: {
-      id: branch?.domicilio?.id || 0,
-      calle: branch?.domicilio?.calle || "",
-      numero: branch?.domicilio?.numero || 0,
-      cp: branch?.domicilio?.cp || 0,
-      piso: branch?.domicilio?.piso || 0,
-      nroDpto: branch?.domicilio?.nroDpto || 0,
-      idLocalidad: branch?.domicilio?.localidad?.id || 0,
-    },
-    idEmpresa: branch?.empresa?.id || company.id,
-    logo: branch?.logo || null,
-    categorias: branch?.categorias || [],
-    eliminado: branch?.eliminado || false,
-  };
+  const initialValues: ICreateSucursal | IUpdateSucursal = branch
+    ? {
+        id: branch.id,
+        nombre: branch.nombre,
+        idEmpresa: branch.empresa.id,
+        eliminado: branch.eliminado,
+        latitud: branch.latitud,
+        longitud: branch.longitud,
+        domicilio: {
+          id: branch.domicilio.id,
+          calle: branch.domicilio.calle,
+          numero: branch.domicilio.numero,
+          cp: branch.domicilio.cp,
+          piso: branch.domicilio.piso,
+          nroDpto: branch.domicilio.nroDpto,
+          idLocalidad: branch.domicilio.localidad.id,
+        },
+        logo: branch.logo ?? null,
+        categorias: branch.categorias,
+        esCasaMatriz: branch.esCasaMatriz,
+        horarioApertura: branch.horarioApertura,
+        horarioCierre: branch.horarioCierre,
+      }
+    : {
+        nombre: "",
+        horarioApertura: "",
+        horarioCierre: "",
+        esCasaMatriz: false,
+        latitud: 0,
+        longitud: 0,
+        domicilio: {
+          calle: "",
+          numero: 0,
+          cp: 0,
+          piso: 0,
+          nroDpto: 0,
+          idLocalidad: 0,
+        },
+        idEmpresa: company.id,
+        logo: null,
+      };
   //INSTANCIAMOS SERVICIOS
   const serviceCountries = new PaisService(`${API_URL}/paises`);
   const serviceProvinces = new ProvinciaService(`${API_URL}/provincias`);
@@ -137,6 +156,10 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
 
   useEffect(() => {
     getPaises();
+    if (branch) {
+      onPaisHandleChange(branch.domicilio.localidad.provincia.pais.id);
+      onProvinciaHandleChange(branch.domicilio.localidad.provincia.id);
+    }
   }, []);
 
   const getProvincia = async (idPais: number) => {
@@ -378,6 +401,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
                 >
                   <select
                     className={styles.selectContainer}
+                    value={countryId}
                     onChange={(e) => {
                       handleChange(e);
                       const selectedCountryId = Number(e.target.value);
@@ -402,6 +426,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
 
                   <select
                     className={styles.selectContainer}
+                    value={provinceId}
                     onChange={(e) => {
                       handleChange(e);
                       const selectedProvinceId = Number(e.target.value);

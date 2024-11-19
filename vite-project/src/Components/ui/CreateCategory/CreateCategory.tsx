@@ -14,6 +14,7 @@ import { ICreateCategoria } from "../../../types/dtos/categorias/ICreateCategori
 import { IUpdateCategoria } from "../../../types/dtos/categorias/IUpdateCategoria";
 import { Form, Formik } from "formik";
 import { CategoriaService } from "../../../services/CategoriaService";
+import Swal from "sweetalert2";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -44,7 +45,9 @@ export const CreateCategory: FC<IPropsCreateCategory> = ({
         denominacion: categoria.denominacion,
         eliminado: categoria.eliminado,
         idEmpresa: idEmpresa,
-        idSucursales: categoria.sucursales.map((sucursal) => sucursal.id),
+        idSucursales: categoria.sucursales
+          ? categoria.sucursales.map((sucursal) => sucursal.id)
+          : [],
         idCategoriaPadre: null,
       }
     : {
@@ -102,17 +105,26 @@ export const CreateCategory: FC<IPropsCreateCategory> = ({
             console.log(values);
 
             if (categoria) {
-              // http://190.221.207.224:8090/categorias/update/23
               categoriaService.editarCategoria(
                 values as IUpdateCategoria,
                 categoria.id
               );
-              console.log("editando categoria...");
+              onClose();
+              Swal.fire({
+                title: "Éxito!",
+                text: `La empresa: ${values.denominacion} se editó correctamente!`,
+                icon: "success",
+                confirmButtonText: "Aceptar",
+              });
             } else {
-              // http://190.221.207.224:8090/categorias/create
-              console.log("... creando categoria");
-
               categoriaService.crearCategoria(values as ICreateCategoria);
+              onClose();
+              Swal.fire({
+                title: "Éxito!",
+                text: `La empresa: ${values.denominacion} se creo correctamente!`,
+                icon: "success",
+                confirmButtonText: "Aceptar",
+              });
             }
           }}
         >

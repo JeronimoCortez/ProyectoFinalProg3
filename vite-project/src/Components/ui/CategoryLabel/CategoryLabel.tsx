@@ -31,6 +31,7 @@ export const CategoryLabel: FC<IPropsCategoryLabel> = ({
 }) => {
   const { isModalOpen, openModal, closeModal, activeModal } = useModal();
   const [subcategorias, setSubcategorias] = useState<ICategorias[]>([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<ICategorias>();
   const categoryService = new CategoriaService(`${API_URL}/categorias`);
 
   const getSubcategorias = async () => {
@@ -130,7 +131,24 @@ export const CategoryLabel: FC<IPropsCategoryLabel> = ({
         {subcategorias && (
           <List sx={{ marginLeft: "18vh", marginTop: "-3vw" }}>
             {subcategorias?.map((el) => (
-              <ListItem sx={{ color: "#fff" }}>{el.denominacion}</ListItem>
+              <ListItem
+                sx={{
+                  color: "#fff",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography>{el.denominacion}</Typography>
+                <IconButton>
+                  <EditButton
+                    isCompany={false}
+                    onEditClick={() => {
+                      setSelectedSubCategory(el);
+                      openModal("editSubCategory");
+                    }}
+                  />
+                </IconButton>
+              </ListItem>
             ))}
           </List>
         )}
@@ -146,6 +164,14 @@ export const CategoryLabel: FC<IPropsCategoryLabel> = ({
         <CreateCategory
           onClose={closeModal}
           categoria={category}
+          idEmpresa={idEmpresa}
+        />
+      )}
+      {isModalOpen && activeModal === "editSubCategory" && (
+        <CreateSubcategory
+          subCategory={selectedSubCategory}
+          onClose={closeModal}
+          idCategoriaPadre={category.id}
           idEmpresa={idEmpresa}
         />
       )}

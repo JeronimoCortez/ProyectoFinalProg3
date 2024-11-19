@@ -46,14 +46,19 @@ export const UploadImage: FC<IUploadImage> = ({
 
         if (setImage) {
           setImage(data);
+          setFieldValue(fieldName, data);
         }
-
-        setFieldValue(fieldName, data);
 
         if (setImageObjeto) {
           setImageObjeto({
             url: data,
             name: file.name,
+          });
+
+          setFieldValue(fieldName, {
+            url: data,
+            name: file.name,
+            eliminado: false,
           });
         }
       } catch (error) {
