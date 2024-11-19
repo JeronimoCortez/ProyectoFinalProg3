@@ -3,13 +3,11 @@ import { FC } from "react";
 import styles from "./InfoButton.module.css";
 
 interface IInfoButtonProps {
-  typeEdit: string;
   isCompany: boolean;
   onInfoClick: () => void;
 }
 
 export const InfoButton: FC<IInfoButtonProps> = ({
-  typeEdit,
   isCompany,
   onInfoClick,
 }) => {

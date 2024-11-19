@@ -3,7 +3,6 @@ import { FC } from "react";
 import styles from "./AddButton.module.css";
 
 interface AddCircleIconProps {
-  typeAdd: String;
   isCompany: boolean;
   onAddClick: () => void;
 }

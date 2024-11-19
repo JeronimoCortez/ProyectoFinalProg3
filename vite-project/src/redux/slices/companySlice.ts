@@ -27,9 +27,10 @@ const companySlice = createSlice({
     },
     removeElementActive(state){
       state.elementActive = null;
-    }
+    },
   }
 });
+
 
 export const { setCompanies, setElementActive, removeElementActive } = companySlice.actions;
 export default companySlice.reducer;

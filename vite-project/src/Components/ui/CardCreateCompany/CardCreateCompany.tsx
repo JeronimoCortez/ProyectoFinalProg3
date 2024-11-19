@@ -2,13 +2,15 @@ import { Box, TextField, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { CheckButton } from "../CheckButton/CheckButton";
 import { CloseButton } from "../CloseButton/CloseButton";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Form, Formik } from "formik";
 import { IEmpresa } from "../../../types/dtos/empresa/IEmpresa";
 import { useAppSelector } from "../../../hooks/redux";
 import * as Yup from "yup";
 import { EmpresaService } from "../../../services/EmpresaService";
 import Swal from "sweetalert2";
+import ImageIcon from "@mui/icons-material/Image";
+import { UploadImage } from "../UploadImage/UploadImage";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -39,7 +41,6 @@ const FormContainer = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 const FieldContainer = styled(Box)(({ theme }) => ({
-  border: "1px solid #ffffff",
   borderRadius: "0.4 rem",
   marginBottom: theme.spacing(3),
 }));
@@ -48,20 +49,20 @@ export const CardCreateCompany: FC<IPropsCreateCompany> = ({
   onClose,
   company,
 }) => {
+  const [image, setImage] = useState<string | null>(null);
   const serviceCompany = new EmpresaService(`${API_URL}/empresas`);
   let elementActive = useAppSelector((state) => state.company.elementActive);
   if (company) {
     elementActive = company;
   }
 
-  // Consultar si el valor del id lo generamos nosotros o lo genera la api
   const initialValues: IEmpresa = company ||
     elementActive || {
       id: 0,
       nombre: "",
       razonSocial: "",
       cuit: 0,
-      logo: "",
+      logo: null,
       sucursales: [],
       pais: {
         id: 0,
@@ -176,36 +177,11 @@ export const CardCreateCompany: FC<IPropsCreateCompany> = ({
                     sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
                   />
                 </FieldContainer>
-                <FieldContainer
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <TextField
-                    fullWidth
-                    name="logo"
-                    label="Imagen"
-                    variant="outlined"
-                    size="small"
-                    value={values.logo}
-                    onChange={handleChange}
-                    error={touched.logo && Boolean(errors.logo)}
-                    helperText={touched.logo && errors.logo}
-                    inputProps={{ style: { border: "none" } }}
-                    InputLabelProps={{
-                      style: { color: "#FFFFFF", fontSize: "16px" },
-                    }}
-                    sx={{ backgroundColor: "rgba(217,217,217,.12)" }}
-                  />
-                  <img
-                    src="../../public/assets/BranchImg.png"
-                    alt=""
-                    width="60px"
-                    height="46px"
-                  />
-                </FieldContainer>
+                <UploadImage
+                  image={image}
+                  setImage={setImage}
+                  fieldName={"logo"}
+                />
               </Stack>
 
               {/* Botones de Aceptar y Cancelar */}

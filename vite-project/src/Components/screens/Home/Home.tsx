@@ -101,11 +101,7 @@ export const Home = () => {
               />
             ))}
           </Box>
-          <AddButton
-            typeAdd="Company"
-            isCompany={true}
-            onAddClick={() => openModal("add")}
-          />
+          <AddButton isCompany={true} onAddClick={() => openModal("add")} />
         </Box>
 
         {/* Seccion sucursales */}
@@ -163,7 +159,7 @@ export const Home = () => {
                 }}
               >
                 {branches.map((e) => (
-                  <CardBranch branch={e} />
+                  <CardBranch key={e.id} branch={e} />
                 ))}
               </Box>
             </Box>
@@ -175,7 +171,7 @@ export const Home = () => {
         )}
 
         {isModalOpen && companyActive && activeModal === "addBranch" && (
-          <CreateBranch onClose={closeModal} idCompany={companyActive?.id} />
+          <CreateBranch onClose={closeModal} company={companyActive} />
         )}
       </ThemeProvider>
     </>

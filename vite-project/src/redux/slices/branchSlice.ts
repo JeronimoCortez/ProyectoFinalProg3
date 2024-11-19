@@ -3,12 +3,12 @@ import { ISucursal } from "../../types/dtos/sucursal/ISucursal";
 import { ICreateSucursal } from "../../types/dtos/sucursal/ICreateSucursal";
 
 interface PayloadSetElement {
-  element: ICreateSucursal | ISucursal
+  element:  ISucursal
 }
 
 interface IInitialState{
   branches: ISucursal[],
-  elementActive: null | ICreateSucursal | ISucursal,
+  elementActive: null |  ISucursal,
 }
 
 const initialState: IInitialState = {

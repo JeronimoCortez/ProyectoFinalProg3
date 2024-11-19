@@ -1,0 +1,20 @@
+.containerDeleteIcon {
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  background-color: #eef4ed;
+  cursor: pointer;
+}
+
+.deleteIcon {
+  font-size: 18px;
+  color: #f95738;
+}
+
+.company {
+  background-color: #134074;
+  color: #ee964b;
+}
