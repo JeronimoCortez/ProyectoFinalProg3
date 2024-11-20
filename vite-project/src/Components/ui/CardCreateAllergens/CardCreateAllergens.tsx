@@ -75,7 +75,7 @@ export const CardCreateAllergens: FC<IPropsCreateAllergens> = ({
           width: "100vw",
           height: "100vh",
           background: "rgba(64,79,96, 0.62)",
-          zIndex: 9999,
+          zIndex: 1,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -100,7 +100,7 @@ export const CardCreateAllergens: FC<IPropsCreateAllergens> = ({
               onClose();
               Swal.fire({
                 title: "Éxito!",
-                text: `La empresa: ${allergen.denominacion} se edito correctamente!`,
+                text: `El alergeno: ${allergen.denominacion} se edito correctamente!`,
                 icon: "success",
                 confirmButtonText: "Aceptar",
               });
@@ -109,7 +109,7 @@ export const CardCreateAllergens: FC<IPropsCreateAllergens> = ({
               onClose();
               Swal.fire({
                 title: "Éxito!",
-                text: `La empresa: ${values.denominacion} se creo correctamente!`,
+                text: `El alergeno: ${values.denominacion} se creo correctamente!`,
                 icon: "success",
                 confirmButtonText: "Aceptar",
               });

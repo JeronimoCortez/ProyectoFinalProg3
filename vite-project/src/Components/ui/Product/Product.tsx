@@ -1,5 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { ThumbUpButton } from "../ThumbUpButton/ThumbUpButton";
+import { ThumbDownButton } from "../ThumbDownButton/ThumbDownButton";
 import { InfoButton } from "../InfoButton/InfoButton";
 import { EditButton } from "../EditButton/EditButton";
 import { DeleteButton } from "../DeleteButton/DeleteButton";
@@ -68,7 +69,9 @@ const Product: FC<IPropsProduct> = ({ product, idBranch }) => {
           {product.categoria.denominacion}
         </Typography>
 
-        <Box>{product.habilitado ? <ThumbUpButton /> : "...."}</Box>
+        <Box>
+          {product.habilitado ? <ThumbUpButton /> : <ThumbDownButton />}
+        </Box>
 
         <Box display="flex" alignItems="center" gap={1.5}>
           <InfoButton

@@ -108,6 +108,9 @@ export const CategoryLabel: FC<IPropsCategoryLabel> = ({
             alignItems: "center",
           }}
         >
+          <IconButton onClick={handleOpenCategoriesList}>
+            <DownButton />
+          </IconButton>
           <IconButton>
             <EditButton
               isCompany={false}
@@ -116,9 +119,6 @@ export const CategoryLabel: FC<IPropsCategoryLabel> = ({
           </IconButton>
           <IconButton>
             <AddButtonLabel onClick={() => openModal("addSubcategory")} />
-          </IconButton>
-          <IconButton onClick={handleOpenCategoriesList}>
-            <DownButton />
           </IconButton>
         </Box>
       </AccordionSummary>

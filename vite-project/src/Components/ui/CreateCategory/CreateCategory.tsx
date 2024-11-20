@@ -65,7 +65,7 @@ export const CreateCategory: FC<IPropsCreateCategory> = ({
         width: "100vw",
         height: "100vh",
         background: "rgba(64,79,96, 0.62)",
-        zIndex: 9999,
+        zIndex: 1,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -112,7 +112,7 @@ export const CreateCategory: FC<IPropsCreateCategory> = ({
               onClose();
               Swal.fire({
                 title: "Éxito!",
-                text: `La empresa: ${values.denominacion} se editó correctamente!`,
+                text: `La categoria: ${values.denominacion} se editó correctamente!`,
                 icon: "success",
                 confirmButtonText: "Aceptar",
               });
@@ -121,7 +121,7 @@ export const CreateCategory: FC<IPropsCreateCategory> = ({
               onClose();
               Swal.fire({
                 title: "Éxito!",
-                text: `La empresa: ${values.denominacion} se creo correctamente!`,
+                text: `La categoria: ${values.denominacion} se creo correctamente!`,
                 icon: "success",
                 confirmButtonText: "Aceptar",
               });

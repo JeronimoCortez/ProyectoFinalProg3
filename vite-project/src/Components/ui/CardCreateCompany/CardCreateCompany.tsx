@@ -77,7 +77,7 @@ export const CardCreateCompany: FC<IPropsCreateCompany> = ({
         width: "100vw",
         height: "100vh",
         background: "rgba(64,79,96, 0.62)",
-        zIndex: 9999,
+        zIndex: 1,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
