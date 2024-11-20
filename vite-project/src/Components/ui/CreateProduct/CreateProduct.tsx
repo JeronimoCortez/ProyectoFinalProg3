@@ -143,7 +143,7 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
         width: "100vw",
         height: "100vh",
         background: "rgba(64,79,96, 0.62)",
-        zIndex: 9999,
+        zIndex: 1,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -176,7 +176,7 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
             onClose();
             Swal.fire({
               title: "Éxito!",
-              text: `La empresa: ${product.denominacion} se edito correctamente!`,
+              text: `El producto: ${product.denominacion} se edito correctamente!`,
               icon: "success",
               confirmButtonText: "Aceptar",
             });
@@ -185,7 +185,7 @@ const CreateProduct: FC<IPropsCreateProduct> = ({
             onClose();
             Swal.fire({
               title: "Éxito!",
-              text: `La empresa: ${values.denominacion} se creo correctamente!`,
+              text: `El producto: ${values.denominacion} se creo correctamente!`,
               icon: "success",
               confirmButtonText: "Aceptar",
             });

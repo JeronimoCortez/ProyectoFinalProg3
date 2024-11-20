@@ -222,7 +222,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
         width: "100vw",
         height: "100vh",
         background: "rgba(64,79,96, 0.62)",
-        zIndex: 9999,
+        zIndex: 1,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -253,7 +253,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
               );
               Swal.fire({
                 title: "Éxito!",
-                text: `La empresa: ${values.nombre} se editó correctamente!`,
+                text: `La sucursal: ${values.nombre} se editó correctamente!`,
                 icon: "success",
                 confirmButtonText: "Aceptar",
               });
@@ -264,7 +264,7 @@ export const CreateBranch: FC<IPropsCreateBranch> = ({
               );
               Swal.fire({
                 title: "Éxito!",
-                text: `La empresa: ${values.nombre} se creó correctamente!`,
+                text: `La sucursal: ${values.nombre} se creó correctamente!`,
                 icon: "success",
                 confirmButtonText: "Aceptar",
               });
